@@ -1,0 +1,917 @@
+{
+  "cookies": [
+    {
+      "name": "__uu",
+      "value": "O5Yu0Xg6CC6WB-1szzzzzzzz",
+      "domain": ".answear.ro",
+      "path": "/hc_scripts",
+      "expires": 1783262607.247754,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "fr",
+      "value": ":::1751726598",
+      "domain": ".answear.ro",
+      "path": "/hc_scripts",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "4795",
+      "value": "O5Yu0Xg6CC6WBk1szzzzzzzz:C4795G108:1754318598",
+      "domain": ".answear.ro",
+      "path": "/hc_scripts",
+      "expires": 1754318603.976544,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "v4795",
+      "value": "AmhpOgYAAwAD~O5Yu0Xg6CC6WB-1s~O5Yu0Xg6CC6WBk1szzzzzzzz~C4795G108",
+      "domain": ".answear.ro",
+      "path": "/hc_scripts",
+      "expires": 1751728407.247951,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "user_country_code",
+      "value": "RO",
+      "domain": "answear.ro",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "ak_bmsc",
+      "value": "89E931B860B8F41649406D167EB92929~000000000000000000000000000000~YAAQ1rnEUf8iiteXAQAAbJQK2xyilG3D3vjLtP5awdcSFgZbQrO/mIgoWrwuRqjeNiSsVKOUlwpLjnSr7soBU33pIlDWfGlHodlj+8k23lqooS5v4Z5cDduKFWd3PusTYCAwWT6fWD8PpL2Ku34/K+qR/MB8nlyeTfqUbifm06OSHs/S9KOZw3/uTeYc7iJii59/snkno3vakV/po7QeeUunN5Q7iaqaKZb9dh7r4CJuGSRM1q2qT3xLYsdGjQMQ7XE3U8yWcvODc0gUQeT/zP2i4ZufQHBBNJfPQpBNGnjSxcGvFP+GXnoMlROtlC6Binbv2Dze2wHUBlfQOuaFyxyHpe5dSwf3s4iajNaWCzevFBC9JzDJqokBRNQ9eHhsNIZMSnRyLkvlc6ZW143knhLSk+a9uYWTF2jMhlmVVxo=",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1751733798.802282,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_lb",
+      "value": "7523608464820957000",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__utmz_gtm",
+      "value": "utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1767451401,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "user_first_visit",
+      "value": "2025-07-05",
+      "domain": "answear.ro",
+      "path": "/",
+      "expires": 1786286601.348569,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "user_group",
+      "value": "uncategorized",
+      "domain": "answear.ro",
+      "path": "/",
+      "expires": 1754318601,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "CookieConsent",
+      "value": "1%2C1%2C1%2C1",
+      "domain": "answear.ro",
+      "path": "/",
+      "expires": 1756910601.902083,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga",
+      "value": "GA1.1.690616329.1751726602",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1786286603.673158,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_lb_id",
+      "value": "7523608464820957000",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1785422601,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_lb_ccc",
+      "value": "1",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1785422601,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ttp",
+      "value": "2zSZmvF4f8rejYTSsK3qm6GCILC",
+      "domain": ".tiktok.com",
+      "path": "/",
+      "expires": 1759502602.130355,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "__rtbh.lid",
+      "value": "%7B%22eventType%22%3A%22lid%22%2C%22id%22%3A%22ljeIpGWcgIOa2DdvrZ6B%22%2C%22expiryDate%22%3A%222026-07-05T14%3A43%3A22.131Z%22%7D",
+      "domain": "answear.ro",
+      "path": "/",
+      "expires": 1783262602,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "FPID",
+      "value": "FPID2.2.kLqTbZYSCvDvTzmYl75ZHu5G4Z6q%2Fpvg3H7iRRBayGM%3D.1751726602",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1786286607.746122,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "FPLC",
+      "value": "bNEEOtkwDCJKuNARTcv7%2BrufEkas2Xu2LgurSgutFCdw214Ev6ZSuVclDSB%2B5HVrgXyHWiDOVCTgDHD%2B3ybupUjdkp956qI16A6mpjYkfAUGG%2BTiLq1ZpddKhCphpw%3D%3D",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1751798602.159576,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "FPAU",
+      "value": "1.1.360370621.1751726602",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1759502607.746205,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_hjSessionUser_5085442",
+      "value": "eyJpZCI6IjA1ZTI5ZWU0LWM4YmEtNTZiZS04MzMzLWQ0NWUxNWE4MGQ2MSIsImNyZWF0ZWQiOjE3NTE3MjY2MDIyODQsImV4aXN0aW5nIjpmYWxzZX0=",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1783262602,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_hjSession_5085442",
+      "value": "eyJpZCI6IjI4YjQyYzFjLTQ0NTItNGM4YS05YmM3LTQ5ZjhiNzZlNjliOSIsImMiOjE3NTE3MjY2MDIyODUsInMiOjAsInIiOjAsInNiIjowLCJzciI6MCwic2UiOjAsImZzIjoxLCJzcCI6MH0=",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1751728402,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_dcid",
+      "value": "dcid.1.1751726596602.581551371",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1786286606.66965,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_gtmeec",
+      "value": "e30%3D",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1759502606.669928,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Strict"
+    },
+    {
+      "name": "_fbp",
+      "value": "fb.1.1751726596613.1080780162",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1759502606.669967,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "g",
+      "value": "JE5yfrLlxDzrD3NnnyNR_1751726596699",
+      "domain": ".creativecdn.com",
+      "path": "/",
+      "expires": 1783262602.39631,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "c",
+      "value": "JE5yfrLlxDzrD3NnnyNR_gSULauMjIuGW7RgEImwb_1751726596699",
+      "domain": ".creativecdn.com",
+      "path": "/",
+      "expires": 1783262602.396382,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "ts",
+      "value": "1751726596",
+      "domain": ".creativecdn.com",
+      "path": "/",
+      "expires": 1783262602.396439,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "uid",
+      "value": "04d73db7-7602-40eb-bc23-89cc42ab3d48",
+      "domain": ".criteo.com",
+      "path": "/",
+      "expires": 1785422602.444481,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "receive-cookie-deprecation",
+      "value": "1",
+      "domain": ".criteo.com",
+      "path": "/",
+      "expires": 1785422602.4446,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_tt_enable_cookie",
+      "value": "1",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1759502602,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ttp",
+      "value": "01JZDGNE8TT8GT2QCEP86PRZK0_.tt.1",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1759502602,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "cto_bundle",
+      "value": "Vybx019TN3Nyc1Z3RUtGMGtjNnhwc3F3MGRtMkVDdlphJTJCa3BPTEdaS3o2REcwczBHeTdVY2dBS2owdGl6VXlZRW1mWmpsYUpBTTUzYmhqYUZwcmswRHhEM2F2SkVOb0xyTkNXZkRZMkNFTG1pampvJTJCSFIzYXFER0tqNWo2OHNVN05FN0dLUmtWMGslMkYwZjBOcTB4dEJQJTJGTTBYdyUzRCUzRA",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1785890602,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "ar_debug",
+      "value": "1",
+      "domain": ".creativecdn.com",
+      "path": "/",
+      "expires": 1783262602.738225,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "XANDR_PANID",
+      "value": "MNJdJclE-7icuI6FrYNaBImCnIkBupkrqkY0PmL2bT_fHyI2n7MmAcyV4BvwbnJaoRGtjHaMBQXmOZlWdkr3PKHVS91BnAQQYZawY7wgTtU.",
+      "domain": ".adnxs.com",
+      "path": "/",
+      "expires": 1759502602.890493,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "uuid2",
+      "value": "9069487821076468103",
+      "domain": ".adnxs.com",
+      "path": "/",
+      "expires": 1759502602.890579,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "CMID",
+      "value": "aGk6BbmqPfEAFfJdABYb9wAA",
+      "domain": ".casalemedia.com",
+      "path": "/",
+      "expires": 1783262607.15263,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "CMPS",
+      "value": "5300",
+      "domain": ".casalemedia.com",
+      "path": "/",
+      "expires": 1759502603.109492,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "CMPRO",
+      "value": "5300",
+      "domain": ".casalemedia.com",
+      "path": "/",
+      "expires": 1759502607.152662,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "IDE",
+      "value": "AHWqTUm8OJuTSWs6ev6ZRthfkz2SCjqs_5ERJQhCHJ1GR0SL5GkeFEXiE8863Gaj",
+      "domain": ".doubleclick.net",
+      "path": "/",
+      "expires": 1785422603.296381,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "demdex",
+      "value": "43950669075918539782312904886986572570",
+      "domain": ".demdex.net",
+      "path": "/",
+      "expires": 1767278607.34482,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "dpm",
+      "value": "43950669075918539782312904886986572570",
+      "domain": ".dpm.demdex.net",
+      "path": "/",
+      "expires": 1767278607.344892,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "receive-cookie-deprecation",
+      "value": "1",
+      "domain": ".doubleclick.net",
+      "path": "/",
+      "expires": 1767278606.928052,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "tv_UICR",
+      "value": "k-YQ69D-PAjqb0xAwgVgT-m9yA47sFu8oKAcknVg",
+      "domain": ".tremorhub.com",
+      "path": "/",
+      "expires": 1754318607.245162,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "tvid",
+      "value": "bb33017028d7422c8fd649900e25cfa7",
+      "domain": ".tremorhub.com",
+      "path": "/",
+      "expires": 1783283503.901451,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_rxuuid",
+      "value": "%7B%22rx_uuid%22%3A%22RX-9c32fac6-b1e3-436a-a708-657be6bb3f49-003%22%7D",
+      "domain": ".1rx.io",
+      "path": "/",
+      "expires": 1783262603.910186,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_HC_4795",
+      "value": "O5Yu0Xg6CC6WBk1szzzzzzzz:C4795G108:1754318598",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1754318598,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_HC_fr",
+      "value": ":::1751726598",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_HC_uu",
+      "value": "O5Yu0Xg6CC6WB-1szzzzzzzz",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1783262601,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_rxuuid",
+      "value": "%7B%22rx_uuid%22%3A%22RX-9c32fac6-b1e3-436a-a708-657be6bb3f49-003%22%7D",
+      "domain": ".targeting.unrulymedia.com",
+      "path": "/",
+      "expires": 1783262607.252682,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "gp_e",
+      "value": "noValue",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1786286604.157064,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "gp_s",
+      "value": "932441789.1751726604",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1786286606.695668,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "criteo",
+      "value": "%7B%22id%22%3A%22k-b4h4q-PAjqb0xAwgVgT-m9yA47vHiRfUB-WYTg%22%2C%22version%22%3A%22criteo%22%7D",
+      "domain": "exchange.mediavine.com",
+      "path": "/",
+      "expires": 1752936207.151657,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "data-c",
+      "value": "k-k0Vc-uPAjqb0xAwgVgT-m9yA47v_cgh3DXgoLA~~3",
+      "domain": ".media.net",
+      "path": "/",
+      "expires": 1754318607.252165,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "mv_tokens",
+      "value": "%7B%22mv_uuid%22%3A%22641ed850-59ae-11f0-9c08-8bef1d59ada1%22%2C%22version%22%3A%22eu-v1%22%7D",
+      "domain": "exchange.mediavine.com",
+      "path": "/",
+      "expires": 1752936207.151554,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "mv_tokens_eu-v1",
+      "value": "%7B%22mv_uuid%22%3A%22641ed850-59ae-11f0-9c08-8bef1d59ada1%22%2C%22version%22%3A%22eu-v1%22%7D",
+      "domain": "exchange.mediavine.com",
+      "path": "/",
+      "expires": 1752936207.151599,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "am_tokens",
+      "value": "%7B%22mv_uuid%22%3A%22641ed850-59ae-11f0-9c08-8bef1d59ada1%22%2C%22version%22%3A%22eu-v1%22%7D",
+      "domain": "exchange.mediavine.com",
+      "path": "/",
+      "expires": 1752936207.151621,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "am_tokens_eu-v1",
+      "value": "%7B%22mv_uuid%22%3A%22641ed850-59ae-11f0-9c08-8bef1d59ada1%22%2C%22version%22%3A%22eu-v1%22%7D",
+      "domain": "exchange.mediavine.com",
+      "path": "/",
+      "expires": 1752936207.151639,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "visitor-id",
+      "value": "3947281984894891000V10",
+      "domain": ".media.net",
+      "path": "/",
+      "expires": 1783262604.589972,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_gcl_au",
+      "value": "1.1.360370621.1751726602.1644717386.1751726605.1751726604",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1759502602,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "opt_out",
+      "value": "1",
+      "domain": ".postrelease.com",
+      "path": "/",
+      "expires": 1783262607.253386,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "udmts",
+      "value": "1751726599.0",
+      "domain": ".udmserve.net",
+      "path": "/",
+      "expires": 1783262604.866908,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "dt",
+      "value": "167501E1-6D7A-3ABA-B097-B81831E06A2F",
+      "domain": ".udmserve.net",
+      "path": "/",
+      "expires": 1783262604.867001,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "rtbh",
+      "value": "o9NMs2yDFY1lLMJC2Bb7HJe8XrjI6xM_iLrtJHMtQgU",
+      "domain": ".udmserve.net",
+      "path": "/",
+      "expires": 1759502604.867033,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "glm_usr_tmp",
+      "value": "8d4fbbd8b94cda7fc87c35a623f037d2_1767282199",
+      "domain": ".glami.ro",
+      "path": "/",
+      "expires": 1783262604.884449,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "RT",
+      "value": "\"z=1&dm=answear.ro&si=b1db2816-d677-4cf7-a8b1-de34365e117c&ss=mcqcse08&sl=1&tt=49y&bcn=%2F%2F684dd326.akstat.io%2F&ld=52g\"",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1752331405,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_40Q5TCMMEF",
+      "value": "GS2.1.s1751726601$o1$g1$t1751726606$j57$l0$h0",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1786286606.488599,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "ttcsid",
+      "value": "1751726602536::TFWaXVCf86yu26GkQ3bx.1.1751726606530",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1759502606,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__rtbh.uid",
+      "value": "%7B%22eventType%22%3A%22uid%22%2C%22id%22%3A%22undefined%22%2C%22expiryDate%22%3A%222026-07-05T14%3A43%3A26.684Z%22%7D",
+      "domain": "answear.ro",
+      "path": "/",
+      "expires": 1783262606,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "glm_usr",
+      "value": "030994ab466c9b3855c7e143fc86877b_1767282201",
+      "domain": ".glami.ro",
+      "path": "/",
+      "expires": 1783262606.835813,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "ab.storage.sessionId.2fdc457b-e8d4-419f-9c00-5485298fd794",
+      "value": "g%3Af62300cf-6ca3-836a-495b-09a7903fdd6b%7Ce%3A1751728407065%7Cc%3A1751726607065%7Cl%3A1751726607065",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1786286607,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "ab.storage.deviceId.2fdc457b-e8d4-419f-9c00-5485298fd794",
+      "value": "g%3Ac83ddbbc-1d7c-d976-01c6-43a9f5c971d2%7Ce%3Aundefined%7Cc%3A1751726601020%7Cl%3A1751726607067",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1786286607,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "ab.storage.userId.2fdc457b-e8d4-419f-9c00-5485298fd794",
+      "value": "g%3AROD16348%7Ce%3Aundefined%7Cc%3A1751726607062%7Cl%3A1751726607067",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1786286607,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "data-c-ts",
+      "value": "1751726601",
+      "domain": ".media.net",
+      "path": "/",
+      "expires": 1754318607.252221,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_HC_v4795",
+      "value": "AmhpOgYAAwAD~O5Yu0Xg6CC6WB-1s~O5Yu0Xg6CC6WBk1szzzzzzzz~C4795G108",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1751728401,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "ttcsid_CCOQTMRC77U3QS7T9OVG",
+      "value": "1751726602534::o-lUN-aQ8hQng_L3nIuq.1.1751726607310",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1759502607,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "cto_bundle",
+      "value": "OzzQHV9sOFB0T2I1a1h1aDAxaCUyRmxOSWU4RVpsdkYlMkJsTmQ5Y2RIR0JBdDZTc0hOSzM0biUyQlBmNTU1eWRNREQ1ek14UkZKQnlyZHlSMHFtTzVPUklnUCUyRjk1dzZYaWFnSGtwWjVOSjZBM2I4JTJCTlElMkZ5JTJCQUJkNzNLRlZtQlR3VVBOYUd3S0RNOFZqYSUyRmlrd0dnMmtzeVdSRXJsVFFRJTNEJTNE",
+      "domain": ".criteo.com",
+      "path": "/",
+      "expires": 1785422608.447171,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_ga_CLD0D8MZFJ",
+      "value": "GS2.1.s1751726601$o1$g1$t1751726607$j56$l0$h2081070953",
+      "domain": ".answear.ro",
+      "path": "/",
+      "expires": 1786286607.485417,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://answear.ro",
+      "localStorage": [
+        {
+          "name": "required",
+          "value": "true"
+        },
+        {
+          "name": "ab.storage.lastSdkReq.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":1751726607070}"
+        },
+        {
+          "name": "ab.storage.triggers.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":[]}"
+        },
+        {
+          "name": "cto_bundle",
+          "value": "Vybx019TN3Nyc1Z3RUtGMGtjNnhwc3F3MGRtMkVDdlphJTJCa3BPTEdaS3o2REcwczBHeTdVY2dBS2owdGl6VXlZRW1mWmpsYUpBTTUzYmhqYUZwcmswRHhEM2F2SkVOb0xyTkNXZkRZMkNFTG1pampvJTJCSFIzYXFER0tqNWo2OHNVN05FN0dLUmtWMGslMkYwZjBOcTB4dEJQJTJGTTBYdyUzRCUzRA"
+        },
+        {
+          "name": "analytics",
+          "value": "true"
+        },
+        {
+          "name": "ab.storage.requestAttempts.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":{\"data\":1}}"
+        },
+        {
+          "name": "_gcl_ls",
+          "value": "{\"schema\":\"gcl\",\"version\":1,\"gcl_ctr\":{\"value\":{\"value\":0,\"creationTimeMs\":1751726601955},\"expires\":1759502601955}}"
+        },
+        {
+          "name": "personalisation",
+          "value": "true"
+        },
+        {
+          "name": "ab.storage.device.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":{\"browser\":\"Unknown Browser\",\"browser_version\":\"Unknown Version\",\"os_version\":\"Windows\",\"locale\":\"en-us\",\"time_zone\":\"Europe/Bucharest\",\"user_agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36\"}}"
+        },
+        {
+          "name": "ab.storage.userId.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":\"g:ROD16348|e:undefined|c:1751726607062|l:1751726607067\"}"
+        },
+        {
+          "name": "ab.storage.messagingSessionStart.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":1751726601018}"
+        },
+        {
+          "name": "ab.storage.deviceId.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":\"g:c83ddbbc-1d7c-d976-01c6-43a9f5c971d2|e:undefined|c:1751726601020|l:1751726607067\"}"
+        },
+        {
+          "name": "ab.storage.attributes.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":{\"ROD16348\":{\"user_id\":\"ROD16348\",\"push_token\":null,\"custom_push_public_key\":null,\"custom_push_user_auth\":null,\"custom_push_vapid_public_key\":null}}}"
+        },
+        {
+          "name": "__rtbh.uid",
+          "value": "{\"eventType\":\"uid\",\"id\":\"undefined\",\"expiryDate\":\"2026-07-05T14:43:26.684Z\"}"
+        },
+        {
+          "name": "ab.storage.serverConfig.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":{\"s\":\"5.6.1\",\"l\":1747809078,\"e\":[\"Karta produktu\"],\"a\":[],\"p\":[],\"m\":21600,\"v\":\"BBg9JlNBe8Wwe07-aBL-Gstpq-4cAd9W16U3RLaMP_0kcIwGnsLuJtywg2NBhO_0xY96VF7fU-zHrJPfswsb8gs=\",\"c\":{\"enabled\":true},\"f\":{\"enabled\":false},\"grl\":{\"enabled\":true,\"capacity\":30,\"refill_rate\":30,\"endpoint_overrides\":{\"content_cards/sync\":{\"capacity\":5,\"refill_rate\":10},\"push/redeliver\":{\"capacity\":1,\"refill_rate\":180}}},\"b\":{\"enabled\":true,\"max_placements\":10}}}"
+        },
+        {
+          "name": "lastExternalReferrer",
+          "value": "empty"
+        },
+        {
+          "name": "cartCount",
+          "value": "0"
+        },
+        {
+          "name": "access_token",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJhcGkuYW5zd2Vhci5ybyIsImlhdCI6MTc1MTcyNjYwMCwiZXhwIjoxNzUxNzMwMjAwLCJqdGkiOiIwMTk3ZGIwYS1iMjAwLTcwYmQtYTJkMi02NTE5ZTZkYzViMGMiLCJ1c2VybmFtZSI6ImNhdGFsaW4uY2FpbGFAZ21haWwuY29tIiwidXNlclR5cGUiOiJVU0VSX1JFR0lTVEVSRUQiLCJleHRlcm5hbElkIjoiUk9EMTYzNDgiLCJibG9ja2VkQ2xpZW50IjpmYWxzZSwiYmxvY2tlZENsaWVudFJlYXNvbiI6bnVsbCwiYmxvY2tlZENsaWVudFJldHVyblBlcmNlbnQiOm51bGwsInJlZnJlc2hUaW1lb3V0IjoxNzU0MzE4NjAwLCJkZXZpY2VJZCI6ImU0Nzg0MmQ2LTcwMGUtNDA1Zi1hMWE2LWZlNzM2YWY4MGZlNiJ9.f-kgB8RRUR0YMoXkQUY1jY2OIUJEhRKwkEGNCKcWwtf-Tbt4iH0av_o8wwx37pgUNf9MK6Vx3zYEUqUSNa3mgxAXomTy63beOqmj2x8O1E0N0Di-OCaXFDTPvf8WifcbnFHJWC0DicFKMTfxG03R8EPiNP3NEk_NMl8vek2XfYy0qT0Mh4gSJp8qmjjRaDocqUtoWmPQ4G84aGDSPHDmsZiGYcGQa7sBRHoJv5dG1dNXMU_n8pYZRed3XQ1ps5QUpUfqLbING4GwFU4t05ttt2KYk7RUKvDGWAaTWILFo9-CSY8OOvmZXDRIEkcOD0_GAOIMI2WNYBhvhstgVxLuxw"
+        },
+        {
+          "name": "ab.storage.sdk_metadata.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":[\"npm\"]}"
+        },
+        {
+          "name": "ab.storage.globalRateLimitCurrentTokenCount.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":29}"
+        },
+        {
+          "name": "__rtbh.lid",
+          "value": "{\"eventType\":\"lid\",\"id\":\"ljeIpGWcgIOa2DdvrZ6B\",\"expiryDate\":\"2026-07-05T14:43:22.131Z\"}"
+        },
+        {
+          "name": "_boomr_LOGN",
+          "value": "{\"items\":{\"h.key\":\"STH6X-52SNT-3FKH4-M93UA-9YYG8\",\"h.d\":\"answear.ro\",\"h.t\":1751726597207,\"h.cr\":\"3cb7de0d235ca2fc6534b1e2790914f546051d98-52f5ba57-1ad50269\",\"session_id\":\"b1db2816-d677-4cf7-a8b1-de34365e117c\",\"site_domain\":\"answear.ro\",\"beacon_url\":\"//684dd326.akstat.io/\",\"autorun\":false,\"strip_query_string\":true,\"beacon_interval\":60,\"BW\":{\"enabled\":false},\"RT\":{\"session_exp\":1800},\"ResourceTiming\":{\"enabled\":true,\"splitAtPath\":true},\"History\":{\"enabled\":true,\"auto\":true},\"Errors\":{\"enabled\":true,\"monitorTimeout\":false,\"monitorEvents\":false,\"maxErrors\":25,\"sendAfterOnload\":true,\"sendInterval\":250},\"Continuity\":{\"enabled\":true,\"waitAfterOnload\":1000},\"TPAnalytics\":{\"enabled\":true},\"PageParams\":{\"xhr\":\"none\",\"pageGroups\":[{\"type\":\"Custom\",\"parameter1\":\"mPulse.pageType\",\"on\":[\"navigation\"]}],\"customMetrics\":[{\"name\":\"Conversion\",\"index\":0,\"type\":\"URLPatternType\",\"label\":\"cmet.Conversion\",\"dataType\":\"Number\",\"xhr_ok\":true,\"parameter1\":\"*answear.ro/purchase-success/*\"},{\"name\":\"Conversion Rate\",\"index\":1,\"type\":\"URLPatternType\",\"label\":\"cmet.Conversion_Rate\",\"dataType\":\"Percentage\",\"match\":\"boolean\",\"xhr_ok\":true,\"parameter1\":\"*answear.ro/purchase-success/*\"},{\"name\":\"Revenue\",\"index\":2,\"type\":\"Custom\",\"label\":\"cmet.Revenue\",\"dataType\":\"Number\",\"xhr_ok\":true,\"parameter2\":\"*/purchase-success/*\",\"parameter1\":\"mPulse.revenue\"}],\"customTimers\":[{\"name\":\"LCP\",\"index\":0,\"type\":\"Custom\",\"label\":\"custom0\",\"xhr_ok\":true,\"parameter1\":\"BOOMR.plugins.PaintTiming.metrics.lcp\"}],\"customDimensions\":[{\"name\":\"App Version\",\"index\":0,\"type\":\"JavaScriptVar\",\"label\":\"cdim.App_Version\",\"dataType\":\"Text\",\"xhr_ok\":true,\"varName\":\"window.config.APP_VERSION\"}],\"urlPatterns\":[],\"params\":true},\"Akamai\":{\"enabled\":true,\"mapping_xhr_base_url\":\"akamaihd.net\",\"mapping_xhr_url_path\":\"/eum/getdns.txt\",\"mapping_xhr_url_v4_prefix\":\"trial-eum-clientnsv4-s\",\"mapping_xhr_url_v6_prefix\":\"trial-eum-clienttons-s\"},\"user_ip\":\"dcd769f24\"},\"expires\":1751727083015}"
+        },
+        {
+          "name": "previousPage",
+          "value": "https://answear.ro/contul-meu"
+        },
+        {
+          "name": "ab.storage.triggers.ts.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":1751726607450}"
+        },
+        {
+          "name": "topicsLastReferenceTime",
+          "value": "1751726606455"
+        },
+        {
+          "name": "gtmBrowserId",
+          "value": "1751727202604"
+        },
+        {
+          "name": "clipboardCount",
+          "value": "0"
+        },
+        {
+          "name": "_boomr_akamaiXhrRetry",
+          "value": "{\"items\":{},\"expires\":1751728405202}"
+        },
+        {
+          "name": "lastExternalReferrerTime",
+          "value": "1751726602324"
+        },
+        {
+          "name": "ab.storage.session_id_for_cached_metadata.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":\"f62300cf-6ca3-836a-495b-09a7903fdd6b\"}"
+        },
+        {
+          "name": "deviceId",
+          "value": "e47842d6-700e-405f-a1a6-fe736af80fe6"
+        },
+        {
+          "name": "ab.storage.lastReqToEndpoint.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":{\"data\":1751726607070}}"
+        },
+        {
+          "name": "adds",
+          "value": "true"
+        },
+        {
+          "name": "ab.storage.sessionId.2fdc457b-e8d4-419f-9c00-5485298fd794",
+          "value": "{\"v\":\"g:f62300cf-6ca3-836a-495b-09a7903fdd6b|e:1751728407065|c:1751726607065|l:1751726607065\"}"
+        }
+      ]
+    }
+  ]
+}

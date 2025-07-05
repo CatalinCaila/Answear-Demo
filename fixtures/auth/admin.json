@@ -1,0 +1,75 @@
+{
+  "cookies": [
+    {
+      "name": "qt_usr",
+      "value": "fce0a551-4425-408f-8a36-f2130eb7d147",
+      "domain": "playwright.quartexcollections.com",
+      "path": "/",
+      "expires": 1785313893.653295,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "q_usg",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJmY2UwYTU1MS00NDI1LTQwOGYtOGEzNi1mMjEzMGViN2QxNDciLCJTZXNzaW9uSWQiOm51bGwsIlNlc3Npb25Vc2VySWQiOi0xLCJIYXNDbGllbnREYXRhIjpmYWxzZSwidHlwIjoiVXNhZ2UiLCJpYXQiOjE3NTA3NTM4OTIsImV4cCI6MTc1MDg0MDI5Mn0.FT5N3DhMzw3TKEXsUWuqLQjQRKCAiNosoN2BWS6CfuY",
+      "domain": "playwright.quartexcollections.com",
+      "path": "/",
+      "expires": 1750757493.653388,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "search-state",
+      "value": "JTdCJTIyc2VhcmNoVGVybXMlMjIlM0ElNUIlNUQlMkMlMjJpbml0aWFsU2VhcmNoJTIyJTNBZmFsc2UlMkMlMjJyYXdTZWFyY2hWYWx1ZSUyMiUzQSUyMiUyMiUyQyUyMmFkdmFuY2VkU2VhcmNoJTIyJTNBZmFsc2UlMkMlMjJzZWFyY2hGaWVsZHMlMjIlM0ElNUIlNUQlN0Q%3D",
+      "domain": "playwright.quartexcollections.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "lf-state",
+      "value": "JTdCJTIybGlzdFVybCUyMiUzQSUyMiUyRmRvY3VtZW50cyUzRnJldHVybmluZyUzRHRydWUlMjIlMkMlMjJjdXJyZW50UGFnZSUyMiUzQTElMkMlMjJwYWdlU2l6ZSUyMiUzQTEyJTJDJTIybGlzdFZpZXclMjIlM0FmYWxzZSUyQyUyMnNvcnRPcmRlciUyMiUzQSUyMlRpdGxlJTdDQVNDJTIyJTJDJTIyZmlsdGVycyUyMiUzQSU3QiU3RCUyQyUyMmNvbGxlY3Rpb25zJTIyJTNBJTVCJTVEJTJDJTIyZmlsdGVyRmlsZVR5cGVzJTIyJTNBJTVCJTVEJTJDJTIyZmlsdGVyU2VhcmNoVHlwZXMlMjIlM0ElNUIlNUQlMkMlMjJkYXRlRnJvbSUyMiUzQSUyMjAlMjIlMkMlMjJkYXRlVG8lMjIlM0ElMjIwJTIyJTJDJTIyYWxsU2VsZWN0ZWQlMjIlM0FmYWxzZSUyQyUyMmNsZWFySW5kZXhEYiUyMiUzQXRydWUlMkMlMjJjdXJyZW50U2Nyb2xsUGFnZSUyMiUzQTElMkMlMjJwYWdlTGltaXQlMjIlM0EwJTJDJTIyb3B0aW9uSWQlMjIlM0FudWxsJTJDJTIycGFnZUd1aWQlMjIlM0ElMjIyMzkyYTFhYy0xNTY3LTQwZTEtOTEwZC0wOWRkYmNhZjhkM2IlMjIlMkMlMjJmaWx0ZXJDYXRlZ29yeSUyMiUzQW51bGwlMkMlMjJ0b3RhbFBhZ2VzJTIyJTNBMCUyQyUyMnRvdGFsUmVjb3JkcyUyMiUzQTAlMkMlMjJyZXN0cmljdGVkRG9jdW1lbnRzJTIyJTNBZmFsc2UlMkMlMjJjdXJyZW50U3RhdGljU2VhcmNoUGFnZSUyMiUzQTElMkMlMjJzdGF0aWNTZWFyY2hTb3J0T3JkZXIlMjIlM0ElMjJSZWxldmFuY2UlN0NERVNDJTIyJTJDJTIyc2VsZWN0ZWRSZXN1bHRzVGFiJTIyJTNBMCU3RA%3D%3D",
+      "domain": "playwright.quartexcollections.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga",
+      "value": "GA1.1.1242452998.1750753894",
+      "domain": ".quartexcollections.com",
+      "path": "/",
+      "expires": 1785313900.22501,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "active-theme",
+      "value": "default",
+      "domain": "playwright.quartexcollections.com",
+      "path": "/",
+      "expires": 1753345900,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_123A56Z890",
+      "value": "GS2.1.s1750753894$o1$g1$t1750753900$j54$l0$h0",
+      "domain": ".quartexcollections.com",
+      "path": "/",
+      "expires": 1785313900.224707,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": []
+}
