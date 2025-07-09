@@ -7,12 +7,16 @@ import type { z } from 'zod';
 export type ProductsResponse = z.infer<typeof productsResponseSchema>;
 
 export async function fetchSearchResults(query: string): Promise<ProductsResponse> {
+  //Read the user access token from a file
   const tokenPath = path.resolve(__dirname, '../../auth/userAccessToken.txt');
 
+  // Ensure the token file exists
   if (!fs.existsSync(tokenPath)) {
     throw new Error(`❌ Token file not found at: ${tokenPath}`);
   }
 
+  // Read the token from the file
+  // Use 'utf-8' encoding to read the file as a string
   const token = fs.readFileSync(tokenPath, 'utf-8').trim();
 
   const context: APIRequestContext = await request.newContext({
@@ -46,7 +50,7 @@ export async function fetchSearchResults(query: string): Promise<ProductsRespons
   expect(response.status(), 'Expected 200 OK from /api/products').toBe(200);
 
   const json = await response.json();
-
+  // Validate the response against the schema
   const parsed = productsResponseSchema.safeParse(json);
   expect(parsed.success, '❌ Schema validation failed for /api/products').toBeTruthy();
 

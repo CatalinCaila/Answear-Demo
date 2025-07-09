@@ -1,9 +1,9 @@
 // tests/compare.user.spec.ts
-import { test } from '../fixtures/auth/fixtures';
+import { test } from '../fixtures/auth/roleFixture';
 import { SearchPage } from '../pages/SearchPage';
-import { Role } from '../utils/helpers/roleTypes';
 
-test('User can compare products', async ({ page, loginAs }) => {
+
+test('User can compare products', async ({ page}) => {
 
 
   const searchPage = new SearchPage(page);

@@ -1,2 +1,5 @@
-// utils/helpers/roleTypes.ts
-export type Role = 'admin' | 'user';
+// utils/helpers/role.ts
+export enum Role {
+  Admin = 'admin',
+  User = 'user',
+}

@@ -57,15 +57,15 @@ projects: [
       testMatch: 'auth.setup.spec.ts',
     },
 
-    // 🌐 API testing
-    // {
-    //   name: 'Search product',
-    //   testMatch: 'search.api.spec.ts',
-    //   use: {
-    //     ...devices['Desktop Chrome'],
-    //     storageState: './auth/userAuth.json',
-    //   },
-    // },
+    //🌐 API testing
+    {
+      name: 'Search product',
+      testMatch: 'search.api.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: './auth/userAuth.json',
+      },
+    },
 
       {
       name: 'Compare product',

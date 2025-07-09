@@ -1,6 +1,7 @@
 // utils/helpers/credentials.ts
 import dotenv from 'dotenv';
 import { Role } from './roleTypes';
+
 dotenv.config();
 
 function required(value: string | undefined, name: string): string {
@@ -9,12 +10,12 @@ function required(value: string | undefined, name: string): string {
 }
 
 export const credentials: Record<Role, { email: string; password: string; storageState: string }> = {
-  admin: {
+  [Role.Admin]: {
     email: required(process.env.ADMIN_EMAIL, 'ADMIN_EMAIL'),
     password: required(process.env.ADMIN_PASSWORD, 'ADMIN_PASSWORD'),
     storageState: './auth/adminAuth.json',
   },
-  user: {
+  [Role.User]: {
     email: required(process.env.USER_EMAIL, 'USER_EMAIL'),
     password: required(process.env.USER_PASSWORD, 'USER_PASSWORD'),
     storageState: './auth/userAuth.json',
