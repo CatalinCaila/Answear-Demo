@@ -2,36 +2,23 @@
   "items": [
     {
       "id": 1001,
-      "name": "Pantaloni",
-      "slug": "pantalonit",
-      "url": "/pantaloni",
+      "name": "Mocked Pantaloni",
+      "slug": "mocked-pantaloni",
+      "url": "/p/mock-pantaloni",
       "price": 199.99,
+      "priceRegular": 299.99,
+      "priceMinimal": 249.99,
+      "priceIsDiscounted": true,
       "productBrand": {
-        "id": 501,
-        "name": "Br",
-        "slug": "brandmock"
+        "id": 101,
+        "name": "MockBrand",
+        "slug": "mockbrand"
       },
-      "allSizes": [
-        {
-          "id": 1,
-          "name": "M",
-          "variation": {
-            "id": 101,
-            "ean": "1234567890123",
-            "availability": "in_stock"
-          }
-        },
-        {
-          "id": 2,
-          "name": "L",
-          "variation": {
-            "id": 102,
-            "ean": "1234567890124",
-            "availability": "out_of_stock"
-          }
-        }
-      ]
+      "allSizes": [],
+      "subtitle": "A mocked product",
+      "badges": [],
+      "badgesFront": []
     }
   ],
-  "sortingOrder": ["popularity", "price-asc", "price-desc"]
+  "sortingOrder": ["relevance", "price_asc"]
 }

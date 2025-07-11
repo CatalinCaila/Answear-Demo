@@ -1,27 +1,31 @@
-import { test, expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
+import { test, expect } from '@playwright/test';
 import { SearchPage } from '../pages/SearchPage';
 
+// Test to verify that the UI can correctly display mocked product results
 test('UI shows mocked search results', async ({ page }) => {
-  // 1. Setup mock route
-  await page.route('**/api/products', async route => {
-    const mockData = JSON.parse(
-      fs.readFileSync(path.resolve(__dirname, '../fixtures/products.mock.json'), 'utf-8')
-    );
+  // Read the mock API response from a local JSON file
+  const mockData = JSON.parse(
+    fs.readFileSync(path.resolve(__dirname, '../fixtures/products.mock.json'), 'utf-8')
+  );
 
+  // Intercept the real /api/products call and respond with mock data instead
+  await page.route('**/api/products', async route => {
     route.fulfill({
-      status: 200,
+      status: 200, // Simulate success response
       contentType: 'application/json',
-      body: JSON.stringify(mockData),
+      body: JSON.stringify(mockData)
     });
   });
 
-  // 2. Perform search flow
-  await page.goto('https://answear.ro/c/barbati');
-  const searchPage = new SearchPage(page);
-  await searchPage.searchForItem('pantaloni');
+  // Navigate to the men's clothing category page
+  await page.goto('https://answear.ro/c/barbati', { waitUntil: 'domcontentloaded' });
 
-  // 3. Assert mock result appears
-  await expect(page.locator('text=pantaloni')).toBeVisible();
+  // Use the SearchPage Page Object to trigger the search
+  const searchPage = new SearchPage(page);
+  const results = await searchPage.searchForItem('mock');
+
+  // Validate that the mocked product is shown correctly in the response
+  expect(results.items[0].name).toBe('Mocked Pantaloni');
 });

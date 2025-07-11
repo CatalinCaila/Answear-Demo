@@ -4,21 +4,26 @@ import path from 'path';
 import { productsResponseSchema } from '../../schemas/products.schema';
 import type { z } from 'zod';
 
+// Define the expected response type using the Zod schema
 export type ProductsResponse = z.infer<typeof productsResponseSchema>;
 
+/**
+ * Fetches product search results from the Answear.ro API.
+ * Injects authorization headers and request body, and validates the response schema.
+ * @param query - The search string (e.g. "pantaloni")
+ * @returns Parsed API response matching the Zod schema
+ */
 export async function fetchSearchResults(query: string): Promise<ProductsResponse> {
-  //Read the user access token from a file
+  // Resolve token file path and validate its existence
   const tokenPath = path.resolve(__dirname, '../../auth/userAccessToken.txt');
-
-  // Ensure the token file exists
   if (!fs.existsSync(tokenPath)) {
     throw new Error(`❌ Token file not found at: ${tokenPath}`);
   }
 
-  // Read the token from the file
-  // Use 'utf-8' encoding to read the file as a string
+  // Read the Bearer token
   const token = fs.readFileSync(tokenPath, 'utf-8').trim();
 
+  // Create a new Playwright API context with required headers
   const context: APIRequestContext = await request.newContext({
     extraHTTPHeaders: {
       accept: 'application/json, text/plain, */*',
@@ -30,9 +35,11 @@ export async function fetchSearchResults(query: string): Promise<ProductsRespons
       origin: 'https://answear.ro',
       referer: 'https://answear.ro/k/barbati/imbracaminte',
       'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+      'content-type': 'application/json'
     },
   });
 
+  // POST request to the products API endpoint with the defined payload
   const response = await context.post('https://answear.ro/api/products', {
     data: {
       queryString: query,
@@ -40,24 +47,30 @@ export async function fetchSearchResults(query: string): Promise<ProductsRespons
       filters: {},
       productsPerPage: 80,
       category: 'barbati',
-      page: 1,
+      page: 1
     },
     headers: {
       'content-type': 'application/json',
     },
   });
 
+  // Expect the response to be successful (HTTP 200 OK)
   expect(response.status(), 'Expected 200 OK from /api/products').toBe(200);
 
+  // Parse the response JSON body
   const json = await response.json();
-  // Validate the response against the schema
-  const parsed = productsResponseSchema.safeParse(json);
-  expect(parsed.success, '❌ Schema validation failed for /api/products').toBeTruthy();
 
+  // Validate the JSON against the Zod schema
+  const parsed = productsResponseSchema.safeParse(json);
+
+  // Add detailed debug output if validation fails
   if (!parsed.success) {
     console.error('❌ Schema validation errors:', parsed.error.format());
-    throw new Error('Invalid products API response schema');
   }
 
-  return parsed.data;
+  // Expect schema validation to pass
+  expect(parsed.success, '❌ Schema validation failed for /api/products').toBeTruthy();
+
+  // Return the parsed and validated data
+  return parsed.data as ProductsResponse;
 }
