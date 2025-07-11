@@ -1,0 +1,37 @@
+{
+  "items": [
+    {
+      "id": 1001,
+      "name": "Pantaloni",
+      "slug": "pantalonit",
+      "url": "/pantaloni",
+      "price": 199.99,
+      "productBrand": {
+        "id": 501,
+        "name": "Br",
+        "slug": "brandmock"
+      },
+      "allSizes": [
+        {
+          "id": 1,
+          "name": "M",
+          "variation": {
+            "id": 101,
+            "ean": "1234567890123",
+            "availability": "in_stock"
+          }
+        },
+        {
+          "id": 2,
+          "name": "L",
+          "variation": {
+            "id": 102,
+            "ean": "1234567890124",
+            "availability": "out_of_stock"
+          }
+        }
+      ]
+    }
+  ],
+  "sortingOrder": ["popularity", "price-asc", "price-desc"]
+}

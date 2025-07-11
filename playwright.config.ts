@@ -75,6 +75,23 @@ projects: [
         storageState: './auth/userAuth.json',
       },
     },
+        {
+      name: 'iframe',
+      testMatch: 'iframe-discovery.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: './auth/userAuth.json',
+      },
+    },
+
+          {
+      name: 'MockSearch',
+      testMatch: 'search.mocked.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: './auth/userAuth.json',
+      },
+    },
 
   
   ],
