@@ -83,6 +83,24 @@ export default defineConfig({
       },
     },
 
+    {
+      name: 'desktop',
+      testMatch: ['tests/search.cross.spec.ts'],
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: './auth/userAuth.json',
+      },
+    },
+    {
+      name: 'mobile',
+      testMatch: ['tests/search.cross.spec.ts'],
+      use: {
+        ...devices['Galaxy S9+'],
+        storageState: './auth/userAuth.json',
+      },
+    
+    },
+
     // ✅ Optional: Firefox (cross-browser support)
     // {
     //   name: 'firefox',
