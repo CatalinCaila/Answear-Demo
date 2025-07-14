@@ -13,7 +13,7 @@ export default defineConfig({
   reporter: 'html',
 
   use: {
-    headless: false,
+    headless: process.env.CI ? true : false,
     trace: 'on',
     screenshot: 'on',
     video: {

@@ -2,7 +2,7 @@
 import { test } from '../fixtures/auth/roleFixture';
 import { SearchPageWeb } from '../pages/web/SearchPageWeb';
 
-
+test.describe('@ui @search @pagination', () => {
 test('User can compare products', async ({ page}) => {
 
 
@@ -10,4 +10,5 @@ test('User can compare products', async ({ page}) => {
   await page.goto('https://answear.ro/c/barbati', { waitUntil: 'networkidle' });
 
   await searchPage.compareValueOfPage1And2();
+});
 });

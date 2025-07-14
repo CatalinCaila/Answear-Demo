@@ -4,6 +4,7 @@ import { test, expect } from '@playwright/test';
 import { SearchPageWeb } from '../pages/web/SearchPageWeb';
 
 // Test to verify that the UI can correctly display mocked product results
+test.describe('@ui @mock @search', () => {
 test('UI shows mocked search results', async ({ page }) => {
   // Read the mock API response from a local JSON file
   const mockData = JSON.parse(
@@ -28,4 +29,5 @@ test('UI shows mocked search results', async ({ page }) => {
 
   // Validate that the mocked product is shown correctly in the response
   expect(results.items[0].name).toBe('Mocked Pantaloni');
+});
 });

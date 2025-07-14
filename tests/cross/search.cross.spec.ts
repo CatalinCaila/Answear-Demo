@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { PageFactory } from '../utils/helpers/pageFactory';
-import type { ProductResponse } from '../schemas/products.schema';
-import { fetchSearchResults } from '../utils/api/products';
+import { PageFactory } from '../../utils/helpers/pageFactory';
+import type { ProductResponse } from '../../schemas/products.schema';
+import { fetchSearchResults } from '../../utils/api/products';
 
+test.describe('@ui @crossdevice @search', () => {
 test('Search works on both mobile and desktop', async ({ page }, testInfo) => {
   const platform = testInfo.project.name as 'desktop' | 'mobile';
   const searchPage = PageFactory.getSearchPage(page);
@@ -23,4 +24,5 @@ test('Search works on both mobile and desktop', async ({ page }, testInfo) => {
 
   expect(matching.length).toBeGreaterThan(0);
   console.log(`[${platform}] ✅ ${matching.length} products contain '${searchTerm}'`);
+});
 });
