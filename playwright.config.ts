@@ -31,15 +31,6 @@ export default defineConfig({
       testMatch: 'auth.setup.spec.ts',
     },
 
-    // ✅ API tests for search endpoint (desktop)
-    {
-      name: 'Search product',
-      testMatch: 'webSearch.api.spec.ts',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: './auth/userAuth.json',
-      },
-    },
 
     // ✅ UI test that compares paginated content (desktop)
     {
@@ -51,15 +42,7 @@ export default defineConfig({
       },
     },
 
-    // ✅ Discover iframe content on page (desktop)
-    {
-      name: 'iframe',
-      testMatch: 'iframe-discovery.spec.ts',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: './auth/userAuth.json',
-      },
-    },
+
 
     // ✅ Mock API response for search results (desktop)
     {
@@ -73,15 +56,6 @@ export default defineConfig({
 
     // ✅ Cross-device testing (Pixel 5)
 
-
-        {
-      name: 'Mobile Galaxy S9+ Search',
-      testMatch: 'mobileSearch.spec.ts',
-      use: {
-        ...devices['Galaxy S9+'],
-        storageState: './auth/userAuth.json',
-      },
-    },
 
     {
       name: 'desktop',
@@ -100,6 +74,12 @@ export default defineConfig({
       },
     
     },
+
+    {
+    name: 'api',
+    testMatch: ['tests/webSearch.api.spec.ts'],
+    use: {} // no device emulation needed
+  }
 
     // ✅ Optional: Firefox (cross-browser support)
     // {

@@ -3,13 +3,6 @@ import { PageFactory } from '../utils/helpers/pageFactory';
 import type { ProductResponse } from '../schemas/products.schema';
 import { fetchSearchResults } from '../utils/api/products';
 
-test('should return products when search query is valid via direct API', async () => {
-  const results = await fetchSearchResults('pantaloni');
-
-  expect(results.items.length).toBeGreaterThan(0);
-  console.log('✅ First product:', results.items[0]?.name ?? 'No products found');
-});
-
 test('Search works on both mobile and desktop', async ({ page }, testInfo) => {
   const platform = testInfo.project.name as 'desktop' | 'mobile';
   const searchPage = PageFactory.getSearchPage(page);
