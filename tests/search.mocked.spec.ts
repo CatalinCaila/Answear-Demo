@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { test, expect } from '@playwright/test';
-import { SearchPage } from '../pages/SearchPage';
+import { SearchPageWeb } from '../pages/web/SearchPageWeb';
 
 // Test to verify that the UI can correctly display mocked product results
 test('UI shows mocked search results', async ({ page }) => {
@@ -23,7 +23,7 @@ test('UI shows mocked search results', async ({ page }) => {
   await page.goto('https://answear.ro/c/barbati', { waitUntil: 'domcontentloaded' });
 
   // Use the SearchPage Page Object to trigger the search
-  const searchPage = new SearchPage(page);
+  const searchPage = new SearchPageWeb(page);
   const results = await searchPage.searchForItem('mock');
 
   // Validate that the mocked product is shown correctly in the response

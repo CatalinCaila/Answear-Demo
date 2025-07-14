@@ -1,7 +1,8 @@
 import { type Page, type Locator, expect } from '@playwright/test';
-import { productsResponseSchema } from '../schemas/products.schema';
+import { productsResponseSchema } from '../../schemas/products.schema';
+import { SearchPageBase } from '../base/SearchPageBase';
 
-export class SearchPage {
+export class SearchPageWeb extends SearchPageBase{
   readonly page: Page;
   readonly menCategory: Locator;
   readonly searchInput: Locator;
@@ -10,6 +11,7 @@ export class SearchPage {
   readonly page2Button: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
     this.searchInput = page.getByTestId('search_input');
     this.menCategory = page.getByTestId('menuMaleCategory');
@@ -26,8 +28,6 @@ export class SearchPage {
  async searchForItem(item: string) {
 
   await this.page.waitForTimeout(10000);
-
-
 
   // ✅ Clear input and fill
   await this.searchInput.fill('');

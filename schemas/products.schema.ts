@@ -85,3 +85,5 @@ export const productsResponseSchema = z.object({
     noindex: z.boolean()
   }).optional()
 });
+
+export type ProductResponse = z.infer<typeof productsResponseSchema>;

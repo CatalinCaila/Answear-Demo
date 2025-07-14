@@ -1,73 +1,48 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
-
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
 export default defineConfig({
-  timeout: 900 * 10000,
-  // This line sets a timeout value for an operation or a series of operations 
-  expect: {
-    timeout: 24000
-    // This sets a timeout specifically for an expect
-  },
-
   testDir: './tests',
-  /* Run tests in files in parallel */
+  timeout: 900_000, // 15 minutes per test
+  expect: {
+    timeout: 24_000 // Timeout for assertions
+  },
   fullyParallel: false,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 0 : 0,
-  /* Opt out of parallel tests on CI. */
+  retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 1 : 1,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-
     headless: false,
     trace: 'on',
     screenshot: 'on',
+    video: {
+      mode: 'retain-on-failure',
+      size: { width: 1280, height: 720 },
+    },
     testIdAttribute: 'data-test',
     ignoreHTTPSErrors: true,
-
-    video: {
-      mode: 'retain-on-failure', // or 'retain-on-failure'
-      size: { width: 1280, height: 720 }, // Higher resolution
-    },
   },
 
-
-  /* Configure projects for major browsers */
-projects: [
-       {
+  projects: [
+    // ✅ Setup login/auth state for user and admin roles
+    {
       name: 'Setup',
       testMatch: 'auth.setup.spec.ts',
     },
 
-    //🌐 API testing
+    // ✅ API tests for search endpoint (desktop)
     {
       name: 'Search product',
-      testMatch: 'search.api.spec.ts',
+      testMatch: 'webSearch.api.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
         storageState: './auth/userAuth.json',
       },
     },
 
-      {
+    // ✅ UI test that compares paginated content (desktop)
+    {
       name: 'Compare product',
       testMatch: 'compare.spec.ts',
       use: {
@@ -75,7 +50,9 @@ projects: [
         storageState: './auth/userAuth.json',
       },
     },
-        {
+
+    // ✅ Discover iframe content on page (desktop)
+    {
       name: 'iframe',
       testMatch: 'iframe-discovery.spec.ts',
       use: {
@@ -84,7 +61,8 @@ projects: [
       },
     },
 
-          {
+    // ✅ Mock API response for search results (desktop)
+    {
       name: 'MockSearch',
       testMatch: 'search.mocked.spec.ts',
       use: {
@@ -93,44 +71,35 @@ projects: [
       },
     },
 
-  
-  ],
-});
-    //     {
-    //       name: 'firefox',
-    //       use: { ...devices['Desktop Firefox'] },
-    //     },
+    // ✅ Cross-device testing (Pixel 5)
 
-    //  {
+
+        {
+      name: 'Mobile Galaxy S9+ Search',
+      testMatch: 'mobileSearch.spec.ts',
+      use: {
+        ...devices['Galaxy S9+'],
+        storageState: './auth/userAuth.json',
+      },
+    },
+
+    // ✅ Optional: Firefox (cross-browser support)
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
+
+    // ✅ Optional: Microsoft Edge
+    // {
     //   name: 'edge',
-    //   use: { ...devices['Desktop Edge'] }, // Use the correct Edge device profile
-    // }
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
     //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
     // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
-//  ],
+  ],
 
-  /* Run your local dev server before starting the tests */
+  // ✅ Optional: run local dev server before starting tests
   // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://127.0.0.1:3000',
+  //   command: 'npm run dev',
+  //   url: 'http://localhost:3000',
   //   reuseExistingServer: !process.env.CI,
   // },
-//});
+});
