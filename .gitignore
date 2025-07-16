@@ -1,8 +1,10 @@
-
-# Playwright
 node_modules/
 test-results/
 allure-results/
 allure-report/
+playwright-report/
 .env
 *.log
+.vscode/
+auth/*.json
+auth/*.txt
