@@ -40,7 +40,7 @@ pipeline {
 
     stage('Generate Allure Report') {
       steps {
-        bat 'allure generate %REPORT_DIR% --clean -o allure-report'
+        bat '"%ALLURE_HOME%\\bin\\allure.bat" generate %REPORT_DIR% --clean -o allure-report'
       }
     }
   }
@@ -57,7 +57,7 @@ pipeline {
     }
 
     failure {
-      mail to: 'your-email@example.com',
+      mail to: 'catalin.caila@gmail.com',
         subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
         body: "Something went wrong with the Jenkins pipeline. Check logs here: ${env.BUILD_URL}"
     }
