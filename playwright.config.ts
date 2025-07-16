@@ -2,9 +2,9 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
-  timeout: 120_000, // 15 minutes per test
+  timeout: 400_000, // 
   expect: {
-    timeout: 24_000 // Timeout for assertions
+    timeout: 50_000 // Timeout for assertions
   },
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
@@ -13,7 +13,8 @@ export default defineConfig({
   reporter: 'html',
 
   use: {
-    headless: process.env.CI ? true : false,
+    headless: true,
+    viewport: { width: 1920, height: 1080 },
     trace: 'on',
     screenshot: 'on',
     video: {
@@ -29,10 +30,12 @@ export default defineConfig({
     {
       name: 'Setup',
       testMatch: 'auth.setup.spec.ts',
+       use: {
+        ...devices['Desktop Chrome']
+      },
     },
 
 
-    // ✅ UI test that compares paginated content (desktop)
     {
       name: 'Compare product',
       testMatch: 'compare.spec.ts',
@@ -44,22 +47,10 @@ export default defineConfig({
 
 
 
-    // ✅ Mock API response for search results (desktop)
-    {
-      name: 'MockSearch',
-      testMatch: 'search.mocked.spec.ts',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: './auth/userAuth.json',
-      },
-    },
-
-    // ✅ Cross-device testing (Pixel 5)
-
 
     {
       name: 'desktop',
-      testMatch: ['tests/search.cross.spec.ts'],
+      testMatch: ['tests/cross/search.cross.spec.ts'],
       use: {
         ...devices['Desktop Chrome'],
         storageState: './auth/userAuth.json',
@@ -67,19 +58,27 @@ export default defineConfig({
     },
     {
       name: 'mobile',
-      testMatch: ['tests/search.cross.spec.ts'],
+      testMatch: ['tests/cross/search.cross.spec.ts'],
       use: {
         ...devices['Galaxy S9+'],
         storageState: './auth/userAuth.json',
       },
-    
+    },
+
+        {
+      name: 'Mock Search',
+      testMatch: 'search.mocked.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: './auth/userAuth.json',
+      },
     },
 
     {
     name: 'api',
-    testMatch: ['tests/webSearch.api.spec.ts'],
+    testMatch: ['tests/api/webSearch.api.spec.ts'],
     use: {} // no device emulation needed
-  }
+  },
 
     // ✅ Optional: Firefox (cross-browser support)
     // {

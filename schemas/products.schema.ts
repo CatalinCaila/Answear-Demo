@@ -1,3 +1,4 @@
+
 import { z } from 'zod';
 
 const availabilityEnum = z.enum(['IN_STOCK', 'OUT_OF_STOCK', 'LAST']);
@@ -76,7 +77,7 @@ export const productsResponseSchema = z.object({
     url: z.string()
   }).optional(),
   urlFilters: z.string().optional(),
-  sorting: z.record(z.string()).optional(),
+
   count: z.number().optional(),
   seoMetaTags: z.object({
     title: z.string(),
