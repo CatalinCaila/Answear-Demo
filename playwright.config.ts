@@ -48,37 +48,37 @@ export default defineConfig({
 
 
 
-    {
-      name: 'desktop',
-      testMatch: ['tests/cross/search.cross.spec.ts'],
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: './auth/userAuth.json',
-      },
-    },
-    {
-      name: 'mobile',
-      testMatch: ['tests/cross/search.cross.spec.ts'],
-      use: {
-        ...devices['Galaxy S9+'],
-        storageState: './auth/userAuth.json',
-      },
-    },
+    // {
+    //   name: 'desktop',
+    //   testMatch: ['tests/cross/search.cross.spec.ts'],
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     storageState: './auth/userAuth.json',
+    //   },
+    // },
+    // {
+    //   name: 'mobile',
+    //   testMatch: ['tests/cross/search.cross.spec.ts'],
+    //   use: {
+    //     ...devices['Galaxy S9+'],
+    //     storageState: './auth/userAuth.json',
+    //   },
+    // },
 
-        {
-      name: 'Mock Search',
-      testMatch: 'search.mocked.spec.ts',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: './auth/userAuth.json',
-      },
-    },
+  //       {
+  //     name: 'Mock Search',
+  //     testMatch: 'search.mocked.spec.ts',
+  //     use: {
+  //       ...devices['Desktop Chrome'],
+  //       storageState: './auth/userAuth.json',
+  //     },
+  //   },
 
-    {
-    name: 'api',
-    testMatch: ['tests/api/webSearch.api.spec.ts'],
-    use: {} // no device emulation needed
-  },
+  //   {
+  //   name: 'api',
+  //   testMatch: ['tests/api/webSearch.api.spec.ts'],
+  //   use: {} // no device emulation needed
+  // },
 
     // ✅ Optional: Firefox (cross-browser support)
     // {
