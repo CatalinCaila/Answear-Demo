@@ -4,6 +4,10 @@ pipeline {
   environment {
     NODE_ENV = 'test'
     REPORT_DIR = 'allure-results'
+    ADMIN_EMAIL = credentials('ADMIN_EMAIL')
+    ADMIN_PASSWORD = credentials('ADMIN_PASSWORD')
+    USER_EMAIL = credentials('USER_EMAIL')
+    USER_PASSWORD = credentials('USER_PASSWORD')
   }
 
   tools {
@@ -32,6 +36,17 @@ pipeline {
       }
     }
 
+    stage('Prepare .env') {
+      steps {
+        bat '''
+          echo ADMIN_EMAIL=%ADMIN_EMAIL% > .env
+          echo ADMIN_PASSWORD=%ADMIN_PASSWORD% >> .env
+          echo USER_EMAIL=%USER_EMAIL% >> .env
+          echo USER_PASSWORD=%USER_PASSWORD% >> .env
+        '''
+      }
+    }
+
     stage('Run Playwright Tests') {
       steps {
         bat 'npx playwright test --reporter=line,allure-playwright'
@@ -54,6 +69,8 @@ pipeline {
         results: [[path: 'allure-results']],
         reportBuildPolicy: 'ALWAYS'
       ])
+
+      bat 'del .env'
     }
 
     failure {
