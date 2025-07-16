@@ -8,6 +8,7 @@ pipeline {
 
   tools {
     nodejs 'NodeJS 22.15.0'
+    allure 'Allure 2.34.1' // matches Jenkins configured tool name
   }
 
   stages {
@@ -28,7 +29,6 @@ pipeline {
       steps {
         bat 'npm ci'
         bat 'npx playwright install --with-deps'
-        bat 'npm install -D allure-commandline'
       }
     }
 
@@ -40,7 +40,7 @@ pipeline {
 
     stage('Generate Allure Report') {
       steps {
-        bat 'npx allure-commandline generate %REPORT_DIR% --clean -o allure-report'
+        bat 'allure generate %REPORT_DIR% --clean -o allure-report'
       }
     }
   }
@@ -50,6 +50,7 @@ pipeline {
       archiveArtifacts artifacts: 'allure-report/**', fingerprint: true
 
       allure([
+        commandline: 'Allure 2.34.1',
         results: [[path: 'allure-results']],
         reportBuildPolicy: 'ALWAYS'
       ])
