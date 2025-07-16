@@ -4,10 +4,6 @@ pipeline {
   environment {
     NODE_ENV = 'test'
     REPORT_DIR = 'allure-results'
-    ADMIN_EMAIL = credentials('ADMIN_EMAIL')
-    ADMIN_PASSWORD = credentials('ADMIN_PASSWORD')
-    USER_EMAIL = credentials('USER_EMAIL')
-    USER_PASSWORD = credentials('USER_PASSWORD')
   }
 
   tools {
@@ -19,7 +15,7 @@ pipeline {
 
     stage('Clean Workspace') {
       steps {
-        cleanWs()
+        cleanWs(deleteDirs: true)
       }
     }
 
@@ -36,14 +32,21 @@ pipeline {
       }
     }
 
-    stage('Prepare .env') {
+    stage('Prepare .env Securely') {
       steps {
-        bat '''
-          echo ADMIN_EMAIL=%ADMIN_EMAIL% > .env
-          echo ADMIN_PASSWORD=%ADMIN_PASSWORD% >> .env
-          echo USER_EMAIL=%USER_EMAIL% >> .env
-          echo USER_PASSWORD=%USER_PASSWORD% >> .env
-        '''
+        withCredentials([
+          string(credentialsId: 'ADMIN_EMAIL', variable: 'ADMIN_EMAIL'),
+          string(credentialsId: 'ADMIN_PASSWORD', variable: 'ADMIN_PASSWORD'),
+          string(credentialsId: 'USER_EMAIL', variable: 'USER_EMAIL'),
+          string(credentialsId: 'USER_PASSWORD', variable: 'USER_PASSWORD')
+        ]) {
+          bat '''
+            echo ADMIN_EMAIL=%ADMIN_EMAIL% > .env
+            echo ADMIN_PASSWORD=%ADMIN_PASSWORD% >> .env
+            echo USER_EMAIL=%USER_EMAIL% >> .env
+            echo USER_PASSWORD=%USER_PASSWORD% >> .env
+          '''
+        }
       }
     }
 
@@ -70,7 +73,7 @@ pipeline {
         reportBuildPolicy: 'ALWAYS'
       ])
 
-      bat 'del .env'
+      bat 'del /f .env'
     }
 
     failure {
