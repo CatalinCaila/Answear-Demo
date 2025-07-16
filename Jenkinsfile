@@ -11,6 +11,7 @@ pipeline {
   }
 
   stages {
+
     stage('Clean Workspace') {
       steps {
         cleanWs()
@@ -23,22 +24,23 @@ pipeline {
       }
     }
 
-    stage('Install') {
+    stage('Install Dependencies') {
       steps {
         bat 'npm ci'
         bat 'npx playwright install --with-deps'
+        bat 'npm install -D allure-commandline'
       }
     }
 
-    stage('Test') {
+    stage('Run Playwright Tests') {
       steps {
-        bat 'npx playwright test --reporter=list,allure-playwright'
+        bat 'npx playwright test --reporter=line,allure-playwright'
       }
     }
 
     stage('Generate Allure Report') {
       steps {
-        bat 'npx allure generate allure-results --clean -o allure-report'
+        bat 'npx allure-commandline generate %REPORT_DIR% --clean -o allure-report'
       }
     }
   }
@@ -46,6 +48,17 @@ pipeline {
   post {
     always {
       archiveArtifacts artifacts: 'allure-report/**', fingerprint: true
+
+      allure([
+        results: [[path: 'allure-results']],
+        reportBuildPolicy: 'ALWAYS'
+      ])
+    }
+
+    failure {
+      mail to: 'your-email@example.com',
+        subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+        body: "Something went wrong with the Jenkins pipeline. Check logs here: ${env.BUILD_URL}"
     }
   }
 }
