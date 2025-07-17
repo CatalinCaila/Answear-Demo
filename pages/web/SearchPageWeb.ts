@@ -9,7 +9,8 @@ export class SearchPageWeb extends SearchPageBase{
   readonly searchButton: Locator;
   readonly productCardDescription: Locator;
   readonly page2Button: Locator;
-
+  readonly cartCount: Locator;
+ 
   constructor(page: Page) {
     super(page);
     this.page = page;
@@ -18,6 +19,7 @@ export class SearchPageWeb extends SearchPageBase{
     this.searchButton = page.getByTestId('search_button');
     this.productCardDescription = page.locator('[data-test="productCardDescription"] >> span');
     this.page2Button = page.locator('[data-test="paginationPageNumbersItem"] >> text=2');
+    this.cartCount = page.getByTestId('cart_count');
   }
 
   async selectMenCategory() {
@@ -26,14 +28,13 @@ export class SearchPageWeb extends SearchPageBase{
   }
 
  async searchForItem(item: string) {
+ await this.cartCount.waitFor({ state: 'visible' });
 
-  await this.page.waitForTimeout(10000);
 
   // ✅ Clear input and fill
   await this.searchInput.fill('');
   await this.searchInput.fill(item);
 
-  await this.searchButton.waitFor({ state: 'visible', timeout: 5000 });
 
   const [response] = await Promise.all([
     this.page.waitForResponse(res =>

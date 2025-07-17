@@ -8,6 +8,7 @@ export class SearchPageMobile extends SearchPageBase {
   readonly searchIcon: Locator;
   readonly searchInput: Locator;
   readonly searchButton: Locator;
+  readonly cartCount: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -16,6 +17,7 @@ export class SearchPageMobile extends SearchPageBase {
     this.searchIcon = page.getByTestId('search_icon');
     this.searchInput = page.locator('#productsSearch');
     this.searchButton = page.locator('div[data-test="search_component"] i.multiTheme-icon-search');
+    this.cartCount = page.getByTestId('cart_count');
   }
 
   async selectMenCategory() {
@@ -23,7 +25,7 @@ export class SearchPageMobile extends SearchPageBase {
   }
 
   async searchForItem(item: string) {
-    await this.page.getByTestId('cart_count').waitFor({ state: 'visible' });
+     await this.cartCount.waitFor({ state: 'visible' });
     await this.searchIcon.click();
     await this.searchInput.fill('');
     await this.searchInput.fill(item);

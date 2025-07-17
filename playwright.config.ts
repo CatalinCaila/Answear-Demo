@@ -13,7 +13,7 @@ export default defineConfig({
   reporter: 'html',
 
   use: {
-    headless: true,
+    headless: false,
     viewport: { width: 1920, height: 1080 },
     trace: 'on',
     screenshot: 'on',
@@ -28,75 +28,60 @@ export default defineConfig({
   projects: [
     // ✅ Setup login/auth state for user and admin roles
     {
-      name: 'Setup',
-      testMatch: 'auth.setup.spec.ts',
+      name: 'setup',
+      testMatch: 'setup/auth.setup.spec.ts',
        use: {
         ...devices['Desktop Chrome']
       },
     },
 
 
-    {
-      name: 'Compare product',
-      testMatch: 'compare.spec.ts',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: './auth/userAuth.json',
-      },
-    },
-
-
-
-
     // {
-    //   name: 'desktop',
-    //   testMatch: ['tests/cross/search.cross.spec.ts'],
+    //   name: 'compare-product',
+    //   testMatch: 'ui/compare.spec.ts',
     //   use: {
     //     ...devices['Desktop Chrome'],
     //     storageState: './auth/userAuth.json',
     //   },
     // },
-    // {
-    //   name: 'mobile',
-    //   testMatch: ['tests/cross/search.cross.spec.ts'],
+
+
+
+
+     {
+      name: 'search-cross-browser-desktop',
+      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+      use: { 
+        ...devices['Desktop Chrome'], 
+        storageState: './auth/userAuth.json'
+      },
+    },
+    {
+      name: 'search-cross-browser-mobile',
+      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+      use: { 
+        ...devices['Galaxy S9+'], 
+        storageState: './auth/userAuth.json'
+      },
+    },
+
+    //     {
+    //   name: 'mock-search-element-not-found',
+    //   testMatch: 'mocks/search.mocked.spec.ts',
     //   use: {
-    //     ...devices['Galaxy S9+'],
+    //     ...devices['Desktop Chrome'],
     //     storageState: './auth/userAuth.json',
     //   },
     // },
 
-  //       {
-  //     name: 'Mock Search',
-  //     testMatch: 'search.mocked.spec.ts',
-  //     use: {
-  //       ...devices['Desktop Chrome'],
-  //       storageState: './auth/userAuth.json',
-  //     },
-  //   },
-
   //   {
-  //   name: 'api',
+  //   name: 'api-web-search',
   //   testMatch: ['tests/api/webSearch.api.spec.ts'],
   //   use: {} // no device emulation needed
   // },
 
-    // ✅ Optional: Firefox (cross-browser support)
-    // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
 
-    // ✅ Optional: Microsoft Edge
-    // {
-    //   name: 'edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
   ],
 
-  // ✅ Optional: run local dev server before starting tests
-  // webServer: {
-  //   command: 'npm run dev',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  
 });

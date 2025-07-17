@@ -1,14 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import { test, expect } from '@playwright/test';
-import { SearchPageWeb } from '../pages/web/SearchPageWeb';
+import { SearchPageWeb } from '../../pages/web/SearchPageWeb';
 
 // Test to verify that the UI can correctly display mocked product results
 test.describe('@ui @mock @search', () => {
 test('UI shows mocked search results', async ({ page }) => {
   // Read the mock API response from a local JSON file
   const mockData = JSON.parse(
-    fs.readFileSync(path.resolve(__dirname, '../fixtures/products.mock.json'), 'utf-8')
+    fs.readFileSync(path.resolve(__dirname, '../../fixtures/products.mock.json'), 'utf-8')
   );
 
   // Intercept the real /api/products call and respond with mock data instead

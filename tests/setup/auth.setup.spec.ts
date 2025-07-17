@@ -1,7 +1,7 @@
 // tests/auth.setup.spec.ts
 import { test } from '@playwright/test';
-import { generateAuthState } from '../utils/helpers/generateAuthState';
-import { Role } from '../utils/helpers/roleTypes';
+import { generateAuthState } from '../../utils/helpers/generateAuthState';
+import { Role } from '../../utils/helpers/roleTypes';
 
 
 test.describe('@auth @setup @helper', () => {

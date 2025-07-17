@@ -1,6 +1,6 @@
 // tests/compare.user.spec.ts
-import { test } from '../fixtures/auth/roleFixture';
-import { SearchPageWeb } from '../pages/web/SearchPageWeb';
+import { test } from '../../fixtures/auth/roleFixture';
+import { SearchPageWeb } from '../../pages/web/SearchPageWeb';
 
 test.describe('@ui @search @pagination', () => {
 test('User can compare products', async ({ page}) => {
