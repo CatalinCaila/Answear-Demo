@@ -15,14 +15,21 @@ export async function generateAuthState(page: Page, role: Role) {
   await cookieBanner.clickIfPresent();
 
   await userPage.loginUsers(credentials[role].email, credentials[role].password);
-  await page.waitForURL('**/contul-meu', { timeout: 10000 });
-  await page.waitForTimeout(2000);
 
+  // ✅ Explicitly wait until the token is complete and has the correct JWT structure:
+  await page.waitForFunction(() => {
+    const token = localStorage.getItem('access_token');
+    return token && token.split('.').length === 3;
+  }, null, { timeout: 15000 });
+
+  // Now, reliably save the storage state
   const authPath = path.resolve(process.cwd(), credentials[role].storageState);
   await page.context().storageState({ path: authPath });
 
   const token = await page.evaluate(() => localStorage.getItem('access_token'));
-  if (!token) throw new Error(`❌ Token not found for ${role}`);
+  if (!token || token.split('.').length !== 3) {
+    throw new Error(`❌ Invalid or incomplete token found for ${role}`);
+  }
 
   if (role === Role.User) {
     fs.writeFileSync(path.resolve('auth/userAccessToken.txt'), token, 'utf-8');

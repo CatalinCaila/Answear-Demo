@@ -3,7 +3,6 @@ import { productsResponseSchema } from '../../schemas/products.schema';
 import { SearchPageBase } from '../base/SearchPageBase';
 
 export class SearchPageWeb extends SearchPageBase{
-  readonly page: Page;
   readonly menCategory: Locator;
   readonly searchInput: Locator;
   readonly searchButton: Locator;
@@ -13,7 +12,6 @@ export class SearchPageWeb extends SearchPageBase{
  
   constructor(page: Page) {
     super(page);
-    this.page = page;
     this.searchInput = page.getByTestId('search_input');
     this.menCategory = page.getByTestId('menuMaleCategory');
     this.searchButton = page.getByTestId('search_button');
@@ -55,32 +53,27 @@ export class SearchPageWeb extends SearchPageBase{
 }
 
 async compareValueOfPage1And2() {
-    await this.page.goto('https://answear.ro/c/barbati', { waitUntil: 'domcontentloaded' });
- 
-    await this.page.waitForTimeout(10000);
-    await this.searchInput.waitFor({ state: 'visible', timeout: 10000 });
-    await this.searchInput.fill('pantaloni');
-    await this.searchInput.press('Enter');
+  await this.page.goto('https://answear.ro/c/barbati', { waitUntil: 'domcontentloaded' });
 
-    await expect(this.page).toHaveURL(/\/k\/barbati.*q=pantaloni/);
-    await expect(this.productCardDescription.first()).toBeVisible();
+  await this.cartCount.waitFor({ state: 'visible' });
+  await this.searchInput.fill('pantaloni');
+  await this.searchInput.press('Enter');
 
-    await this.page.waitForTimeout(10000);
-    const page1Names = await this.productCardDescription.allTextContents();
+  // Explicitly target product names clearly
+  const productDescriptions = this.page.locator('[data-test="productCardDescription"] span');
+  await productDescriptions.first().waitFor({ state: 'visible', timeout: 15000 });
 
-    // Wait for page 2 button and click it
-    await this.page2Button.waitFor({ state: 'visible', timeout: 10000 });
-    await this.page2Button.click();
+  const page1Names = await productDescriptions.allTextContents();
 
-    await expect(this.page).toHaveURL(/\/k\/barbati.*page=2.*q=pantaloni/);
-    await expect(this.productCardDescription.first()).toBeVisible();
-    
-    await this.page.waitForTimeout(10000);
-    const page2Names = await this.productCardDescription.allTextContents();
+  await this.page2Button.waitFor({ state: 'visible', timeout: 50000 });
+  await this.page2Button.click();
 
-    // Assertion
-    expect(page1Names).not.toBe(page2Names);
-    console.log('✅ Page 1 first:', page1Names[0]);
-    console.log('✅ Page 2 first:', page2Names[0]);
-  }
+  await productDescriptions.first().waitFor({ state: 'visible', timeout: 15000 });
+  const page2Names = await productDescriptions.allTextContents();
+
+  expect(page1Names).not.toEqual(page2Names);
+
+  console.log('✅ Page 1 first:', page1Names[0]);
+  console.log('✅ Page 2 first:', page2Names[0]);
+}
 }

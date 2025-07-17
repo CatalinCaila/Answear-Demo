@@ -26,7 +26,7 @@ export default defineConfig({
   },
 
   projects: [
-    // ✅ Setup login/auth state for user and admin roles
+   // ✅ Setup login/auth state for user and admin roles
     {
       name: 'setup',
       testMatch: 'setup/auth.setup.spec.ts',
@@ -36,16 +36,14 @@ export default defineConfig({
     },
 
 
-    // {
-    //   name: 'compare-product',
-    //   testMatch: 'ui/compare.spec.ts',
-    //   use: {
-    //     ...devices['Desktop Chrome'],
-    //     storageState: './auth/userAuth.json',
-    //   },
-    // },
-
-
+    {
+      name: 'compare-product',
+      testMatch: 'ui/compare.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: './auth/userAuth.json',
+      },
+    },
 
 
      {
@@ -65,20 +63,20 @@ export default defineConfig({
       },
     },
 
-    //     {
-    //   name: 'mock-search-element-not-found',
-    //   testMatch: 'mocks/search.mocked.spec.ts',
-    //   use: {
-    //     ...devices['Desktop Chrome'],
-    //     storageState: './auth/userAuth.json',
-    //   },
-    // },
+        {
+      name: 'mock-search-element-not-found',
+      testMatch: 'mocks/search.mocked.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: './auth/userAuth.json',
+      },
+    },
 
-  //   {
-  //   name: 'api-web-search',
-  //   testMatch: ['tests/api/webSearch.api.spec.ts'],
-  //   use: {} // no device emulation needed
-  // },
+    {
+    name: 'api-web-search',
+    testMatch: ['tests/api/webSearch.api.spec.ts'],
+    use: {} // no device emulation needed
+  },
 
 
   ],

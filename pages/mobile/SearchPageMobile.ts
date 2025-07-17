@@ -3,7 +3,6 @@ import { SearchPageBase } from '../base/SearchPageBase';
 import { productsResponseSchema } from '../../schemas/products.schema';
 
 export class SearchPageMobile extends SearchPageBase {
-  readonly page: Page;
   readonly menCategory: Locator;
   readonly searchIcon: Locator;
   readonly searchInput: Locator;
@@ -12,7 +11,6 @@ export class SearchPageMobile extends SearchPageBase {
 
   constructor(page: Page) {
     super(page);
-    this.page = page;
     this.menCategory = page.locator('a.btn').nth(1);
     this.searchIcon = page.getByTestId('search_icon');
     this.searchInput = page.locator('#productsSearch');
