@@ -3,7 +3,7 @@ import { Page } from '@playwright/test';
 import path from 'path';
 import fs from 'fs';
 import { UsersPage } from '../../pages/UsersPage';
-import { CookieBanner } from '../../pages/CookieBanner';
+import { CookieBanner } from '../../pages/common/CookieBanner';
 import { credentials } from './credentials';
 import { Role } from './roleTypes';
 
@@ -12,6 +12,7 @@ export async function generateAuthState(page: Page, role: Role) {
   const cookieBanner = new CookieBanner(page);
 
   await page.goto('https://answear.ro', { waitUntil: 'domcontentloaded' });
+  await page.getByTestId('cookiesPopupContainer').waitFor({state: "visible", timeout : 60000});
   await cookieBanner.clickIfPresent();
 
   await userPage.loginUsers(credentials[role].email, credentials[role].password);
