@@ -9,7 +9,7 @@ import { logger } from '../../utils/logger';
 /**
  * UI test suite verifying product search results with mocked API responses.
  */
-test.describe('@ui @mock @search', () => {
+test.describe('@dev @qa @prod @ui @mock @search', () => {
   test('UI shows mocked search results', async ({ page }) => {
     // Load mocked API response from fixtures
     const mockFilePath = path.resolve(__dirname, '../../fixtures/products.mock.json');

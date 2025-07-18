@@ -8,7 +8,7 @@ import { logger } from '../../utils/logger';
 /**
  * UI test suite to verify search functionality across both desktop and mobile.
  */
-test.describe('@ui @crossdevice @search', () => {
+test.describe('@dev @qa @prod @ui @crossdevice @search', () => {
   test('Search works on both mobile and desktop', async ({ page, isMobile }) => {
     const platform: 'mobile' | 'desktop' = isMobile ? 'mobile' : 'desktop';
     logger.info(`[CrossDevice Search] Running search test on ${platform}.`);

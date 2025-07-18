@@ -8,7 +8,7 @@ import { logger } from '../../utils/logger';
 /**
  * Authentication setup tests to generate auth state files for user roles.
  */
-test.describe('@auth @setup @helper', () => {
+test.describe('@dev @qa @prod @auth @setup @helper', () => {
   for (const role of Object.values(Role)) {
     test(`Generate auth state for ${role}`, async ({ page }) => {
       logger.info(`[Auth Setup] Generating authentication state for role: ${role}`);

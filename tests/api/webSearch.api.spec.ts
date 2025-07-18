@@ -7,7 +7,7 @@ import { logger } from '../../utils/logger';
 /**
  * API test suite verifying product search functionality via direct API.
  */
-test.describe('@api @search', () => {
+test.describe('@dev @qa @prod @api @search', () => {
   test('should return products when search query is valid via direct API', async () => {
     const searchTerm = 'pantaloni';
     logger.info(`[API Search] Initiating API search for "${searchTerm}".`);

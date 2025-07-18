@@ -7,7 +7,7 @@ import { logger } from '../../utils/logger';
 /**
  * UI test verifying product comparison functionality across pagination for authenticated users.
  */
-test.describe('@ui @search @pagination', () => {
+test.describe('@dev @qa @prod @ui @search @pagination', () => {
   test('User can compare products', async ({ page }) => {
     logger.info('[Compare Products] Test started: User can compare products across pages.');
     
