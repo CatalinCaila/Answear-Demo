@@ -9,4 +9,7 @@ playwright-report/
 auth/*.json
 auth/*.txt
 logs/
+.env.dev
+.env.prod
+.env.qa
 
