@@ -3,13 +3,11 @@ test-results/
 allure-results/
 allure-report/
 playwright-report/
+.env.*
 .env
 *.log
 .vscode/
 auth/*.json
 auth/*.txt
 logs/
-.env.dev
-.env.prod
-.env.qa
 
