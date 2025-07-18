@@ -34,7 +34,7 @@ export default defineConfig({
   },
 
   projects: [
-//   ✅ Setup login/auth state for user and admin roles
+ // ✅ Setup login/auth state for user and admin roles
     {
       name: 'setup',
       testMatch: 'setup/auth.setup.spec.ts',

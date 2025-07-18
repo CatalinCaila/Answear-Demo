@@ -4,7 +4,10 @@ import path from 'path';
 import { productsResponseSchema } from '../../schemas/products.schema';
 import type { z } from 'zod';
 import { logger } from '../logger';
+import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 // Define the expected response type using the Zod schema
 export type ProductsResponse = z.infer<typeof productsResponseSchema>;
 
