@@ -1,21 +1,8 @@
-// utils/logger.ts
+import winston from 'winston';
 
-import { createLogger, format, transports } from 'winston';
+const logLevel = process.env.ENABLE_LOGS === 'false' ? 'silent' : 'info';
 
-/**
- * Logger configuration using Winston for structured, leveled logging.
- */
-export const logger = createLogger({
-  level: process.env.LOG_LEVEL || 'info',
-  format: format.combine(
-    format.colorize(),
-    format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    format.printf(
-      ({ timestamp, level, message }) => `${timestamp} [${level}]: ${message}`,
-    ),
-  ),
-  transports: [
-    new transports.Console(),
-    new transports.File({ filename: 'logs/playwright.log' }),
-  ],
+export const logger = winston.createLogger({
+  level: logLevel,
+  transports: [new winston.transports.Console()],
 });

@@ -46,7 +46,7 @@ export default defineConfig({
     },
 
 
-     {
+    {
       name: 'search-cross-browser-desktop',
       testMatch: ['tests/cross-browser/search.cross.spec.ts'],
       use: { 

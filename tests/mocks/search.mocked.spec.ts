@@ -1,33 +1,40 @@
+// tests/mocks/search.mocked.spec.ts
+
 import fs from 'fs';
 import path from 'path';
 import { test, expect } from '@playwright/test';
 import { SearchPageWeb } from '../../pages/web/SearchPageWeb';
+import { logger } from '../../utils/logger';
 
-// Test to verify that the UI can correctly display mocked product results
+/**
+ * UI test suite verifying product search results with mocked API responses.
+ */
 test.describe('@ui @mock @search', () => {
-test('UI shows mocked search results', async ({ page }) => {
-  // Read the mock API response from a local JSON file
-  const mockData = JSON.parse(
-    fs.readFileSync(path.resolve(__dirname, '../../fixtures/products.mock.json'), 'utf-8')
-  );
+  test('UI shows mocked search results', async ({ page }) => {
+    // Load mocked API response from fixtures
+    const mockFilePath = path.resolve(__dirname, '../../fixtures/products.mock.json');
+    const mockData = JSON.parse(fs.readFileSync(mockFilePath, 'utf-8'));
+    logger.info(`[Mocked Search] Loaded mock data from "${mockFilePath}".`);
 
-  // Intercept the real /api/products call and respond with mock data instead
-  await page.route('**/api/products', async route => {
-    route.fulfill({
-      status: 200, // Simulate success response
-      contentType: 'application/json',
-      body: JSON.stringify(mockData)
+    // Mock the products API call
+    await page.route('**/api/products', async route => {
+      logger.info('[Mocked Search] Intercepted API request. Responding with mocked data.');
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockData),
+      });
     });
+
+    // Perform UI actions
+    await page.goto('https://answear.ro/c/barbati', { waitUntil: 'domcontentloaded' });
+    logger.info('[Mocked Search] Navigated to men’s clothing category page.');
+
+    const searchPage = new SearchPageWeb(page);
+    const results = await searchPage.searchForItem('mock');
+
+    // Assert mocked results
+    expect(results.items[0].name).toBe('Mocked Pantaloni');
+    logger.info('[Mocked Search] ✅ Mocked product result verified successfully.');
   });
-
-  // Navigate to the men's clothing category page
-  await page.goto('https://answear.ro/c/barbati', { waitUntil: 'domcontentloaded' });
-
-  // Use the SearchPage Page Object to trigger the search
-  const searchPage = new SearchPageWeb(page);
-  const results = await searchPage.searchForItem('mock');
-
-  // Validate that the mocked product is shown correctly in the response
-  expect(results.items[0].name).toBe('Mocked Pantaloni');
-});
 });

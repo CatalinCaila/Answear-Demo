@@ -1,49 +1,60 @@
 // fixtures/auth/fixtures.ts
-import { test as base } from '@playwright/test';
+
+import { test as base, expect } from '@playwright/test';
 import { generateAuthState } from '../../utils/helpers/generateAuthState';
 import { Role } from '../../utils/helpers/roleTypes';
 import fs from 'fs';
 import path from 'path';
+import { logger } from '../../utils/logger';
+
+/**
+ * Custom fixture to handle user authentication states dynamically within tests.
+ * Allows easy switching between different user roles (Admin, User).
+ */
 export const test = base.extend<{
   loginAs: (role: Role) => Promise<void>;
 }>({
-  // Define a custom Playwright fixture: `loginAs`
   loginAs: async ({ page }, use) => {
-    // Provide the actual implementation of the loginAs function to the test context
+    /**
+     * Fixture function: `loginAs`
+     * Logs into the application based on specified user role and manages the auth state.
+     */
     await use(async (role: Role) => {
       const filePath = path.resolve(__dirname, `../../../auth/${role}Auth.json`);
 
-      // If the auth state file already exists, reuse it to avoid login
+      // Check if authentication state already exists for the given role
       if (fs.existsSync(filePath)) {
+        logger.info(`[Fixture] Reusing existing auth state for role: ${role}`);
         await page.context().storageState({ path: filePath });
         return;
       }
 
-      // Otherwise, perform the login flow and save the state to file
+      // Generate new auth state if not already available
+      logger.info(`[Fixture] Generating new auth state for role: ${role}`);
       await generateAuthState(page, role);
     });
   },
 });
 
-// Re-export expect for convenience in test files
-export { expect } from '@playwright/test';
+// Re-exporting expect for easier usage in tests
+export { expect };
 
 /**
- * Where fixture of loginAs can be apply, I don't have an admin role, to do the test
- * this is just a use case of the custom fixture.
- * SCENARIO: Admin applies discount, User verifies discount
+ * USE-CASE EXAMPLE:
+ *
+ * SCENARIO: Admin applies discount, User verifies discount.
  *
  * ROLES:
- * - Admin: logs into admin dashboard and creates a 10% discount
- * - User: logs into storefront and verifies the discounted price is visible
+ *  - Admin: Logs into admin dashboard and sets a product discount.
+ *  - User: Logs into storefront and verifies the discounted price.
  *
- * FLOW:
- * 1. Admin logs in and navigates to product management
- * 2. Admin searches for the product and sets a discount
- * 3. Admin saves the discount and verifies success message
- * 4. User logs in, searches for the same product
- * 5. User verifies that the discounted price is lower than the original
+ * TEST FLOW:
+ *  1. Admin logs in and navigates to product management.
+ *  2. Admin sets a 10% discount on a product and verifies success.
+ *  3. User logs in, searches for the discounted product.
+ *  4. User verifies the product displays the correct discounted price.
  *
- * TECHNIQUES:
- * - Uses loginAs(Role) fixture to switch roles dynamically within one test
+ * TEST TECHNIQUES USED:
+ *  - Dynamically switches roles within a single test via `loginAs(Role)` fixture.
+ *  - Clearly demonstrates end-to-end flows involving multiple user permissions.
  */

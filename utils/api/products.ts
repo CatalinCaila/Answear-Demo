@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { productsResponseSchema } from '../../schemas/products.schema';
 import type { z } from 'zod';
+import { logger } from '../logger';
 
 // Define the expected response type using the Zod schema
 export type ProductsResponse = z.infer<typeof productsResponseSchema>;
@@ -17,11 +18,13 @@ export async function fetchSearchResults(query: string): Promise<ProductsRespons
   // Resolve token file path and validate its existence
   const tokenPath = path.resolve(__dirname, '../../auth/userAccessToken.txt');
   if (!fs.existsSync(tokenPath)) {
+    logger.error(`Token file missing at ${tokenPath}`);
     throw new Error(`❌ Token file not found at: ${tokenPath}`);
   }
 
   // Read the Bearer token
   const token = fs.readFileSync(tokenPath, 'utf-8').trim();
+  logger.info(`[Products API] Using token from ${tokenPath}`);
 
   // Create a new Playwright API context with required headers
   const context: APIRequestContext = await request.newContext({
@@ -56,6 +59,7 @@ export async function fetchSearchResults(query: string): Promise<ProductsRespons
 
   // Expect the response to be successful (HTTP 200 OK)
   expect(response.status(), 'Expected 200 OK from /api/products').toBe(200);
+  logger.info(`[Products API] ✅ Received successful response for query "${query}"`);
 
   // Parse the response JSON body
   const json = await response.json();
@@ -65,12 +69,13 @@ export async function fetchSearchResults(query: string): Promise<ProductsRespons
 
   // Add detailed debug output if validation fails
   if (!parsed.success) {
+    logger.error(`❌ Schema validation errors: ${JSON.stringify(parsed.error.format())}`);
     console.error('❌ Schema validation errors:', parsed.error.format());
   }
 
   // Expect schema validation to pass
   expect(parsed.success, '❌ Schema validation failed for /api/products').toBeTruthy();
-
+ logger.info(`[Products API] ✅ Schema validation successful.`);
   // Return the parsed and validated data
   return parsed.data as ProductsResponse;
 }
