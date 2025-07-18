@@ -1,39 +1,63 @@
-import { test as base, type Page, type Locator, expect } from '@playwright/test';
-import { credentials } from '../utils/helpers/credentials';
+// pages/web/UsersPage.ts
 
+import type { Locator, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
+import { logger } from '../utils/logger';
+
+/**
+ * Represents the user authentication page and its interactions.
+ */
 export class UsersPage {
-    readonly page: Page;
-    readonly accountButton : Locator;
-    readonly emailInput : Locator;
-    readonly passwordInput : Locator;
-    readonly loginButton : Locator;
-   
-    
-    constructor(page: Page) {
-        this.page = page;
-        this.accountButton = page.getByTestId('my_account_icon');
-        this.emailInput = page.locator('#_username');
-        this.passwordInput = page.locator('#_password')
-        this.loginButton = page.locator('.LoginPanelTemplate__loginStepWrapper__pTsw3 button[type="submit"]');
-    }
+  private readonly accountButton: Locator;
+  private readonly emailInput: Locator;
+  private readonly passwordInput: Locator;
+  private readonly loginButton: Locator;
 
-    async loginUsers(email: string, password: string) {
-       
+  /**
+   * Initializes locators for user authentication interactions.
+   *
+   * @param page - Playwright Page object for browser interactions.
+   */
+  constructor(private readonly page: Page) {
+    this.accountButton = page.getByTestId('my_account_icon');
+    this.emailInput = page.locator('#_username');
+    this.passwordInput = page.locator('#_password');
+    this.loginButton = page.locator(
+      '.LoginPanelTemplate__loginStepWrapper__pTsw3 button[type="submit"]',
+    );
 
-        await expect(this.accountButton).toBeVisible();
-        await this.accountButton.click();
+    logger.info(`[UsersPage] Initialized all login locators.`);
+  }
 
-        // Admin Email
-        await this.emailInput.waitFor({ state: 'visible' });
-        await expect(this.emailInput).toBeVisible();
-        await this.emailInput.fill(email);
+  /**
+   * Logs in a user with the specified email and password.
+   *
+   * @param email - User email address.
+   * @param password - User password.
+   */
+  async loginUsers(email: string, password: string): Promise<void> {
+    logger.info(`[UsersPage] Initiating login process.`);
 
-        //Admin Paasword
-        await this.passwordInput.waitFor({ state: 'visible' });
-        await expect(this.passwordInput).toBeVisible();
-        await this.passwordInput.fill(password);
+    // Click on account button to open login modal/form
+    await expect(this.accountButton).toBeVisible();
+    logger.info(`[UsersPage] Account button visible. Clicking to open login.`);
+    await this.accountButton.click();
 
-        await expect(this.loginButton).toBeVisible();
-        await this.loginButton.click();
-    }
+    // Wait for email input visibility and fill email
+    await expect(this.emailInput).toBeVisible();
+    logger.info(`[UsersPage] Email input visible. Filling email.`);
+    await this.emailInput.fill(email);
+
+    // Wait for password input visibility and fill password
+    await expect(this.passwordInput).toBeVisible();
+    logger.info(`[UsersPage] Password input visible. Filling password.`);
+    await this.passwordInput.fill(password);
+
+    // Wait for login button visibility and click to submit login form
+    await expect(this.loginButton).toBeVisible();
+    logger.info(`[UsersPage] Login button visible. Clicking to submit.`);
+    await this.loginButton.click();
+
+    logger.info(`[UsersPage] Login action completed.`);
+  }
 }

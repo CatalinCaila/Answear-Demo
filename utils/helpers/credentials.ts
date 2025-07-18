@@ -1,6 +1,7 @@
 // utils/helpers/credentials.ts
 import dotenv from 'dotenv';
 import { Role } from './roleTypes';
+import { logger } from '../logger';
 
 dotenv.config();
 
@@ -21,3 +22,5 @@ export const credentials: Record<Role, { email: string; password: string; storag
     storageState: './auth/userAuth.json',
   },
 };
+
+logger.info('✅ Credentials loaded successfully.');

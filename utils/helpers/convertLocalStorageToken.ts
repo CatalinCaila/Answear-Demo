@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { logger } from '../logger';
 
 const storageFilePath = path.resolve(__dirname, '../../auth/userAuth.json');
 const outputFilePath = path.resolve(__dirname, '../../auth/accessToken.txt');
@@ -18,6 +19,7 @@ const answearStorage = storageState.origins.find(
 ); 
 
 if (!answearStorage) {
+  logger.error('❌ Answear.ro localStorage entry missing.');
   throw new Error(`❌ Could not find localStorage for https://answear.ro`);
 }
 
@@ -27,12 +29,13 @@ const accessTokenEntry = answearStorage.localStorage.find(
 );
 
 if (!accessTokenEntry) {
+  logger.error('❌ access_token missing in localStorage.');
   throw new Error(`❌ 'access_token' not found in localStorage.`);
 }
 
 // Write the token to file
 fs.writeFileSync(outputFilePath, accessTokenEntry.value, 'utf-8');
 
-console.log('✅ access_token extracted:');
+
 console.log(accessTokenEntry.value);
-console.log(`\n✅ Token saved to: ${outputFilePath}`);
+logger.info(`✅ access_token extracted and saved to ${outputFilePath}`);

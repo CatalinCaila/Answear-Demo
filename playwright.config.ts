@@ -1,4 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenvFlow from 'dotenv-flow';
+
+// ✅ Dynamically load environment variables
+dotenvFlow.config({
+  path: './',
+  node_env: process.env.NODE_ENV || 'prod', // Defaults to dev
+});
 
 export default defineConfig({
   testDir: './tests',
@@ -13,6 +20,7 @@ export default defineConfig({
   reporter: 'html',
 
   use: {
+    baseURL: process.env.BASE_URL,
     headless: false,
     viewport: { width: 1920, height: 1080 },
     trace: 'on',
@@ -26,7 +34,7 @@ export default defineConfig({
   },
 
   projects: [
-   // ✅ Setup login/auth state for user and admin roles
+//   ✅ Setup login/auth state for user and admin roles
     {
       name: 'setup',
       testMatch: 'setup/auth.setup.spec.ts',
@@ -46,7 +54,7 @@ export default defineConfig({
     },
 
 
-     {
+    {
       name: 'search-cross-browser-desktop',
       testMatch: ['tests/cross-browser/search.cross.spec.ts'],
       use: { 
