@@ -18,6 +18,14 @@
     "resolveJsonModule": true,
     "outDir": "./dist"
   },
-  "include": ["tests", "pages", "utils", "schemas"],
+  "include": [
+    "tests",
+    "pages",
+    "utils",
+    "schemas",
+    "fixtures",
+    "playwright.config.ts",
+    "playwright.rm.config.ts"
+  ],
   "exclude": ["node_modules"]
 }
