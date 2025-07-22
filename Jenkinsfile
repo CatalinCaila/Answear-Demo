@@ -2,9 +2,15 @@ pipeline {
     agent any
 
     environment {
-        NODE_ENV = "${params.ENVIRONMENT}"
+        NODE_ENV       = "${params.ENVIRONMENT}"
         ALLURE_RESULTS = "allure-results"
-        ALLURE_REPORT = "allure-report"
+        ALLURE_REPORT  = "allure-report"
+
+        // Credentials from Jenkins
+        ADMIN_EMAIL    = credentials('ADMIN_EMAIL')
+        ADMIN_PASSWORD = credentials('ADMIN_PASSWORD')
+        USER_EMAIL     = credentials('USER_EMAIL')
+        USER_PASSWORD  = credentials('USER_PASSWORD')
     }
 
     parameters {
