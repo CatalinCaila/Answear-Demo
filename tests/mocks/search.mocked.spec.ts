@@ -25,7 +25,7 @@ test.describe('@dev @qa @prod @ui @mock @search', () => {
     );
 
     logger.info('[Mocked Search] Navigating to men’s clothing category page.');
-    await page.goto('https://answear.ro/c/barbati', { waitUntil: 'domcontentloaded' });
+    await page.goto('https://answear.ro/c/barbati');
 
     const searchPage = new SearchPageWeb(page);
     const results = await searchPage.searchForItem('mock');

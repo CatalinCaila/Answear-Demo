@@ -12,7 +12,7 @@ export class SearchPageMobile extends SearchPageBase {
   readonly searchIcon: Locator;
   readonly searchInput: Locator;
   readonly searchButton: Locator;
-  readonly cartCount: Locator;
+  readonly userlogged: Locator;
 
   /**
    * Initializes locators specific to mobile version of the search page.
@@ -24,9 +24,8 @@ export class SearchPageMobile extends SearchPageBase {
     this.searchIcon = page.getByTestId('search_icon');
     this.searchInput = page.locator('#productsSearch');
     this.searchButton = page.locator(
-      'div[data-test="search_component"] i.multiTheme-icon-search',
-    );
-    this.cartCount = page.getByTestId('cart_count');
+      'div[data-test="search_component"] i.multiTheme-icon-search');
+    this.userlogged = page.locator('[id="Icon/User-logged-2"]');
 
     logger.info(`[SearchPageMobile] Initialized mobile locators.`);
   }
@@ -45,7 +44,7 @@ export class SearchPageMobile extends SearchPageBase {
    */
   async fillSearchInput(item: string): Promise<void> {
     logger.info(`[SearchPageMobile] Filling search input with "${item}".`);
-    await this.cartCount.waitFor({ state: 'visible' });
+    await this.userlogged.waitFor({ state: 'visible' });
     await this.searchIcon.click();
     await this.searchInput.fill('');
     await this.searchInput.fill(item);

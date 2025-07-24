@@ -14,7 +14,7 @@ export class SearchPageWeb extends SearchPageBase {
   readonly searchButton: Locator;
   readonly productCardDescription: Locator;
   readonly page2Button: Locator;
-  readonly cartCount: Locator;
+  readonly userlogged: Locator;
 
   /**
    * Initializes locators specific to web version of the search page.
@@ -27,7 +27,7 @@ export class SearchPageWeb extends SearchPageBase {
     this.searchButton = page.getByTestId('search_button');
     this.productCardDescription = page.locator('[data-test="productCardDescription"] >> span');
     this.page2Button = page.locator('[data-test="paginationPageNumbersItem"] >> text=2');
-    this.cartCount = page.getByTestId('cart_count');
+    this.userlogged = page.locator('[id="Icon/User-logged-2"]');
 
     logger.info(`[SearchPageWeb] Initialized web locators.`);
   }
@@ -47,7 +47,7 @@ export class SearchPageWeb extends SearchPageBase {
    */
   async fillSearchInput(item: string): Promise<void> {
     logger.info(`[SearchPageWeb] Filling search input with "${item}".`);
-    await this.cartCount.waitFor({ state: 'visible' });
+    await this.userlogged.waitFor({ state: 'visible' });
     await this.searchInput.fill('');
     await this.searchInput.fill(item);
   }
@@ -66,10 +66,11 @@ export class SearchPageWeb extends SearchPageBase {
    */
   async compareValueOfPage1And2(): Promise<void> {
     logger.info(`[SearchPageWeb] Navigating to men's category page.`);
-    await this.page.goto('https://answear.ro/c/barbati', { waitUntil: 'domcontentloaded' });
+    await this.page.goto('https://answear.ro/c/barbati');
+    await this.userlogged.waitFor({ state: 'visible' });
 
     logger.info(`[SearchPageWeb] Initiating search for "pantaloni".`);
-    await this.cartCount.waitFor({ state: 'visible' });
+    await this.userlogged.waitFor({ state: 'visible' });
     await this.fillSearchInput('pantaloni');
     await this.searchInput.press('Enter');
 

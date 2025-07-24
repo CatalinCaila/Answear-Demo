@@ -14,7 +14,7 @@ test.describe('@dev @qa @prod @ui @crossdevice @search', () => {
     logger.info(`[CrossDevice Search] Running search test on ${platform}.`);
 
     const searchPage = PageFactory.getSearchPage(page, platform);
-    await page.goto('https://answear.ro/', { waitUntil: 'domcontentloaded' });
+    await page.goto('https://answear.ro/');
 
     await searchPage.selectMenCategory?.();
     logger.info(`[CrossDevice Search] Men category selected.`);

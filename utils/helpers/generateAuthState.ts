@@ -24,7 +24,7 @@ export async function generateAuthState(page: Page, role: Role): Promise<void> {
   const cookieBanner = new CookieBanner(page);
 
   // Navigate to the homepage
-  await page.goto('https://answear.ro', { waitUntil: 'domcontentloaded' });
+  await page.goto('https://answear.ro');
   logger.info(`[AuthState] Navigated to homepage`);
 
   // Wait explicitly for cookie popup visibility

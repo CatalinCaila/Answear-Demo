@@ -12,7 +12,8 @@ test.describe('@dev @qa @prod @ui @search @pagination', () => {
     logger.info('[Compare Products] Test started: User can compare products across pages.');
     
     const searchPage = new SearchPageWeb(page);
-    await page.goto('https://answear.ro/c/barbati', { waitUntil: 'networkidle' });
+    await page.goto('https://answear.ro/c/barbati');
+    
     logger.info('[Compare Products] Navigated to men’s clothing category page.');
 
     await searchPage.compareValueOfPage1And2();
