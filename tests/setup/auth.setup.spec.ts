@@ -8,12 +8,15 @@ import { logger } from '../../utils/logger';
 /**
  * Authentication setup tests to generate auth state files for user roles.
  */
-test.describe('@dev @qa @prod @auth @setup @helper', () => {
-  for (const role of Object.values(Role)) {
-    test(`Generate auth state for ${role}`, async ({ page }) => {
-      logger.info(`[Auth Setup] Generating authentication state for role: ${role}`);
-      await generateAuthState(page, role);
-      logger.info(`[Auth Setup] ✅ Authentication state generated for role: ${role}`);
-    });
+const domains = ['ro', 'it'] as const;
+const roles = [Role.User, Role.Admin];
+
+test.describe('@auth @setup', () => {
+  for (const domain of domains) {
+    for (const role of roles) {
+      test(`Generate auth state for ${role} on ${domain.toUpperCase()}`, async ({ page }) => {
+        await generateAuthState(page, role, domain);
+      });
+    }
   }
 });

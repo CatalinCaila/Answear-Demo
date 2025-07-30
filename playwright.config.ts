@@ -21,7 +21,7 @@ export default defineConfig({
 
   use: {
     baseURL: process.env.BASE_URL,
-    headless: true,
+    headless: false,
     viewport: { width: 1920, height: 1080 },
     trace: 'on',
     screenshot: 'on',
@@ -35,56 +35,78 @@ export default defineConfig({
 
   projects: [
  // ✅ Setup login/auth state for user and admin roles
-    {
-      name: 'setup',
-      testMatch: 'setup/auth.setup.spec.ts',
-       use: {
-        ...devices['Desktop Chrome']
-      },
+    // {
+    //   name: 'setup',
+    //   testMatch: 'setup/auth.setup.spec.ts',
+    //    use: {
+    //     ...devices['Desktop Chrome']
+    //   },
+    // },
+
+
+    // {
+    //   name: 'compare-product',
+    //   testMatch: 'ui/compare.spec.ts',
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     storageState: './auth/userAuth.json',
+    //   },
+    // },
+
+// {
+//     name: 'search-desktop-RO',
+//     testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+//     use: { 
+//       ...devices['Desktop Chrome'], 
+//       baseURL: 'https://answear.ro',
+//       locale: 'ro',
+//       storageState: './auth/userAuth.json',
+//     },
+//   },
+//   {
+//     name: 'search-mobile-RO',
+//     testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+//     use: { 
+//       ...devices['Galaxy S9+'], 
+//       baseURL: 'https://answear.ro',
+//       locale: 'ro',
+//       storageState: './auth/userAuth.json',
+//     },
+//   },
+  {
+    name: 'search-desktop-IT',
+    testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+    use: { 
+      ...devices['Desktop Chrome'], 
+      baseURL: 'https://answear.it',
+      locale: 'it',
+      storageState: './auth/userAuth-IT.json',
     },
-
-
-    {
-      name: 'compare-product',
-      testMatch: 'ui/compare.spec.ts',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: './auth/userAuth.json',
-      },
-    },
-
-
-    {
-      name: 'search-cross-browser-desktop',
-      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
-      use: { 
-        ...devices['Desktop Chrome'], 
-        storageState: './auth/userAuth.json'
-      },
-    },
-    {
-      name: 'search-cross-browser-mobile',
-      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
-      use: { 
-        ...devices['Galaxy S9+'], 
-        storageState: './auth/userAuth.json'
-      },
-    },
-
-        {
-      name: 'mock-search-element-not-found',
-      testMatch: 'mocks/search.mocked.spec.ts',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: './auth/userAuth.json',
-      },
-    },
-
-    {
-    name: 'api-web-search',
-    testMatch: ['tests/api/webSearch.api.spec.ts'],
-    use: {} // no device emulation needed
   },
+  {
+    name: 'search-mobile-IT',
+    testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+    use: { 
+      ...devices['Galaxy S9+'], 
+      baseURL: 'https://answear.it',
+      locale: 'it',
+      storageState: './auth/userAuth-IT.json',
+    },
+  },
+  //       {
+  //     name: 'mock-search-element-not-found',
+  //     testMatch: 'mocks/search.mocked.spec.ts',
+  //     use: {
+  //       ...devices['Desktop Chrome'],
+  //       storageState: './auth/userAuth.json',
+  //     },
+  //   },
+
+  //   {
+  //   name: 'api-web-search',
+  //   testMatch: ['tests/api/webSearch.api.spec.ts'],
+  //   use: {} // no device emulation needed
+  // },
 
 
   ],

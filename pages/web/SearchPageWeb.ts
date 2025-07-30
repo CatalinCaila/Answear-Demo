@@ -14,7 +14,8 @@ export class SearchPageWeb extends SearchPageBase {
   readonly searchButton: Locator;
   readonly productCardDescription: Locator;
   readonly page2Button: Locator;
-  readonly userlogged: Locator;
+  readonly userloggedIcon: Locator;
+  readonly logoAnswear: Locator;
 
   /**
    * Initializes locators specific to web version of the search page.
@@ -27,50 +28,42 @@ export class SearchPageWeb extends SearchPageBase {
     this.searchButton = page.getByTestId('search_button');
     this.productCardDescription = page.locator('[data-test="productCardDescription"] >> span');
     this.page2Button = page.locator('[data-test="paginationPageNumbersItem"] >> text=2');
-    this.userlogged = page.locator('[id="Icon/User-logged-2"]');
+    this.userloggedIcon = page.locator('[id="Icon/User-logged-2"]');
+    this.logoAnswear = page.locator('img[alt="logo answear"]');
 
     logger.info(`[SearchPageWeb] Initialized web locators.`);
   }
 
-  /**
-   * Clicks on the "Men" category after ensuring visibility.
-   */
-  async selectMenCategory(): Promise<void> {
-    logger.info(`[SearchPageWeb] Selecting men category.`);
-    await this.menCategory.waitFor({ state: 'visible', timeout: 5000 });
-    await this.menCategory.click();
-  }
+
 
   /**
    * Fills the search input explicitly with the provided search term.
+   * After Search input field will be present just on desktop, using assertSearchItem
    * @param item - Search term to input.
    */
   async fillSearchInput(item: string): Promise<void> {
     logger.info(`[SearchPageWeb] Filling search input with "${item}".`);
-    await this.userlogged.waitFor({ state: 'visible' });
+    await this.userloggedIcon.waitFor({ state: 'visible' });
     await this.searchInput.fill('');
     await this.searchInput.fill(item);
+    await this.assertSearchItem(item);
   }
 
-  /**
-   * Clicks the search button explicitly to perform a search.
-   */
-  async clickSearchButton(): Promise<void> {
-    logger.info(`[SearchPageWeb] Clicking search button.`);
-    await this.searchButton.click();
+  async assertSearchItem(item: string): Promise<void> {
+    await expect
+      .soft(this.searchInput, `Search input should have value "${item}"`)
+      .toHaveValue(item);
+    logger.info(`[SearchPageWeb] ✅ Soft-asserted search input has value "${item}".`);
   }
 
-  /**
-   * Compares the product results on page 1 and page 2 of the search results.
-   * Ensures that the results differ to validate pagination functionality.
-   */
+
   async compareValueOfPage1And2(): Promise<void> {
     logger.info(`[SearchPageWeb] Navigating to men's category page.`);
     await this.page.goto('https://answear.ro/c/barbati');
-    await this.userlogged.waitFor({ state: 'visible' });
+    await this.userloggedIcon.waitFor({ state: 'visible' });
 
     logger.info(`[SearchPageWeb] Initiating search for "pantaloni".`);
-    await this.userlogged.waitFor({ state: 'visible' });
+    await this.userloggedIcon.waitFor({ state: 'visible' });
     await this.fillSearchInput('pantaloni');
     await this.searchInput.press('Enter');
 

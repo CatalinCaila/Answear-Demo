@@ -3,6 +3,7 @@
 import type { Page } from '@playwright/test';
 import { SearchPageWeb } from '../../pages/web/SearchPageWeb';
 import { SearchPageMobile } from '../../pages/mobile/SearchPageMobile';
+import { SearchPageBase } from '../../pages/base/SearchPageBase';
 import { logger } from '../logger';
 
 /**
@@ -16,15 +17,13 @@ export class PageFactory {
    * @param platform - Platform identifier ('desktop' or 'mobile').
    * @returns An instance of SearchPageWeb or SearchPageMobile.
    */
-  static getSearchPage(page: Page, platform: 'desktop' | 'mobile'): SearchPageWeb | SearchPageMobile {
-    logger.info(`[PageFactory] Creating search page instance for platform: ${platform}`);
-
-    if (platform === 'mobile') {
-      logger.info(`[PageFactory] Mobile search page instance created.`);
-      return new SearchPageMobile(page);
-    }
-
-    logger.info(`[PageFactory] Web search page instance created.`);
-    return new SearchPageWeb(page);
+static getSearchPage(page: Page, platform: 'desktop' | 'mobile'): SearchPageBase {
+  logger.info(`[PageFactory] Creating search page instance for platform: ${platform}`);
+  if (platform === 'mobile') {
+    logger.info(`[PageFactory] Mobile search page instance created.`);
+    return new SearchPageMobile(page);
   }
+  logger.info(`[PageFactory] Web search page instance created.`);
+  return new SearchPageWeb(page);
+}
 }

@@ -16,54 +16,55 @@ import { logger } from '../logger';
  * @param page - Playwright Page instance for browser interaction.
  * @param role - User role to generate the authentication state for (Admin/User).
  */
-export async function generateAuthState(page: Page, role: Role): Promise<void> {
-  logger.info(`[AuthState] Starting authentication state generation for role: ${role}`);
+export async function generateAuthState(page: Page, role: Role, domain: 'ro' | 'it'): Promise<void> {
+  logger.info(`[AuthState] Starting authentication for role: ${role}, domain: ${domain}`);
 
-  // Initialize page objects
   const userPage = new UsersPage(page);
   const cookieBanner = new CookieBanner(page);
+  
+  // Define correct domain URL explicitly
+  const domainURL = domain === 'ro' ? 'https://answear.ro' : 'https://answear.it';
 
-  // Navigate to the homepage
-  await page.goto('https://answear.ro');
-  logger.info(`[AuthState] Navigated to homepage`);
+  // Navigate explicitly to the specified domain
+  await page.goto(domainURL);
+  logger.info(`[AuthState] Navigated to ${domainURL}`);
 
-  // Wait explicitly for cookie popup visibility
+  // Handle cookie banner explicitly
   await page.getByTestId('cookiesPopupContainer').waitFor({ state: 'visible', timeout: 60000 });
   logger.info(`[AuthState] Cookie popup container is visible`);
-
-  // Accept cookies if the cookie banner appears
+  
   await cookieBanner.clickIfPresent();
   logger.info(`[AuthState] Cookie banner handled`);
 
-  // Perform user login using provided credentials
-  await userPage.loginUsers(credentials[role].email, credentials[role].password);
+  // Perform user/admin login clearly based on role
+  const { email, password } = credentials[role];
+  await userPage.loginUsers(email, password);
   logger.info(`[AuthState] Logged in successfully as ${role}`);
 
-  // Ensure access token is fully loaded and has a valid JWT structure (header.payload.signature)
+  // Wait explicitly for access token
   await page.waitForFunction(() => {
     const token = localStorage.getItem('access_token');
     return token && token.split('.').length === 3;
   }, null, { timeout: 15000 });
   logger.info(`[AuthState] Verified access token structure`);
 
-  // Save storage state (cookies, localStorage) for future use
-  const authPath = path.resolve(process.cwd(), credentials[role].storageState);
+  // Clearly define storage state path per role and domain
+  const authPath = path.resolve(process.cwd(), credentials[role].storageState[domain]);
   await page.context().storageState({ path: authPath });
   logger.info(`[AuthState] Storage state saved at: ${authPath}`);
 
-  // Retrieve and validate the access token explicitly from local storage
+  // Validate and optionally save token separately for User role
   const token = await page.evaluate(() => localStorage.getItem('access_token'));
   if (!token || token.split('.').length !== 3) {
-    logger.error(`[AuthState] Invalid or incomplete token found for ${role}`);
-    throw new Error(`❌ Invalid or incomplete token found for ${role}`);
+    logger.error(`[AuthState] Invalid token for ${role} on ${domain}`);
+    throw new Error(`❌ Invalid or incomplete token found for ${role} on ${domain}`);
   }
 
-  // If role is 'User', save the access token separately for API usage
   if (role === Role.User) {
-    const tokenPath = path.resolve('auth/userAccessToken.txt');
+    const tokenPath = path.resolve(`auth/userAccessToken-${domain}.txt`);
     fs.writeFileSync(tokenPath, token, 'utf-8');
-    logger.info(`✅ Saved user access token separately at ${tokenPath}`);
+    logger.info(`[AuthState] ✅ Saved User token at ${tokenPath}`);
   }
 
-  logger.info(`[AuthState] ✅ Authentication state generation complete for role: ${role}`);
+  logger.info(`[AuthState] ✅ Authentication state generated for ${role} on ${domain}`);
 }
