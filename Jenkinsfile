@@ -38,17 +38,13 @@ pipeline {
         stage('🔧 Run Playwright Tests') {
             steps {
                 withCredentials([
-                    string(credentialsId: 'USER_EMAIL_0', variable: 'USER_EMAIL_0'),
-                    string(credentialsId: 'USER_PASSWORD_0', variable: 'USER_PASSWORD_0'),
-                    string(credentialsId: 'ADMIN_EMAIL_0', variable: 'ADMIN_EMAIL_0'),
-                    string(credentialsId: 'ADMIN_PASSWORD_0', variable: 'ADMIN_PASSWORD_0'),
-                    string(credentialsId: 'USER_EMAIL_1', variable: 'USER_EMAIL_1'),
-                    string(credentialsId: 'USER_PASSWORD_1', variable: 'USER_PASSWORD_1'),
-                    string(credentialsId: 'ADMIN_EMAIL_1', variable: 'ADMIN_EMAIL_1'),
-                    string(credentialsId: 'ADMIN_PASSWORD_1', variable: 'ADMIN_PASSWORD_1')
+                    usernamePassword(credentialsId: 'USER_EMAIL_0', usernameVariable: 'USER_EMAIL_0', passwordVariable: 'USER_PASSWORD_0'),
+                    usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0'),
+                    usernamePassword(credentialsId: 'USER_EMAIL_1', usernameVariable: 'USER_EMAIL_1', passwordVariable: 'USER_PASSWORD_1'),
+                    usernamePassword(credentialsId: 'ADMIN_EMAIL_1', usernameVariable: 'ADMIN_EMAIL_1', passwordVariable: 'ADMIN_PASSWORD_1')
                 ]) {
-                    echo "📌 Running Playwright tests in %NODE_ENV% environment..."
-                    bat "npm run test:%NODE_ENV%"
+                    echo "📌 Running Playwright tests in ${NODE_ENV} environment..."
+                    bat "npm run test:${NODE_ENV}"
                 }
             }
             post {
