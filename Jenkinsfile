@@ -60,21 +60,31 @@ pipeline {
     }
 }
 
-        stage('🔧 Run Playwright Tests') {
-            steps {
-                echo "📌 Running Playwright tests in ${NODE_ENV} environment..."
-                bat "npm run test:${NODE_ENV}"
-            }
-            post {
-                always {
-                    echo "📌 Archiving test artifacts and reports..."
-                    archiveArtifacts artifacts: 'test-results/**/*.*, playwright-report/**/*.*', allowEmptyArchive: true
-                }
-                failure {
-                    echo "❌ Playwright tests failed."
-                }
-            }
+stage('🔧 Run Playwright Tests') {
+    environment {
+        NODE_ENV = "${params.ENVIRONMENT}"
+    }
+    steps {
+        withCredentials([
+            usernamePassword(credentialsId: 'USER_EMAIL_0', usernameVariable: 'USER_EMAIL_0', passwordVariable: 'USER_PASSWORD_0'),
+            usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0'),
+            usernamePassword(credentialsId: 'USER_EMAIL_1', usernameVariable: 'USER_EMAIL_1', passwordVariable: 'USER_PASSWORD_1'),
+            usernamePassword(credentialsId: 'ADMIN_EMAIL_1', usernameVariable: 'ADMIN_EMAIL_1', passwordVariable: 'ADMIN_PASSWORD_1')
+        ]) {
+            echo "📌 Running Playwright tests in ${NODE_ENV} environment..."
+            bat "npm run test:${NODE_ENV}"
         }
+    }
+    post {
+        always {
+            echo "📌 Archiving test artifacts and reports..."
+            archiveArtifacts artifacts: 'test-results/**/*.*, playwright-report/**/*.*', allowEmptyArchive: true
+        }
+        failure {
+            echo "❌ Playwright tests failed."
+        }
+    }
+}
 
         stage('📊 Generate Allure Report') {
             steps {
