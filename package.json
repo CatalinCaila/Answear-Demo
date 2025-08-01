@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "test:dev": "cross-env NODE_ENV=dev playwright test --grep @dev",
     "test:qa": "cross-env NODE_ENV=qa playwright test --grep @qa",
-    "test:prod": "cross-env NODE_ENV=prod playwright test --grep @prod"
+    "test:prod": "cross-env NODE_ENV=prod playwright test --grep @prod",
+    "auth:generate": "playwright test --project=setup-RO --project=setup-IT"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.1",
