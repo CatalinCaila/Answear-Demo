@@ -34,6 +34,18 @@ pipeline {
                 bat 'npm run lint'
             }
         }
+         stage('🔑 Generate Auth State') {
+            steps {
+                withCredentials([
+                    usernamePassword(credentialsId: 'USER_EMAIL_0', usernameVariable: 'USER_EMAIL_0', passwordVariable: 'USER_PASSWORD_0'),
+                    usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0'),
+                    usernamePassword(credentialsId: 'USER_EMAIL_1', usernameVariable: 'USER_EMAIL_1', passwordVariable: 'USER_PASSWORD_1'),
+                    usernamePassword(credentialsId: 'ADMIN_EMAIL_1', usernameVariable: 'ADMIN_EMAIL_1', passwordVariable: 'ADMIN_PASSWORD_1')
+                ]) {
+                    bat "npm run auth:generate -- --env=${NODE_ENV}"
+                }
+            }
+        }
 
         stage('🔧 Run Playwright Tests') {
             steps {
