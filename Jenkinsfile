@@ -36,26 +36,29 @@ pipeline {
         }
 
         stage('🔑 Generate Auth State') {
-            steps {
-                withCredentials([
-                    usernamePassword(credentialsId: 'USER_EMAIL_0', usernameVariable: 'USER_EMAIL_0', passwordVariable: 'USER_PASSWORD_0'),
-                    usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0'),
-                    usernamePassword(credentialsId: 'USER_EMAIL_1', usernameVariable: 'USER_EMAIL_1', passwordVariable: 'USER_PASSWORD_1'),
-                    usernamePassword(credentialsId: 'ADMIN_EMAIL_1', usernameVariable: 'ADMIN_EMAIL_1', passwordVariable: 'ADMIN_PASSWORD_1')
-                ]) {
-                    echo "📌 Generating authentication state files..."
-                    bat "npm run auth:generate -- --env=${NODE_ENV}"
-                }
-            }
-            post {
-                success {
-                    echo "✅ Auth state generated successfully."
-                }
-                failure {
-                    error "❌ Failed to generate auth state files."
-                }
-            }
+    environment {
+        ENV = "${params.ENVIRONMENT}"
+    }
+    steps {
+        withCredentials([
+            usernamePassword(credentialsId: 'USER_EMAIL_0', usernameVariable: 'USER_EMAIL_0', passwordVariable: 'USER_PASSWORD_0'),
+            usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0'),
+            usernamePassword(credentialsId: 'USER_EMAIL_1', usernameVariable: 'USER_EMAIL_1', passwordVariable: 'USER_PASSWORD_1'),
+            usernamePassword(credentialsId: 'ADMIN_EMAIL_1', usernameVariable: 'ADMIN_EMAIL_1', passwordVariable: 'ADMIN_PASSWORD_1')
+        ]) {
+            echo "📌 Generating authentication state files for ${ENV}..."
+            bat "set ENV=${ENV} && npm run auth:generate"
         }
+    }
+    post {
+        success {
+            echo "✅ Auth state generated successfully."
+        }
+        failure {
+            error "❌ Failed to generate auth state files."
+        }
+    }
+}
 
         stage('🔧 Run Playwright Tests') {
             steps {
