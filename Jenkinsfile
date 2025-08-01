@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        NODE_ENV       = "${params.ENVIRONMENT}"
+        NODE_ENV = "${params.ENVIRONMENT}"
         ALLURE_RESULTS = "allure-results"
         ALLURE_REPORT  = "allure-report"
     }
@@ -34,7 +34,8 @@ pipeline {
                 bat 'npm run lint'
             }
         }
-         stage('🔑 Generate Auth State') {
+
+        stage('🔑 Generate Auth State') {
             steps {
                 withCredentials([
                     usernamePassword(credentialsId: 'USER_EMAIL_0', usernameVariable: 'USER_EMAIL_0', passwordVariable: 'USER_PASSWORD_0'),
@@ -42,27 +43,32 @@ pipeline {
                     usernamePassword(credentialsId: 'USER_EMAIL_1', usernameVariable: 'USER_EMAIL_1', passwordVariable: 'USER_PASSWORD_1'),
                     usernamePassword(credentialsId: 'ADMIN_EMAIL_1', usernameVariable: 'ADMIN_EMAIL_1', passwordVariable: 'ADMIN_PASSWORD_1')
                 ]) {
+                    echo "📌 Generating authentication state files..."
                     bat "npm run auth:generate -- --env=${NODE_ENV}"
+                }
+            }
+            post {
+                success {
+                    echo "✅ Auth state generated successfully."
+                }
+                failure {
+                    error "❌ Failed to generate auth state files."
                 }
             }
         }
 
         stage('🔧 Run Playwright Tests') {
             steps {
-                withCredentials([
-                    usernamePassword(credentialsId: 'USER_EMAIL_0', usernameVariable: 'USER_EMAIL_0', passwordVariable: 'USER_PASSWORD_0'),
-                    usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0'),
-                    usernamePassword(credentialsId: 'USER_EMAIL_1', usernameVariable: 'USER_EMAIL_1', passwordVariable: 'USER_PASSWORD_1'),
-                    usernamePassword(credentialsId: 'ADMIN_EMAIL_1', usernameVariable: 'ADMIN_EMAIL_1', passwordVariable: 'ADMIN_PASSWORD_1')
-                ]) {
-                    echo "📌 Running Playwright tests in ${NODE_ENV} environment..."
-                    bat "npm run test:${NODE_ENV}"
-                }
+                echo "📌 Running Playwright tests in ${NODE_ENV} environment..."
+                bat "npm run test:${NODE_ENV}"
             }
             post {
                 always {
                     echo "📌 Archiving test artifacts and reports..."
                     archiveArtifacts artifacts: 'test-results/**/*.*, playwright-report/**/*.*', allowEmptyArchive: true
+                }
+                failure {
+                    echo "❌ Playwright tests failed."
                 }
             }
         }
@@ -74,20 +80,26 @@ pipeline {
             }
             post {
                 always {
-                    echo "📌 Archiving Allure results..."
+                    echo "📌 Archiving Allure reports..."
                     archiveArtifacts artifacts: "${ALLURE_REPORT}/**/*.*", allowEmptyArchive: true
                     allure includeProperties: false, results: [[path: "${ALLURE_RESULTS}"]]
+                }
+                failure {
+                    echo "❌ Allure report generation failed."
                 }
             }
         }
     }
 
     post {
-        always {
-            echo "✅ Pipeline completed. Check Allure reports for details."
+        success {
+            echo "✅ Pipeline succeeded! Allure reports available."
         }
         failure {
-            echo "❌ Pipeline failed. Check logs and reports for debugging."
+            echo "❌ Pipeline failed! Check logs and reports."
+        }
+        always {
+            echo "🎯 Pipeline execution completed."
         }
     }
 }
