@@ -9,14 +9,14 @@ dotenvFlow.config({
 
 export default defineConfig({
   testDir: './tests',
-  timeout: 400_000, // 
+  timeout: 400_000, //
   expect: {
-    timeout: 50_000 // Timeout for assertions
+    timeout: 50_000, // Timeout for assertions
   },
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  workers: process.env.CI ? 1 : 1,
+  workers: 2,
   reporter: 'html',
 
   use: {
@@ -34,82 +34,135 @@ export default defineConfig({
   },
 
   projects: [
- // ✅ Setup login/auth state for user and admin roles
-    // {
-    //   name: 'setup',
-    //   testMatch: 'setup/auth.setup.spec.ts',
-    //    use: {
-    //     ...devices['Desktop Chrome']
-    //   },
-    // },
+  //  ✅ Setup login/auth state for user and admin roles
+      {
+        name: 'setup-RO',
+        testMatch: 'setup/auth.setup.spec.ts',
+        workers: 2,
+         use: {
+          ...devices['Desktop Chrome'],
+          locale: 'ro',
+        },
+      },
 
-
-    // {
-    //   name: 'compare-product',
-    //   testMatch: 'ui/compare.spec.ts',
-    //   use: {
-    //     ...devices['Desktop Chrome'],
-    //     storageState: './auth/userAuth.json',
-    //   },
-    // },
-
-// {
-//     name: 'search-desktop-RO',
-//     testMatch: ['tests/cross-browser/search.cross.spec.ts'],
-//     use: { 
-//       ...devices['Desktop Chrome'], 
-//       baseURL: 'https://answear.ro',
-//       locale: 'ro',
-//       storageState: './auth/userAuth.json',
-//     },
-//   },
-//   {
-//     name: 'search-mobile-RO',
-//     testMatch: ['tests/cross-browser/search.cross.spec.ts'],
-//     use: { 
-//       ...devices['Galaxy S9+'], 
-//       baseURL: 'https://answear.ro',
-//       locale: 'ro',
-//       storageState: './auth/userAuth.json',
-//     },
-//   },
-  {
-    name: 'search-desktop-IT',
-    testMatch: ['tests/cross-browser/search.cross.spec.ts'],
-    use: { 
-      ...devices['Desktop Chrome'], 
-      baseURL: 'https://answear.it',
-      locale: 'it',
-      storageState: './auth/userAuth-IT.json',
+       {
+      name: 'setup-IT',
+      testMatch: 'setup/auth.setup.spec.ts',
+      workers: 2,
+      use: {
+        ...devices['Desktop Chrome'],
+        locale: 'it',
+      },
     },
-  },
-  {
-    name: 'search-mobile-IT',
-    testMatch: ['tests/cross-browser/search.cross.spec.ts'],
-    use: { 
-      ...devices['Galaxy S9+'], 
-      baseURL: 'https://answear.it',
-      locale: 'it',
-      storageState: './auth/userAuth-IT.json',
+
+    {
+      name: 'compare-product',
+      testMatch: 'ui/compare.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://answear.ro', // 👈 add this line
+        storageState: './auth/userAuth-RO-0.json',
+        locale: 'ro', // recommended to explicitly set
+      },
     },
-  },
-  //       {
-  //     name: 'mock-search-element-not-found',
-  //     testMatch: 'mocks/search.mocked.spec.ts',
-  //     use: {
-  //       ...devices['Desktop Chrome'],
-  //       storageState: './auth/userAuth.json',
-  //     },
-  //   },
 
-  //   {
-  //   name: 'api-web-search',
-  //   testMatch: ['tests/api/webSearch.api.spec.ts'],
-  //   use: {} // no device emulation needed
-  // },
+    {
+      name: 'search-desktop-RO-account-0',
+      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://answear.ro',
+        locale: 'ro',
+        storageState: './auth/userAuth-RO-0.json', // pre-generated once
+      },
+    },
+    {
+      name: 'search-desktop-RO-account-1',
+      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://answear.ro',
+        locale: 'ro',
+        storageState: './auth/userAuth-RO-1.json',
+      },
+    },
+    {
+      name: 'search-mobile-RO-account-0',
+      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+      use: {
+        ...devices['Galaxy S9+'],
+        baseURL: 'https://answear.ro',
+        locale: 'ro',
+        storageState: './auth/userAuth-RO-0.json',
+      },
+    },
+    {
+      name: 'search-mobile-RO-account-1',
+      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+      use: {
+        ...devices['Galaxy S9+'],
+        baseURL: 'https://answear.ro',
+        locale: 'ro',
+        storageState: './auth/userAuth-RO-1.json',
+      },
+    },
+    {
+      name: 'search-desktop-IT-account-0',
+      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://answear.it',
+        locale: 'it',
+        storageState: './auth/userAuth-IT-0.json',
+      },
+    },
+    {
+      name: 'search-desktop-IT-account-1',
+      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://answear.it',
+        locale: 'it',
+        storageState: './auth/userAuth-IT-1.json',
+      },
+    },
+    {
+      name: 'search-mobile-IT-account-0',
+      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+      use: {
+        ...devices['Galaxy S9+'],
+        baseURL: 'https://answear.it',
+        locale: 'it',
+        storageState: './auth/userAuth-IT-0.json',
+      },
+    },
+    {
+      name: 'search-mobile-IT-account-1',
+      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+      use: {
+        ...devices['Galaxy S9+'],
+        baseURL: 'https://answear.it',
+        locale: 'it',
+        storageState: './auth/userAuth-IT-1.json',
+      },
+    },
+    {
+      name: 'mock-search-element-not-found',
+      testMatch: 'mocks/search.mocked.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://answear.ro', // 👈 add this line
+        storageState: './auth/userAuth-RO-0.json',
+        locale: 'ro', // recommended to explicitly set
+      },
+    },
 
-
+    {
+      name: 'api-web-search',
+      testMatch: ['tests/api/webSearch.api.spec.ts'],
+      use: {
+        baseURL: 'https://answear.ro', // ✅ Add your desired environment URL
+      },
+    },
   ],
-
-  
 });

@@ -1,3 +1,4 @@
+// tests/fixtures.ts
 import { test as base } from '@playwright/test';
 import path from 'path';
 import fs from 'fs';
@@ -16,16 +17,18 @@ export const test = base.extend<{
 }>({
   loginAs: async ({ page }, use, testInfo) => {
     const locale: Domain = testInfo.project.use.locale as Domain;
+    const workerIndex = testInfo.workerIndex; // Using worker index
+
     await use(async (role: Role) => {
-      const filePath = path.resolve(process.cwd(), credentials[role].storageState[locale]);
+      const creds = credentials[role][workerIndex % credentials[role].length];
+      const filePath = path.resolve(process.cwd(), creds.storageState[locale]);
 
       if (fs.existsSync(filePath)) {
         await page.context().storageState({ path: filePath });
         return;
       }
 
-      // Generate the storage state if it does not exist
-      await generateAuthState(page, role, locale);
+      await generateAuthState(page, role, locale, workerIndex);
     });
   },
 

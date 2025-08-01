@@ -8,16 +8,19 @@ import { logger } from '../../utils/logger';
  * UI test verifying product comparison functionality across pagination for authenticated users.
  */
 test.describe('@dev @qa @prod @ui @search @pagination', () => {
-  test('User can compare products', async ({ page }) => {
-    logger.info('[Compare Products] Test started: User can compare products across pages.');
-    
+  test('User can compare products across pagination', async ({ page, translations }, testInfo) => {
+    const baseURL = testInfo.project.use.baseURL;
+    const locale = (testInfo.project.use.locale || 'ro').toUpperCase();
+
+    logger.info(`[Compare Products][${locale}] Test started: User compares products across pages at ${baseURL}.`);
+
     const searchPage = new SearchPageWeb(page);
-    await page.goto('https://answear.ro/c/barbati');
-    
-    logger.info('[Compare Products] Navigated to men’s clothing category page.');
+    await page.goto(`${baseURL}/c/barbati`);
+
+    logger.info(`[Compare Products][${locale}] Navigated to men’s clothing category page.`);
 
     await searchPage.compareValueOfPage1And2();
-    
-    logger.info('[Compare Products] ✅ Product comparison test completed successfully.');
+
+    logger.info(`[Compare Products][${locale}] ✅ Product comparison across pagination completed successfully.`);
   });
 });

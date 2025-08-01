@@ -6,11 +6,16 @@ pipeline {
         ALLURE_RESULTS = "allure-results"
         ALLURE_REPORT  = "allure-report"
 
-        // Credentials from Jenkins
-        ADMIN_EMAIL    = credentials('ADMIN_EMAIL')
-        ADMIN_PASSWORD = credentials('ADMIN_PASSWORD')
-        USER_EMAIL     = credentials('USER_EMAIL')
-        USER_PASSWORD  = credentials('USER_PASSWORD')
+        // Worker-scoped credentials
+        ADMIN_EMAIL_0     = credentials('ADMIN_EMAIL_0')
+        ADMIN_PASSWORD_0  = credentials('ADMIN_PASSWORD_0')
+        USER_EMAIL_0      = credentials('USER_EMAIL_0')
+        USER_PASSWORD_0   = credentials('USER_PASSWORD_0')
+
+        ADMIN_EMAIL_1     = credentials('ADMIN_EMAIL_1')
+        ADMIN_PASSWORD_1  = credentials('ADMIN_PASSWORD_1')
+        USER_EMAIL_1      = credentials('USER_EMAIL_1')
+        USER_PASSWORD_1   = credentials('USER_PASSWORD_1')
     }
 
     parameters {
