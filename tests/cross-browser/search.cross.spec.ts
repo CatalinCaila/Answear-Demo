@@ -2,58 +2,62 @@
 import { mergeTests } from '@playwright/test';
 import { test as roleTest, expect } from '../../fixtures/auth/roleFixture';
 import { test as searchTest } from '../../fixtures/searchItem';
-
 import { PageFactory } from '../../utils/helpers/pageFactory';
 import type { ProductResponse } from '../../schemas/products.schema';
 import { logger } from '../../utils/logger';
 import { assertHomepageLoaded } from '../../utils/helpers/homepageHelper';
 
-
 export const test = mergeTests(roleTest, searchTest);
 
 /**
- * UI test suite to verify search functionality across both desktop and mobile.
+ * UI test suite to verify search functionality across desktop and mobile devices.
  */
 test.describe('@dev @qa @prod @ui @crossdevice @search', () => {
-  test('Search works on both mobile and desktop', async ({ page, isMobile, searchItem, translations }) => {
-    // Determine the current testing platform based on the viewport (mobile or desktop)
-    const platform: 'mobile' | 'desktop' = isMobile ? 'mobile' : 'desktop';
-    logger.info(`[CrossDevice Search] Running search test on ${platform}.`);
+  test('Search functionality works correctly on desktop and mobile', async ({
+    page,
+    isMobile,
+    searchItem,
+    translations,
+  }) => {
+    const platform = isMobile ? 'mobile' : 'desktop';
+    logger.info(`[CrossDevice Search] Starting test on ${platform}.`);
 
-    // Instantiate the appropriate page object using a PageFactory based on platform
+    // Instantiate the appropriate page object based on the platform
     const searchPage = PageFactory.getSearchPage(page, platform);
 
-    // Navigate to the homepage of Answear.ro
+    // Navigate to homepage
     await page.goto('/');
-    logger.info('[CrossDevice Search] Navigated to https://answear.ro/.');
+    logger.info('[CrossDevice Search] Navigated to homepage.');
 
-     await assertHomepageLoaded(page);
-     logger.info('[CrossDevice Search] Homepage loaded and verified.');
+    // Verify homepage has loaded successfully
+    await assertHomepageLoaded(page);
+    logger.info('[CrossDevice Search] Homepage verified successfully.');
 
-    // Select the 'Men' category if applicable (optional chaining used)
-    await searchPage.selectMenCategory?.(translations);
-    logger.info(`[CrossDevice Search] Men category selected.`);
+    // Select the 'Men' category if available
+    if (searchPage.selectMenCategory) {
+      await searchPage.selectMenCategory(translations);
+      logger.info('[CrossDevice Search] "Men" category selected.');
 
-    await searchPage.assertMenURL(translations);
+      await searchPage.assertMenURL(translations);
+      logger.info('[CrossDevice Search] Men category URL assertion passed.');
+    }
 
-    // Execute the search functionality and capture the response
+    // Perform search operation
     const data: ProductResponse = await searchPage.searchForItem(searchItem);
-    logger.info(`[CrossDevice Search] Search executed with term "${searchItem}".`);
+    logger.info(`[CrossDevice Search] Search executed for item: "${searchItem}".`);
 
-   
+    // Verify that search returned at least one result
+    expect(data.items).not.toHaveLength(0);
+    logger.info(`[CrossDevice Search] ✅ Search returned ${data.items.length} item(s).`);
 
-    // Validate that at least one product item is returned in the search response
-    expect(data.items.length).toBeGreaterThan(0);
-    logger.info(`[CrossDevice Search] ✅ Search returned ${data.items.length} items.`);
-
-    // Further validate that the returned items contain the search term
+    // Ensure returned items contain the search term
     const matchingProducts = data.items.filter(item =>
       item.name.toLowerCase().includes(searchItem.toLowerCase()),
     );
 
-    expect(matchingProducts.length).toBeGreaterThan(0);
+    expect(matchingProducts).not.toHaveLength(0);
     logger.info(
-      `[CrossDevice Search] ✅ ${matchingProducts.length} products contain "${searchItem}".`,
+      `[CrossDevice Search] ✅ ${matchingProducts.length} product(s) matched the term "${searchItem}".`,
     );
   });
 });

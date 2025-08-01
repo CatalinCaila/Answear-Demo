@@ -5,17 +5,6 @@ pipeline {
         NODE_ENV       = "${params.ENVIRONMENT}"
         ALLURE_RESULTS = "allure-results"
         ALLURE_REPORT  = "allure-report"
-
-        // Worker-scoped credentials
-        ADMIN_EMAIL_0     = credentials('ADMIN_EMAIL_0')
-        ADMIN_PASSWORD_0  = credentials('ADMIN_PASSWORD_0')
-        USER_EMAIL_0      = credentials('USER_EMAIL_0')
-        USER_PASSWORD_0   = credentials('USER_PASSWORD_0')
-
-        ADMIN_EMAIL_1     = credentials('ADMIN_EMAIL_1')
-        ADMIN_PASSWORD_1  = credentials('ADMIN_PASSWORD_1')
-        USER_EMAIL_1      = credentials('USER_EMAIL_1')
-        USER_PASSWORD_1   = credentials('USER_PASSWORD_1')
     }
 
     parameters {
@@ -48,8 +37,19 @@ pipeline {
 
         stage('🔧 Run Playwright Tests') {
             steps {
-                echo "📌 Running Playwright tests in %NODE_ENV% environment..."
-                bat "npm run test:%NODE_ENV%"
+                withCredentials([
+                    string(credentialsId: 'USER_EMAIL_0', variable: 'USER_EMAIL_0'),
+                    string(credentialsId: 'USER_PASSWORD_0', variable: 'USER_PASSWORD_0'),
+                    string(credentialsId: 'ADMIN_EMAIL_0', variable: 'ADMIN_EMAIL_0'),
+                    string(credentialsId: 'ADMIN_PASSWORD_0', variable: 'ADMIN_PASSWORD_0'),
+                    string(credentialsId: 'USER_EMAIL_1', variable: 'USER_EMAIL_1'),
+                    string(credentialsId: 'USER_PASSWORD_1', variable: 'USER_PASSWORD_1'),
+                    string(credentialsId: 'ADMIN_EMAIL_1', variable: 'ADMIN_EMAIL_1'),
+                    string(credentialsId: 'ADMIN_PASSWORD_1', variable: 'ADMIN_PASSWORD_1')
+                ]) {
+                    echo "📌 Running Playwright tests in %NODE_ENV% environment..."
+                    bat "npm run test:%NODE_ENV%"
+                }
             }
             post {
                 always {
