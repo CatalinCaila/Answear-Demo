@@ -1,12 +1,12 @@
-// tests/fixtures.ts
+// tests/rolefixtures.ts
 import { test as base } from '@playwright/test';
 import path from 'path';
 import fs from 'fs';
 import ro from './ro.json' with { type: 'json' };
 import it from './it.json' with { type: 'json' };
-import { generateAuthState } from '../../utils/helpers/generateAuthState';
-import { credentials } from '../../utils/helpers/credentials';
-import { Role } from '../../utils/helpers/roleTypes';
+import { generateAuthState } from '../../utils/auth/generateAuthState';
+import { credentials } from '../../utils/auth/credentials';
+import { Role } from '../../utils/config/roleTypes';
 
 type Translations = { [key: string]: string };
 type Domain = 'ro' | 'it';

@@ -2,11 +2,11 @@
 import { type Page } from '@playwright/test';
 import path from 'path';
 import fs from 'fs';
-import { UsersPage } from '../../pages/UsersPage';
-import { CookieBanner } from '../../pages/common/CookieBanner';
+import { UsersPage } from '../../pages/web/LoginPage';
+import { CookieBanner } from '../helpers/cookieBanner';
 import { credentials } from './credentials';
-import { Role } from './roleTypes';
-import { logger } from '../logger';
+import { Role } from '../config/roleTypes';
+import { logger } from '../logger/logger';
 
 export async function generateAuthState(
   page: Page,

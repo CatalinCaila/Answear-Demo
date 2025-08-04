@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import { test, expect } from '@playwright/test';
 import { SearchPageWeb } from '../../pages/web/SearchPageWeb';
-import { logger } from '../../utils/logger';
+import { logger } from '../../utils/logger/logger';
 
 // __dirname for ESM
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -11,7 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 test.describe('@dev @qa @prod @ui @mock @search', () => {
   test('UI shows mocked search results', async ({ page }) => {
     // …load mock…
-    const mockFilePath = path.resolve(__dirname, '../../fixtures/products.mock.json');
+    const mockFilePath = path.resolve(__dirname, '../../fixtures/mocks/products.mock.json');
     const mockData = JSON.parse(fs.readFileSync(mockFilePath, 'utf-8'));
     await page.route('**/api/products', route =>
       route.fulfill({

@@ -1,7 +1,7 @@
 // utils/helpers/credentials.ts
 import dotenv from 'dotenv';
-import { Role } from './roleTypes';
-import { logger } from '../logger';
+import { Role } from '../config/roleTypes';
+import { logger } from '../logger/logger';
 
 dotenv.config();
 

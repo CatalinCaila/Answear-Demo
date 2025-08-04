@@ -26,6 +26,6 @@
     "fixtures",
     "playwright.config.ts",
     "playwright.rm.config.ts"
-  ],
+, "setup/auth.setup.spec.ts"  ],
   "exclude": ["node_modules"]
 }

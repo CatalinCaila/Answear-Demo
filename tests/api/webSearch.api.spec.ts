@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { fetchSearchResults } from '../../utils/api/products';
-import { logger } from '../../utils/logger';
+import { logger } from '../../utils/logger/logger';
 import path from 'path';
 import fs from 'fs';
 

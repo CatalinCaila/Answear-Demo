@@ -2,7 +2,7 @@
 
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
-import { logger } from '../utils/logger';
+import { logger } from '../../utils/logger/logger';
 
 /**
  * Represents the user authentication page and its interactions.

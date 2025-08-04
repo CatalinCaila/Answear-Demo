@@ -37,6 +37,7 @@ export default defineConfig({
   //  ✅ Setup login/auth state for user and admin roles
       {
         name: 'setup-RO',
+        testDir:'./setup',
         testMatch: 'setup/auth.setup.spec.ts',
         workers: 2,
          use: {
@@ -47,6 +48,7 @@ export default defineConfig({
 
        {
       name: 'setup-IT',
+      testDir:'./setup',
       testMatch: 'setup/auth.setup.spec.ts',
       workers: 2,
       use: {

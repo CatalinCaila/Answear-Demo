@@ -4,7 +4,7 @@ import type { Page } from '@playwright/test';
 import { SearchPageWeb } from '../../pages/web/SearchPageWeb';
 import { SearchPageMobile } from '../../pages/mobile/SearchPageMobile';
 import { SearchPageBase } from '../../pages/base/SearchPageBase';
-import { logger } from '../logger';
+import { logger } from '../logger/logger';
 
 /**
  * Factory class to instantiate platform-specific implementations of search pages.

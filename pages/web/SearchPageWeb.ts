@@ -1,6 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
 import { SearchPageBase } from '../base/SearchPageBase';
-import { logger } from '../../utils/logger';
+import { logger } from '../../utils/logger/logger';
 import { expect } from '@playwright/test';
 
 export class SearchPageWeb extends SearchPageBase {

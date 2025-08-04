@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { logger } from '../logger';
+import { logger } from '../logger/logger';
 
 const domain = process.env.BASE_URL || 'https://answear.ro'; // 👈 Dynamic domain variable
 

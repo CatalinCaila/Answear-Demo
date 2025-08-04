@@ -1,10 +1,10 @@
 // tests/cross-browser/crossdevice.search.spec.ts
 import { mergeTests } from '@playwright/test';
 import { test as roleTest, expect } from '../../fixtures/auth/roleFixture';
-import { test as searchTest } from '../../fixtures/searchItem';
+import { test as searchTest } from '../../fixtures/data/searchItem';
 import { PageFactory } from '../../utils/helpers/pageFactory';
 import type { ProductResponse } from '../../schemas/products.schema';
-import { logger } from '../../utils/logger';
+import { logger } from '../../utils/logger/logger';
 import { assertHomepageLoaded } from '../../utils/helpers/homepageHelper';
 
 export const test = mergeTests(roleTest, searchTest);

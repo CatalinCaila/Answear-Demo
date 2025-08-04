@@ -2,7 +2,7 @@
 
 import type { Page } from '@playwright/test';
 import { productsResponseSchema, type ProductResponse } from '../../schemas/products.schema';
-import { logger } from '../logger';
+import { logger } from '../logger/logger';
 
 /**
  * Waits explicitly for the products API response and validates it against the Zod schema.

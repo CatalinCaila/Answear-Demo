@@ -1,10 +1,10 @@
 // pages/base/SearchPageBase.ts
 import { expect } from '@playwright/test';
 import type { Locator, Page } from '@playwright/test';
-import { CookieBanner } from '../common/CookieBanner';
+import { CookieBanner } from '../../utils/helpers/cookieBanner';
 import type { ProductResponse } from '../../schemas/products.schema';
-import { waitAndParseProductApi } from '../../utils/api/waitAndParseProductApi';
-import { logger } from '../../utils/logger';
+import { waitAndParseProductApi } from '../../utils/api/productApiHelper';
+import { logger } from '../../utils/logger/logger';
 
 /**
  * Abstract base class defining common search functionalities

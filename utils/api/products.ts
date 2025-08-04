@@ -1,6 +1,6 @@
 import { request, type APIRequestContext, expect } from '@playwright/test';
 import { productsResponseSchema, type ProductResponse  } from '../../schemas/products.schema';
-import { logger } from '../logger';
+import { logger } from '../logger/logger';
 
 /**
  * Fetches search results dynamically using provided token and environment URL.

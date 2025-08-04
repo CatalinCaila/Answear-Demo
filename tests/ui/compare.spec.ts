@@ -2,7 +2,7 @@
 
 import { test } from '../../fixtures/auth/roleFixture';
 import { SearchPageWeb } from '../../pages/web/SearchPageWeb';
-import { logger } from '../../utils/logger';
+import { logger } from '../../utils/logger/logger';
 
 /**
  * UI test verifying product comparison functionality across pagination for authenticated users.
