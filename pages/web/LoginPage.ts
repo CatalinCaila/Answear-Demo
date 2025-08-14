@@ -1,5 +1,3 @@
-// pages/web/UsersPage.ts
-
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 import { logger } from '../../utils/logger/logger';
@@ -22,9 +20,7 @@ export class UsersPage {
     this.accountButton = page.getByTestId('my_account_icon');
     this.emailInput = page.locator('#_username');
     this.passwordInput = page.locator('#_password');
-    this.loginButton = page.locator(
-      '.LoginPanelTemplate__loginStepWrapper__pTsw3 button[type="submit"]',
-    );
+    this.loginButton = page.locator('[data-test="loginStep"] button[type="submit"]');
 
     logger.info(`[UsersPage] Initialized all login locators.`);
   }

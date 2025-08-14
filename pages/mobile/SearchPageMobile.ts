@@ -1,9 +1,7 @@
-// pages/mobile/SearchPageMobile.ts
-
 import type { Locator, Page } from '@playwright/test';
 import { SearchPageBase } from '../base/SearchPageBase';
 import { logger } from '../../utils/logger/logger';
-import { expect } from '@playwright/test';
+
 
 /**
  * Mobile-specific implementation of search page functionality.

@@ -1,4 +1,3 @@
-// tests/cross-browser/crossdevice.search.spec.ts
 import { mergeTests } from '@playwright/test';
 import { test as roleTest, expect } from '../../fixtures/auth/roleFixture';
 import { test as searchTest } from '../../fixtures/data/searchItem';

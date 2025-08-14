@@ -1,4 +1,3 @@
-// pages/base/SearchPageBase.ts
 import { expect } from '@playwright/test';
 import type { Locator, Page } from '@playwright/test';
 import { CookieBanner } from '../../utils/helpers/cookieBanner';

@@ -1,4 +1,3 @@
-
 import { z } from 'zod';
 
 const availabilityEnum = z.enum(['IN_STOCK', 'OUT_OF_STOCK', 'LAST']);
@@ -29,7 +28,7 @@ const badgeSchema = z.object({
   priority: z.number(),
   textColor: z.string(),
   backgroundColor: z.string(),
-  transparency: z.number()
+  transparency: z.number(),
 });
 
 const productSchema = z.object({
@@ -44,17 +43,23 @@ const productSchema = z.object({
   subtitle: z.string().optional(),
   productBrand: productBrandSchema,
   allSizes: z.array(sizeSchema),
- 
-  categories: z.array(z.object({
-    id: z.number(),
-    name: z.string()
-  })).optional(),
+
+  categories: z
+    .array(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+      }),
+    )
+    .optional(),
   frontendUuid: z.string().optional(),
   pbbCode: z.string().optional(),
-  color: z.object({
-    name: z.string(),
-    colorPbbCode: z.string()
-  }).optional(),
+  color: z
+    .object({
+      name: z.string(),
+      colorPbbCode: z.string(),
+    })
+    .optional(),
   source: z.string().optional(),
   badges: z.array(badgeSchema).optional(),
   badgesFront: z.array(badgeSchema).optional(),
@@ -63,28 +68,32 @@ const productSchema = z.object({
   onOfferFor30Days: z.boolean().optional(),
   hasSizeGroupProducts: z.boolean().optional(),
   isAvailableSoon: z.boolean().optional(),
-  isPresale: z.boolean().optional()
+  isPresale: z.boolean().optional(),
 });
 
 export const productsResponseSchema = z.object({
   items: z.array(productSchema),
   sortingOrder: z.array(z.string()),
   filters: z.array(z.any()).optional(),
-  category: z.object({
-    id: z.number(),
-    name: z.string(),
-    slug: z.string(),
-    url: z.string()
-  }).optional(),
+  category: z
+    .object({
+      id: z.number(),
+      name: z.string(),
+      slug: z.string(),
+      url: z.string(),
+    })
+    .optional(),
   urlFilters: z.string().optional(),
 
   count: z.number().optional(),
-  seoMetaTags: z.object({
-    title: z.string(),
-    description: z.string(),
-    header: z.string().nullable().optional(),
-    noindex: z.boolean()
-  }).optional()
+  seoMetaTags: z
+    .object({
+      title: z.string(),
+      description: z.string(),
+      header: z.string().nullable().optional(),
+      noindex: z.boolean(),
+    })
+    .optional(),
 });
 
 export type ProductResponse = z.infer<typeof productsResponseSchema>;

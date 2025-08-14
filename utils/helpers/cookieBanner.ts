@@ -1,5 +1,3 @@
-// utils/helpers/cookieBanner.ts
-
 import type { Locator, Page } from '@playwright/test';
 import { logger } from '../logger/logger';
 

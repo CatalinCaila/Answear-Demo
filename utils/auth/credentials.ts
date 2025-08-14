@@ -1,4 +1,3 @@
-// utils/helpers/credentials.ts
 import dotenv from 'dotenv';
 import { Role } from '../config/roleTypes';
 import { logger } from '../logger/logger';

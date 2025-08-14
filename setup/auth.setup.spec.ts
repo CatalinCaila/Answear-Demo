@@ -1,4 +1,3 @@
-// setup/auth.setup.spec.ts
 import { test } from '@playwright/test';
 import { generateAuthState } from '../utils/auth/generateAuthState';
 import { Role } from '../utils/config/roleTypes';

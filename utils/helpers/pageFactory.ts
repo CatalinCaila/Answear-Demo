@@ -1,5 +1,3 @@
-// utils/helpers/pageFactory.ts
-
 import type { Page } from '@playwright/test';
 import { SearchPageWeb } from '../../pages/web/SearchPageWeb';
 import { SearchPageMobile } from '../../pages/mobile/SearchPageMobile';

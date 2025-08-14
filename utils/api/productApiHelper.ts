@@ -1,5 +1,3 @@
-// utils/api.ts
-
 import type { Page } from '@playwright/test';
 import { productsResponseSchema, type ProductResponse } from '../../schemas/products.schema';
 import { logger } from '../logger/logger';
