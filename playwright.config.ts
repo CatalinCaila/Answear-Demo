@@ -46,27 +46,27 @@ export default defineConfig({
         },
       },
 
-    //    {
-    //   name: 'setup-IT',
-    //   testDir:'./setup',
-    //   testMatch: 'setup/auth.setup.spec.ts',
-    //   workers: 2,
-    //   use: {
-    //     ...devices['Desktop Chrome'],
-    //     locale: 'it',
-    //   },
-    // },
+       {
+      name: 'setup-IT',
+      testDir:'./setup',
+      testMatch: 'setup/auth.setup.spec.ts',
+      workers: 2,
+      use: {
+        ...devices['Desktop Chrome'],
+        locale: 'it',
+      },
+    },
 
-    // {
-    //   name: 'compare-product',
-    //   testMatch: 'ui/compare.spec.ts',
-    //   use: {
-    //     ...devices['Desktop Chrome'],
-    //     baseURL: 'https://answear.ro', // 👈 add this line
-    //     storageState: './auth/userAuth-RO-0.json',
-    //     locale: 'ro', // recommended to explicitly set
-    //   },
-    // },
+    {
+      name: 'compare-product',
+      testMatch: 'ui/compare.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://answear.ro', // 👈 add this line
+        storageState: './auth/userAuth-RO-0.json',
+        locale: 'ro', // recommended to explicitly set
+      },
+    },
 
     {
       name: 'search-desktop-RO-account-0',
@@ -148,23 +148,23 @@ export default defineConfig({
         storageState: './auth/userAuth-IT-1.json',
       },
     },
-    // {
-    //   name: 'mock-search-element-not-found',
-    //   testMatch: 'mocks/search.mocked.spec.ts',
-    //   use: {
-    //     ...devices['Desktop Chrome'],
-    //     baseURL: 'https://answear.ro', // 👈 add this line
-    //     storageState: './auth/userAuth-RO-0.json',
-    //     locale: 'ro', // recommended to explicitly set
-    //   },
-    // },
+    {
+      name: 'mock-search-element-not-found',
+      testMatch: 'mocks/search.mocked.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://answear.ro', // 👈 add this line
+        storageState: './auth/userAuth-RO-0.json',
+        locale: 'ro', // recommended to explicitly set
+      },
+    },
 
-    // {
-    //   name: 'api-web-search',
-    //   testMatch: ['tests/api/webSearch.api.spec.ts'],
-    //   use: {
-    //     baseURL: 'https://answear.ro', // ✅ Add your desired environment URL
-    //   },
-    // },
+    {
+      name: 'api-web-search',
+      testMatch: ['tests/api/webSearch.api.spec.ts'],
+      use: {
+        baseURL: 'https://answear.ro', // ✅ Add your desired environment URL
+      },
+    },
   ],
 });
