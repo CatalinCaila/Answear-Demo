@@ -1,12 +1,13 @@
 import { mergeTests } from '@playwright/test';
 import { test as roleTest, expect } from '../../fixtures/auth/roleFixture';
 import { test as searchTest } from '../../fixtures/data/searchItem';
+import { test as i18nTest } from '../../fixtures/data/translations';
 import { PageFactory } from '../../utils/helpers/pageFactory';
 import type { ProductResponse } from '../../schemas/products.schema';
 import { logger } from '../../utils/logger/logger';
 import { assertHomepageLoaded } from '../../utils/helpers/homepageHelper';
 
-export const test = mergeTests(roleTest, searchTest);
+export const test = mergeTests(roleTest, searchTest, i18nTest);
 
 /**
  * UI test suite to verify search functionality across desktop and mobile devices.

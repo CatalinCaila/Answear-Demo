@@ -34,37 +34,38 @@ export default defineConfig({
   },
 
   projects: [
-  //  ✅ Setup login/auth state for user and admin roles
+  // ✅ Setup login/auth state for user and admin roles
       {
-        name: 'setup-RO',
-        testDir:'./setup',
-        testMatch: 'setup/auth.setup.spec.ts',
-        workers: 2,
-         use: {
-          ...devices['Desktop Chrome'],
-          locale: 'ro',
-        },
-      },
-
-       {
-      name: 'setup-IT',
-      testDir:'./setup',
-      testMatch: 'setup/auth.setup.spec.ts',
-      workers: 2,
-      use: {
-        ...devices['Desktop Chrome'],
-        locale: 'it',
-      },
+    name: 'setup-RO',
+    testDir: './setup',
+    testMatch: 'setup/auth.setup.spec.ts',
+    workers: 2,
+    use: {
+      ...devices['Desktop Chrome'],
+      baseURL: 'https://answear.ro',
+      locale: 'ro',
     },
+  },
+  {
+    name: 'setup-IT',
+    testDir: './setup',
+    testMatch: 'setup/auth.setup.spec.ts',
+    workers: 2,
+    use: {
+      ...devices['Desktop Chrome'],
+      baseURL: 'https://answear.it',
+      locale: 'it',
+    },
+  },
 
     {
       name: 'compare-product',
       testMatch: 'ui/compare.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
-        baseURL: 'https://answear.ro', // 👈 add this line
+        baseURL: 'https://answear.ro', 
         storageState: './auth/userAuth-RO-0.json',
-        locale: 'ro', // recommended to explicitly set
+        locale: 'ro', 
       },
     },
 
@@ -75,7 +76,7 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         baseURL: 'https://answear.ro',
         locale: 'ro',
-        storageState: './auth/userAuth-RO-0.json', // pre-generated once
+        storageState: './auth/userAuth-RO-0.json', 
       },
     },
     {
@@ -153,9 +154,9 @@ export default defineConfig({
       testMatch: 'mocks/search.mocked.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
-        baseURL: 'https://answear.ro', // 👈 add this line
+        baseURL: 'https://answear.ro', 
         storageState: './auth/userAuth-RO-0.json',
-        locale: 'ro', // recommended to explicitly set
+        locale: 'ro', 
       },
     },
 
@@ -163,7 +164,7 @@ export default defineConfig({
       name: 'api-web-search',
       testMatch: ['tests/api/webSearch.api.spec.ts'],
       use: {
-        baseURL: 'https://answear.ro', // ✅ Add your desired environment URL
+        baseURL: 'https://answear.ro', 
       },
     },
   ],

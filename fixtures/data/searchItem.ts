@@ -1,4 +1,3 @@
-//D:\Project Playwright\Answear-Demo\fixtures\searchItem.ts
 import { test as base } from '@playwright/test';
 
 export const test = base.extend<{
