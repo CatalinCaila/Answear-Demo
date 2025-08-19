@@ -35,137 +35,147 @@ export default defineConfig({
 
   projects: [
   // ✅ Setup login/auth state for user and admin roles
-      {
-    name: 'setup-RO',
-    testDir: './setup',
-    testMatch: 'setup/auth.setup.spec.ts',
-    workers: 2,
-    use: {
-      ...devices['Desktop Chrome'],
-      baseURL: 'https://answear.ro',
-      locale: 'ro',
-    },
-  },
-  {
-    name: 'setup-IT',
-    testDir: './setup',
-    testMatch: 'setup/auth.setup.spec.ts',
-    workers: 2,
-    use: {
-      ...devices['Desktop Chrome'],
-      baseURL: 'https://answear.it',
-      locale: 'it',
-    },
-  },
+  //     {
+  //   name: 'setup-RO',
+  //   testDir: './setup',
+  //   testMatch: 'setup/auth.setup.spec.ts',
+  //   workers: 2,
+  //   use: {
+  //     ...devices['Desktop Chrome'],
+  //     baseURL: 'https://answear.ro',
+  //     locale: 'ro',
+  //   },
+  // },
+  // {
+  //   name: 'setup-IT',
+  //   testDir: './setup',
+  //   testMatch: 'setup/auth.setup.spec.ts',
+  //   workers: 2,
+  //   use: {
+  //     ...devices['Desktop Chrome'],
+  //     baseURL: 'https://answear.it',
+  //     locale: 'it',
+  //   },
+  // },
 
-    {
-      name: 'compare-product',
-      testMatch: 'ui/compare.spec.ts',
+     {
+      name: 'MultiRole',
+      testMatch: 'multiRole.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
         baseURL: 'https://answear.ro', 
-        storageState: './auth/userAuth-RO-0.json',
         locale: 'ro', 
       },
     },
 
-    {
-      name: 'search-desktop-RO-account-0',
-      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'https://answear.ro',
-        locale: 'ro',
-        storageState: './auth/userAuth-RO-0.json', 
-      },
-    },
-    {
-      name: 'search-desktop-RO-account-1',
-      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'https://answear.ro',
-        locale: 'ro',
-        storageState: './auth/userAuth-RO-1.json',
-      },
-    },
-    {
-      name: 'search-mobile-RO-account-0',
-      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
-      use: {
-        ...devices['Galaxy S9+'],
-        baseURL: 'https://answear.ro',
-        locale: 'ro',
-        storageState: './auth/userAuth-RO-0.json',
-      },
-    },
-    {
-      name: 'search-mobile-RO-account-1',
-      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
-      use: {
-        ...devices['Galaxy S9+'],
-        baseURL: 'https://answear.ro',
-        locale: 'ro',
-        storageState: './auth/userAuth-RO-1.json',
-      },
-    },
-    {
-      name: 'search-desktop-IT-account-0',
-      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'https://answear.it',
-        locale: 'it',
-        storageState: './auth/userAuth-IT-0.json',
-      },
-    },
-    {
-      name: 'search-desktop-IT-account-1',
-      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'https://answear.it',
-        locale: 'it',
-        storageState: './auth/userAuth-IT-1.json',
-      },
-    },
-    {
-      name: 'search-mobile-IT-account-0',
-      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
-      use: {
-        ...devices['Galaxy S9+'],
-        baseURL: 'https://answear.it',
-        locale: 'it',
-        storageState: './auth/userAuth-IT-0.json',
-      },
-    },
-    {
-      name: 'search-mobile-IT-account-1',
-      testMatch: ['tests/cross-browser/search.cross.spec.ts'],
-      use: {
-        ...devices['Galaxy S9+'],
-        baseURL: 'https://answear.it',
-        locale: 'it',
-        storageState: './auth/userAuth-IT-1.json',
-      },
-    },
-    {
-      name: 'mock-search-element-not-found',
-      testMatch: 'mocks/search.mocked.spec.ts',
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'https://answear.ro', 
-        storageState: './auth/userAuth-RO-0.json',
-        locale: 'ro', 
-      },
-    },
+    // {
+    //   name: 'compare-product',
+    //   testMatch: 'ui/compare.spec.ts',
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     baseURL: 'https://answear.ro', 
+    //     storageState: './auth/userAuth-RO-0.json',
+    //     locale: 'ro', 
+    //   },
+    // },
 
-    {
-      name: 'api-web-search',
-      testMatch: ['tests/api/webSearch.api.spec.ts'],
-      use: {
-        baseURL: 'https://answear.ro', 
-      },
-    },
+    // {
+    //   name: 'search-desktop-RO-account-0',
+    //   testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     baseURL: 'https://answear.ro',
+    //     locale: 'ro',
+    //     storageState: './auth/userAuth-RO-0.json', 
+    //   },
+    // },
+    // {
+    //   name: 'search-desktop-RO-account-1',
+    //   testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     baseURL: 'https://answear.ro',
+    //     locale: 'ro',
+    //     storageState: './auth/userAuth-RO-1.json',
+    //   },
+    // },
+    // {
+    //   name: 'search-mobile-RO-account-0',
+    //   testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+    //   use: {
+    //     ...devices['Galaxy S9+'],
+    //     baseURL: 'https://answear.ro',
+    //     locale: 'ro',
+    //     storageState: './auth/userAuth-RO-0.json',
+    //   },
+    // },
+    // {
+    //   name: 'search-mobile-RO-account-1',
+    //   testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+    //   use: {
+    //     ...devices['Galaxy S9+'],
+    //     baseURL: 'https://answear.ro',
+    //     locale: 'ro',
+    //     storageState: './auth/userAuth-RO-1.json',
+    //   },
+    // },
+    // {
+    //   name: 'search-desktop-IT-account-0',
+    //   testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     baseURL: 'https://answear.it',
+    //     locale: 'it',
+    //     storageState: './auth/userAuth-IT-0.json',
+    //   },
+    // },
+    // {
+    //   name: 'search-desktop-IT-account-1',
+    //   testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     baseURL: 'https://answear.it',
+    //     locale: 'it',
+    //     storageState: './auth/userAuth-IT-1.json',
+    //   },
+    // },
+    // {
+    //   name: 'search-mobile-IT-account-0',
+    //   testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+    //   use: {
+    //     ...devices['Galaxy S9+'],
+    //     baseURL: 'https://answear.it',
+    //     locale: 'it',
+    //     storageState: './auth/userAuth-IT-0.json',
+    //   },
+    // },
+    // {
+    //   name: 'search-mobile-IT-account-1',
+    //   testMatch: ['tests/cross-browser/search.cross.spec.ts'],
+    //   use: {
+    //     ...devices['Galaxy S9+'],
+    //     baseURL: 'https://answear.it',
+    //     locale: 'it',
+    //     storageState: './auth/userAuth-IT-1.json',
+    //   },
+    // },
+    // {
+    //   name: 'mock-search-element-not-found',
+    //   testMatch: 'mocks/search.mocked.spec.ts',
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     baseURL: 'https://answear.ro', 
+    //     storageState: './auth/userAuth-RO-0.json',
+    //     locale: 'ro', 
+    //   },
+    // },
+
+    // {
+    //   name: 'api-web-search',
+    //   testMatch: ['tests/api/webSearch.api.spec.ts'],
+    //   use: {
+    //     baseURL: 'https://answear.ro', 
+    //   },
+    // },
   ],
 });
