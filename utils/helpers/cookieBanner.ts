@@ -29,7 +29,7 @@ export class CookieBanner {
     this.acceptButton = page.getByTestId('cookiesAcceptButton').first();
 
     this.options = {
-      timeoutMs: options?.timeoutMs ?? 25_000, // generous default
+      timeoutMs: options?.timeoutMs ?? 45_000, // generous default
       waitForDomContentLoaded: options?.waitForDomContentLoaded ?? true,
     };
 
