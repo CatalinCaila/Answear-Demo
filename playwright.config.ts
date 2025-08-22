@@ -21,7 +21,7 @@ export default defineConfig({
 
   use: {
     baseURL: process.env.BASE_URL,
-    headless: false,
+    headless: true,
     viewport: { width: 1920, height: 1080 },
     trace: 'on',
     screenshot: 'on',

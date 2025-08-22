@@ -5,7 +5,7 @@ import fs from 'fs';
 import { credentials } from '../../utils/auth/credentials';
 import { Role } from '../../utils/config/roleTypes';
 import { logger } from '../../utils/logger/logger';
-import { UsersPage } from '../../pages/web/LoginPage';
+import { LoginPage } from '../../pages/web/LoginPage';
 import { CookieBanner } from '../../utils/helpers/cookieBanner';
 
 type Domain = 'ro' | 'it';
@@ -92,11 +92,11 @@ type StorageState = {
  * Apply a saved storageState to the *existing* context + page.
  */
 async function applyStorageStateToExistingContext(targetPage: Page, filePath: string): Promise<void> {
-  const method = 'applyStorageStateToExistingContext';
-  logger.info(`[${method}] Start... ${filePath}`);
+  const methodName = 'applyStorageStateToExistingContext';
+  logger.info(`[${methodName}] Start... ${filePath}`);
 
   if (!fs.existsSync(filePath)) {
-    logger.info(`[${method}] No storage file found at: ${filePath}`);
+    logger.info(`[${methodName}] No storage file found at: ${filePath}`);
     return;
   }
 
@@ -116,7 +116,7 @@ async function applyStorageStateToExistingContext(targetPage: Page, filePath: st
     }
   }
 
-  logger.info(`[${method}] End.`);
+  logger.info(`[${methodName}] End.`);
 }
 
 /**
@@ -129,8 +129,8 @@ async function doLoginAndSaveState(
   accountIndex: number,
   baseURLFromProject?: string
 ): Promise<string> {
-  const method = 'doLoginAndSaveState';
-  logger.info(`[${method}] Start... role=${role}, domain=${domain}, accountIndex=${accountIndex}`);
+  const methodName = 'doLoginAndSaveState';
+  logger.info(`[${methodName}] Start... role=${role}, domain=${domain}, accountIndex=${accountIndex}`);
 
   const cred = credentials[role][accountIndex % credentials[role].length];
   const storagePath = storagePathFor(role, domain, accountIndex);
@@ -138,19 +138,19 @@ async function doLoginAndSaveState(
   const domainURL = baseURLFromProject ?? (domain === 'ro' ? 'https://answear.ro' : 'https://answear.it');
 
   const cookieBanner = new CookieBanner(targetPage);
-  const userPage = new UsersPage(targetPage);
+  const loginPage = new LoginPage(targetPage);
 
   // 1) Navigate home
   await targetPage.goto(domainURL, { waitUntil: 'domcontentloaded' });
-  logger.info(`[${method}] Navigated to ${domainURL}`);
+  logger.info(`[${methodName}] Navigated to ${domainURL}`);
 
   // 2) Accept cookies BEFORE login (if present)
   await cookieBanner.clickIfPresent();
-  logger.info(`[${method}] Cookie banner handled (pre-login)`);
+  logger.info(`[${methodName}] Cookie banner handled (pre-login)`);
 
   // 3) Login (UI)
-  await userPage.loginUsers(cred.email, cred.password);
-  logger.info(`[${method}] Login submitted for ${role}`);
+  await loginPage.loginUsers(cred.email, cred.password);
+  logger.info(`[${methodName}] Login submitted for ${role}`);
 
   // 4) Deterministic wait: localStorage token is JWT-like
   await targetPage.waitForFunction(
@@ -163,21 +163,21 @@ async function doLoginAndSaveState(
 
   // 5) Save storage state
   await targetPage.context().storageState({ path: storagePath });
-  logger.info(`[${method}] Storage state saved at: ${storagePath}`);
+  logger.info(`[${methodName}] Storage state saved at: ${storagePath}`);
 
   // Optional: also persist User token to a file
   if (role === Role.User) {
     const token = await targetPage.evaluate(() => window.localStorage.getItem('access_token'));
     if (!token || token.split('.').length !== 3) {
-      logger.error(`[${method}] Invalid token after login for ${role} on ${domain}`);
+      logger.error(`[${methodName}] Invalid token after login for ${role} on ${domain}`);
       throw new Error(`❌ Invalid token for ${role} on ${domain}`);
     }
     const tokenPath = path.resolve(`auth/userAccessToken-${domain}-0.txt`.replace('-0', `-${accountIndex}`));
     fs.writeFileSync(tokenPath, token, 'utf-8');
-    logger.info(`[${method}] ✅ Saved User token at ${tokenPath}`);
+    logger.info(`[${methodName}] ✅ Saved User token at ${tokenPath}`);
   }
 
-  logger.info(`[${method}] End.`);
+  logger.info(`[${methodName}] End.`);
   return storagePath;
 }
 
@@ -201,23 +201,23 @@ export const test = base.extend<{
       const accountIndex = opts?.accountIndex ?? testInfo.workerIndex; // default: worker index
       const storagePath = storagePathFor(role, domain, accountIndex);
 
-      const method = 'loginAs';
+      const methodName = 'loginAs';
       logger.info(
-        `[${method}] Start... project=${testInfo.project.name}, baseURL=${baseURLFromProject ?? 'N/A'}, role=${role}, domain=${domain}, accountIndex=${accountIndex}`
+        `[${methodName}] Start... project=${testInfo.project.name}, baseURL=${baseURLFromProject ?? 'N/A'}, role=${role}, domain=${domain}, accountIndex=${accountIndex}`
       );
 
       const canReuse = !opts?.force && storageHasValidToken(storagePath);
 
       if (canReuse) {
-        logger.info(`[${method}] Reusing storageState: ${storagePath}`);
+        logger.info(`[${methodName}] Reusing storageState: ${storagePath}`);
         // IMPORTANT: do NOT call page.context().storageState({ path }) here — that WRITES.
         await applyStorageStateToExistingContext(targetPage, storagePath);
       } else {
-        logger.info(`[${method}] Missing/expired state. Generating fresh...`);
+        logger.info(`[${methodName}] Missing/expired state. Generating fresh...`);
         await doLoginAndSaveState(targetPage, role, domain, accountIndex, baseURLFromProject);
       }
 
-      logger.info(`[${method}] End.`);
+      logger.info(`[${methodName}] End.`);
       return storagePath;
     });
   },

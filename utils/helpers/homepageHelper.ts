@@ -5,11 +5,11 @@ import { type Page, expect } from '@playwright/test';
  * @param page - Playwright page object.
  */
 export async function assertHomepageLoaded(page: Page): Promise<void> {
-  const methodName = 'assertHomepageLoaded';
-  console.log(`[${methodName}] Start...`);
+  const methodNameName = 'assertHomepageLoaded';
+  console.log(`[${methodNameName}] Start...`);
 
   const logoLocator = page.locator('img[alt="logo answear"]');
   await expect(logoLocator).toBeVisible();
 
-  console.log(`[${methodName}] End...`);
+  console.log(`[${methodNameName}] End...`);
 }

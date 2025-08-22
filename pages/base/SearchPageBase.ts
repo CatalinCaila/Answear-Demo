@@ -26,7 +26,7 @@ export abstract class SearchPageBase {
   }
 
   /**
-   * Abstract method to select "Men" category from the navigation menu.
+   * Abstract methodName to select "Men" category from the navigation menu.
    * Implementation is platform-specific.
    */
 async selectMenCategory(translations: Record<string, string>): Promise<void> {

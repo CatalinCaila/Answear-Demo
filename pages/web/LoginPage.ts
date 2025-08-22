@@ -5,7 +5,7 @@ import { logger } from '../../utils/logger/logger';
 /**
  * Represents the user authentication page and its interactions.
  */
-export class UsersPage {
+export class LoginPage {
   private readonly accountButton: Locator;
   private readonly emailInput: Locator;
   private readonly passwordInput: Locator;

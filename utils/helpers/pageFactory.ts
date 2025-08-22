@@ -9,7 +9,7 @@ import { logger } from '../logger/logger';
  */
 export class PageFactory {
   /**
-   * Factory method to instantiate and return a platform-specific search page instance.
+   * Factory methodName to instantiate and return a platform-specific search page instance.
    *
    * @param page - Playwright's Page instance used by the search page classes.
    * @param platform - Platform identifier ('desktop' or 'mobile').
