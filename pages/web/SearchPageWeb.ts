@@ -50,12 +50,12 @@ export class SearchPageWeb extends SearchPageBase {
   async performSearch(query: string): Promise<void> {
     await this.fillSearchInput(query);
     await this.searchInput.press('Enter');
-    await this.productCardDescription.first().waitFor({ state: 'visible', timeout: 15000 });
+    await this.productCardDescription.first().waitFor({ state: 'visible', timeout: 30000 });
     logger.info(`[SearchPageWeb] Search performed successfully for "${query}".`);
   }
 
   async getProductDescriptions(): Promise<string[]> {
-    await this.productCardDescription.first().waitFor({ state: 'visible', timeout: 15000 });
+    await this.productCardDescription.first().waitFor({ state: 'visible', timeout: 30000 });
     return this.productCardDescription.allTextContents();
   }
 
@@ -63,7 +63,7 @@ export class SearchPageWeb extends SearchPageBase {
     const pageButton = this.paginationButton(pageNumber);
     await pageButton.waitFor({ state: 'visible', timeout: 50000 });
     await pageButton.click();
-    await this.productCardDescription.first().waitFor({ state: 'visible', timeout: 15000 });
+    await this.productCardDescription.first().waitFor({ state: 'visible', timeout: 30000 });
     logger.info(`[SearchPageWeb] Navigated successfully to page ${pageNumber}.`);
   }
 

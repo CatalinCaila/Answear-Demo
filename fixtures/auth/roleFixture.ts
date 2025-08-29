@@ -108,11 +108,23 @@ async function applyStorageStateToExistingContext(targetPage: Page, filePath: st
   }
 
   // 2) LocalStorage -> per origin
-  for (const origin of raw.origins ?? []) {
-    await targetPage.goto(origin.origin, { waitUntil: 'domcontentloaded' });
-    for (const kv of origin.localStorage) {
-      // eslint-disable-next-line no-await-in-loop
-      await targetPage.evaluate(([k, v]) => localStorage.setItem(k, v), [kv.name, kv.value] as const);
+   for (const origin of raw.origins ?? []) {
+    // Open a temporary page so we don’t disturb the current test page
+    const tmpPage = await targetPage.context().newPage();
+    try {
+      // Navigate to the origin (e.g., https://answear.ro)
+      await tmpPage.goto(origin.origin, { waitUntil: 'domcontentloaded' });
+
+      // Inject each localStorage key/value pair
+      for (const { name, value } of origin.localStorage ?? []) {
+        // eslint-disable-next-line no-await-in-loop
+        await tmpPage.evaluate(([k, v]) => localStorage.setItem(k, v), [name, value] as const);
+      }
+
+      logger.info(`[${methodName}] Restored ${origin.localStorage.length} localStorage items for ${origin.origin}`);
+    } finally {
+      // Close the temporary page once done to avoid leaks
+      await tmpPage.close();
     }
   }
 
