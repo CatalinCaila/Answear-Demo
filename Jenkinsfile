@@ -8,9 +8,8 @@ pipeline {
   }
 
   parameters {
-    // CSV lists; leave defaults to run ALL envs and BOTH roles
-    string(name: 'ENVS',  defaultValue: 'dev,qa,stage,prod', description: 'Comma-separated envs to include (e.g., "dev,qa").')
-    string(name: 'ROLES', defaultValue: 'user,admin',        description: 'Comma-separated roles to include (e.g., "user,admin").')
+    // CSV list of envs; leave default to run ALL
+    string(name: 'ENVS', defaultValue: 'dev,qa,stage,prod', description: 'Comma-separated envs to include (e.g., "dev,qa").')
 
     choice(
       name: 'TEST_FILTER',
@@ -19,6 +18,7 @@ pipeline {
         '@smoke',
         '@api',
         '@search',
+        '@regression',
         '@smoke|@api',
         '@search|@compare',
         '(?=.*@ui)(?=.*@search)',
@@ -47,11 +47,10 @@ pipeline {
       steps {
         script {
           properties([parameters([
-            string(name: 'ENVS',  defaultValue: 'dev,qa,stage,prod', description: 'CSV envs to include'),
-            string(name: 'ROLES', defaultValue: 'user,admin',        description: 'CSV roles to include'),
+            string(name: 'ENVS', defaultValue: 'dev,qa,stage,prod', description: 'CSV envs to include'),
             choice(name: 'TEST_FILTER',
               choices: [
-                'All tests','@smoke','@api','@search',
+                'All tests','@smoke','@api','@search','@regression',
                 '@smoke|@api','@search|@compare',
                 '(?=.*@ui)(?=.*@search)',
                 '(?=.*@ui)(?=.*(@search|@compare))',
@@ -84,7 +83,6 @@ pipeline {
       steps {
         echo "📌 Running ESLint & TypeScript checks..."
         bat 'npm run lint'
-        // Windows-safe fallback to tsc if "typecheck" is missing/fails
         bat '''
           call npm run typecheck
           if errorlevel 1 (
@@ -95,20 +93,18 @@ pipeline {
       }
     }
 
-    // 🚀 Matrix over envs × roles; filtered by ENVS/ROLES CSV
+    // 🚀 Matrix only over envs
     stage('🧪 Run Matrix') {
       matrix {
         axes {
-          axis { name 'TEST_ENV';  values 'dev', 'qa', 'stage', 'prod' }
-          axis { name 'TEST_ROLE'; values 'user', 'admin' }
+          axis { name 'TEST_ENV'; values 'dev', 'qa', 'stage', 'prod' }
         }
 
-        // Only run combinations included in params.ENVS/ROLES
+        // Only run combinations included in ENVS CSV
         when {
           expression {
-            def envs  = (params.ENVS  ?: '').toLowerCase().split(/\s*,\s*/).findAll{ it }
-            def roles = (params.ROLES ?: '').toLowerCase().split(/\s*,\s*/).findAll{ it }
-            return envs.contains(TEST_ENV.toLowerCase()) && roles.contains(TEST_ROLE.toLowerCase())
+            def envs = (params.ENVS ?: '').toLowerCase().split(/\s*,\s*/).findAll{ it }
+            return envs.contains(TEST_ENV.toLowerCase())
           }
         }
 
@@ -119,10 +115,9 @@ pipeline {
                 usernamePassword(credentialsId: 'USER_EMAIL_0',  usernameVariable: 'USER_EMAIL_0',  passwordVariable: 'USER_PASSWORD_0'),
                 usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0')
               ]) {
-                echo "📌 Generating auth for ENV=${TEST_ENV}, ROLE=${TEST_ROLE}"
+                echo "📌 Generating auth for ENV=${TEST_ENV}"
                 bat """
                   set TEST_ENV=${TEST_ENV}
-                  set TEST_ROLE=${TEST_ROLE}
                   npm run auth:generate
                 """
               }
@@ -141,10 +136,9 @@ pipeline {
                   def grepExpr = (selected == 'Custom') ? custom : (selected != 'All tests' ? selected : '')
                   def grepArg  = grepExpr ? "--grep \"${grepExpr}\"" : ""
 
-                  echo "📌 ENV=${TEST_ENV}, ROLE=${TEST_ROLE}, GREP=${grepExpr ?: 'ALL'}, invert=@quarantine"
+                  echo "📌 ENV=${TEST_ENV}, GREP=${grepExpr ?: 'ALL'}, invert=@quarantine"
                   bat """
                     set TEST_ENV=${TEST_ENV}
-                    set TEST_ROLE=${TEST_ROLE}
                     npx playwright test ${grepArg} --grep-invert "@quarantine" --reporter=line
                   """
                 }
@@ -152,7 +146,7 @@ pipeline {
             }
             post {
               always {
-                echo "📌 Archiving artifacts for ${TEST_ENV}/${TEST_ROLE}"
+                echo "📌 Archiving artifacts for ${TEST_ENV}"
                 archiveArtifacts artifacts: 'playwright-report/**/*.*', allowEmptyArchive: true
                 archiveArtifacts artifacts: 'test-results/**/*.*',      allowEmptyArchive: true
               }
