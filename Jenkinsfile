@@ -8,8 +8,9 @@ pipeline {
   }
 
   parameters {
-    choice(name: 'TEST_ENV',  choices: ['dev','qa','stage','prod'], description: 'Select environment')
-    choice(name: 'TEST_ROLE', choices: ['user','admin'],            description: 'Select role')
+    // CSV lists; leave defaults to run ALL envs and BOTH roles
+    string(name: 'ENVS',  defaultValue: 'dev,qa,stage,prod', description: 'Comma-separated envs to include (e.g., "dev,qa").')
+    string(name: 'ROLES', defaultValue: 'user,admin',        description: 'Comma-separated roles to include (e.g., "user,admin").')
 
     choice(
       name: 'TEST_FILTER',
@@ -18,10 +19,10 @@ pipeline {
         '@smoke',
         '@api',
         '@search',
-        '@smoke|@api',                       // OR
+        '@smoke|@api',
         '@search|@compare',
-        '(?=.*@ui)(?=.*@search)',            // AND
-        '(?=.*@ui)(?=.*(@search|@compare))', // AND + OR
+        '(?=.*@ui)(?=.*@search)',
+        '(?=.*@ui)(?=.*(@search|@compare))',
         'Custom'
       ],
       description: 'Preset Playwright --grep. Pick "Custom" to use CUSTOM_TAGS.'
@@ -30,7 +31,7 @@ pipeline {
     string(
       name: 'CUSTOM_TAGS',
       defaultValue: '',
-      description: 'Only used when TEST_FILTER=Custom. Examples: @smoke|@api  or  (?=.*@ui)(?=.*@search)'
+      description: 'Used when TEST_FILTER=Custom. Examples: @smoke|@api  or  (?=.*@ui)(?=.*@search)'
     )
   }
 
@@ -41,33 +42,25 @@ pipeline {
   }
 
   stages {
-
-    // Ensures the job shows the same parameters as this Jenkinsfile
+    // Keep job parameters in sync with this file
     stage('🧰 Sync Jenkins Parameters') {
       steps {
         script {
-          properties([
-            parameters([
-              choice(name: 'TEST_ENV',  choices: ['dev','qa','stage','prod'], description: 'Select environment'),
-              choice(name: 'TEST_ROLE', choices: ['user','admin'],            description: 'Select role'),
-              choice(
-                name: 'TEST_FILTER',
-                choices: [
-                  'All tests',
-                  '@smoke',
-                  '@api',
-                  '@search',
-                  '@smoke|@api',
-                  '@search|@compare',
-                  '(?=.*@ui)(?=.*@search)',
-                  '(?=.*@ui)(?=.*(@search|@compare))',
-                  'Custom'
-                ],
-                description: 'Preset Playwright --grep. Pick "Custom" to use CUSTOM_TAGS.'
-              ),
-              string(name: 'CUSTOM_TAGS', defaultValue: '', description: 'Used when TEST_FILTER=Custom.')
-            ])
-          ])
+          properties([parameters([
+            string(name: 'ENVS',  defaultValue: 'dev,qa,stage,prod', description: 'CSV envs to include'),
+            string(name: 'ROLES', defaultValue: 'user,admin',        description: 'CSV roles to include'),
+            choice(name: 'TEST_FILTER',
+              choices: [
+                'All tests','@smoke','@api','@search',
+                '@smoke|@api','@search|@compare',
+                '(?=.*@ui)(?=.*@search)',
+                '(?=.*@ui)(?=.*(@search|@compare))',
+                'Custom'
+              ],
+              description: 'Preset grep'
+            ),
+            string(name: 'CUSTOM_TAGS', defaultValue: '', description: 'Used when TEST_FILTER=Custom')
+          ])])
         }
       }
     }
@@ -91,72 +84,81 @@ pipeline {
       steps {
         echo "📌 Running ESLint & TypeScript checks..."
         bat 'npm run lint'
-        // Windows-safe fallback to tsc if "typecheck" script is missing or fails
+        // Windows-safe fallback to tsc if "typecheck" is missing/fails
         bat '''
           call npm run typecheck
           if errorlevel 1 (
-            echo No "typecheck" script or it failed. Running "npx tsc -p . --noEmit" as fallback...
+            echo Fallback: npx tsc -p . --noEmit
             npx tsc -p . --noEmit
           )
         '''
       }
     }
 
-    stage('🔑 Generate Auth State') {
-      steps {
-        withCredentials([
-          usernamePassword(credentialsId: 'USER_EMAIL_0',  usernameVariable: 'USER_EMAIL_0',  passwordVariable: 'USER_PASSWORD_0'),
-          usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0')
-        ]) {
-          echo "📌 Generating auth state for ${params.TEST_ENV} / role ${params.TEST_ROLE}..."
-          bat """
-            set TEST_ENV=${params.TEST_ENV}
-            set TEST_ROLE=${params.TEST_ROLE}
-            npm run auth:generate
-          """
+    // 🚀 Matrix over envs × roles; filtered by ENVS/ROLES CSV
+    stage('🧪 Run Matrix') {
+      matrix {
+        axes {
+          axis { name 'TEST_ENV';  values 'dev', 'qa', 'stage', 'prod' }
+          axis { name 'TEST_ROLE'; values 'user', 'admin' }
         }
-      }
-      post {
-        success { echo '✅ Auth state generated successfully.' }
-        failure { error '❌ Failed to generate auth state files.' }
-      }
-    }
 
-    stage('🔧 Run Playwright Tests') {
-      steps {
-        withCredentials([
-          usernamePassword(credentialsId: 'USER_EMAIL_0',  usernameVariable: 'USER_EMAIL_0',  passwordVariable: 'USER_PASSWORD_0'),
-          usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0')
-        ]) {
-          script {
-            def selected = params.TEST_FILTER?.trim()
-            def custom   = params.CUSTOM_TAGS?.trim()
-            def grepExpr = ''
-
-            if (selected == 'Custom') {
-              grepExpr = custom
-            } else if (selected != 'All tests') {
-              grepExpr = selected
-            }
-
-            def grepArg = grepExpr ? "--grep \"${grepExpr}\"" : ""  // empty = run all tests
-
-            echo "📌 ENV=${params.TEST_ENV}, ROLE=${params.TEST_ROLE}, GREP=${grepExpr ?: 'ALL'}, invert=@quarantine"
-            bat """
-              set TEST_ENV=${params.TEST_ENV}
-              set TEST_ROLE=${params.TEST_ROLE}
-              npx playwright test ${grepArg} --grep-invert "@quarantine" --reporter=line
-            """
+        // Only run combinations included in params.ENVS/ROLES
+        when {
+          expression {
+            def envs  = (params.ENVS  ?: '').toLowerCase().split(/\s*,\s*/).findAll{ it }
+            def roles = (params.ROLES ?: '').toLowerCase().split(/\s*,\s*/).findAll{ it }
+            return envs.contains(TEST_ENV.toLowerCase()) && roles.contains(TEST_ROLE.toLowerCase())
           }
         }
-      }
-      post {
-        always {
-          echo "📌 Archiving test artifacts..."
-          archiveArtifacts artifacts: 'playwright-report/**/*.*', allowEmptyArchive: true
-          archiveArtifacts artifacts: 'test-results/**/*.*',      allowEmptyArchive: true
+
+        stages {
+          stage('🔑 Generate Auth State') {
+            steps {
+              withCredentials([
+                usernamePassword(credentialsId: 'USER_EMAIL_0',  usernameVariable: 'USER_EMAIL_0',  passwordVariable: 'USER_PASSWORD_0'),
+                usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0')
+              ]) {
+                echo "📌 Generating auth for ENV=${TEST_ENV}, ROLE=${TEST_ROLE}"
+                bat """
+                  set TEST_ENV=${TEST_ENV}
+                  set TEST_ROLE=${TEST_ROLE}
+                  npm run auth:generate
+                """
+              }
+            }
+          }
+
+          stage('🔧 Run Playwright Tests') {
+            steps {
+              withCredentials([
+                usernamePassword(credentialsId: 'USER_EMAIL_0',  usernameVariable: 'USER_EMAIL_0',  passwordVariable: 'USER_PASSWORD_0'),
+                usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0')
+              ]) {
+                script {
+                  def selected = params.TEST_FILTER?.trim()
+                  def custom   = params.CUSTOM_TAGS?.trim()
+                  def grepExpr = (selected == 'Custom') ? custom : (selected != 'All tests' ? selected : '')
+                  def grepArg  = grepExpr ? "--grep \"${grepExpr}\"" : ""
+
+                  echo "📌 ENV=${TEST_ENV}, ROLE=${TEST_ROLE}, GREP=${grepExpr ?: 'ALL'}, invert=@quarantine"
+                  bat """
+                    set TEST_ENV=${TEST_ENV}
+                    set TEST_ROLE=${TEST_ROLE}
+                    npx playwright test ${grepArg} --grep-invert "@quarantine" --reporter=line
+                  """
+                }
+              }
+            }
+            post {
+              always {
+                echo "📌 Archiving artifacts for ${TEST_ENV}/${TEST_ROLE}"
+                archiveArtifacts artifacts: 'playwright-report/**/*.*', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'test-results/**/*.*',      allowEmptyArchive: true
+              }
+            }
+          }
         }
-        failure { echo '❌ Playwright tests failed.' }
       }
     }
 
