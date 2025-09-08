@@ -3,14 +3,16 @@ pipeline {
 
   options {
     timestamps()
+    timeout(time: 60, unit: 'MINUTES')              // hard cap for the whole pipeline
     disableConcurrentBuilds()
     buildDiscarder(logRotator(numToKeepStr: '20'))
   }
 
   parameters {
-    // CSV list of envs; leave default to run ALL
+    // CSV list of environments; default = run all
     string(name: 'ENVS', defaultValue: 'dev,qa,stage,prod', description: 'Comma-separated envs to include (e.g., "dev,qa").')
 
+    // Tag filtering (Playwright --grep)
     choice(
       name: 'TEST_FILTER',
       choices: [
@@ -19,20 +21,22 @@ pipeline {
         '@api',
         '@search',
         '@regression',
-        '@smoke|@api',
+        '@smoke|@api',                       // OR
         '@search|@compare',
-        '(?=.*@ui)(?=.*@search)',
-        '(?=.*@ui)(?=.*(@search|@compare))',
+        '(?=.*@ui)(?=.*@search)',            // AND
+        '(?=.*@ui)(?=.*(@search|@compare))', // AND + OR
         'Custom'
       ],
       description: 'Preset Playwright --grep. Pick "Custom" to use CUSTOM_TAGS.'
     )
-
     string(
       name: 'CUSTOM_TAGS',
       defaultValue: '',
       description: 'Used when TEST_FILTER=Custom. Examples: @smoke|@api  or  (?=.*@ui)(?=.*@search)'
     )
+
+    // Optional auth setup (disabled by default)
+    booleanParam(name: 'GENERATE_AUTH', defaultValue: false, description: 'Run auth setup before tests (enable only if required).')
   }
 
   environment {
@@ -42,7 +46,8 @@ pipeline {
   }
 
   stages {
-    // Keep job parameters in sync with this file
+
+    // keep job parameters in sync with this file
     stage('🧰 Sync Jenkins Parameters') {
       steps {
         script {
@@ -58,9 +63,23 @@ pipeline {
               ],
               description: 'Preset grep'
             ),
-            string(name: 'CUSTOM_TAGS', defaultValue: '', description: 'Used when TEST_FILTER=Custom')
+            string(name: 'CUSTOM_TAGS', defaultValue: '', description: 'Used when TEST_FILTER=Custom'),
+            booleanParam(name: 'GENERATE_AUTH', defaultValue: false, description: 'Run auth setup before tests')
           ])])
         }
+      }
+    }
+
+    // clean previous reports so runs don’t mix
+    stage('🧹 Clean Previous Results') {
+      steps {
+        echo "📌 Cleaning old reports and results..."
+        bat '''
+          if exist playwright-report rmdir /s /q playwright-report
+          if exist test-results rmdir /s /q test-results
+          if exist allure-results rmdir /s /q allure-results
+          if exist allure-report rmdir /s /q allure-report
+        '''
       }
     }
 
@@ -83,6 +102,7 @@ pipeline {
       steps {
         echo "📌 Running ESLint & TypeScript checks..."
         bat 'npm run lint'
+        // Windows-safe fallback to tsc if "typecheck" is missing or fails
         bat '''
           call npm run typecheck
           if errorlevel 1 (
@@ -93,14 +113,14 @@ pipeline {
       }
     }
 
-    // 🚀 Matrix only over envs
+    // run the suite per-environment (no role axis)
     stage('🧪 Run Matrix') {
       matrix {
         axes {
           axis { name 'TEST_ENV'; values 'dev', 'qa', 'stage', 'prod' }
         }
 
-        // Only run combinations included in ENVS CSV
+        // Only run envs included in ENVS CSV
         when {
           expression {
             def envs = (params.ENVS ?: '').toLowerCase().split(/\s*,\s*/).findAll{ it }
@@ -109,38 +129,44 @@ pipeline {
         }
 
         stages {
-          stage('🔑 Generate Auth State') {
+          stage('🔑 Generate Auth State (optional)') {
+            when { expression { return params.GENERATE_AUTH } }
             steps {
               withCredentials([
                 usernamePassword(credentialsId: 'USER_EMAIL_0',  usernameVariable: 'USER_EMAIL_0',  passwordVariable: 'USER_PASSWORD_0'),
                 usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0')
               ]) {
-                echo "📌 Generating auth for ENV=${TEST_ENV}"
-                bat """
-                  set TEST_ENV=${TEST_ENV}
-                  npm run auth:generate
-                """
+                timeout(time: 10, unit: 'MINUTES') {
+                  echo "📌 Generating auth for ENV=${TEST_ENV}"
+                  // Adjust to your repo’s setup (role-agnostic if possible).
+                  bat """
+                    set TEST_ENV=${TEST_ENV}
+                    npm run auth:generate
+                  """
+                }
               }
+            }
+            post {
+              failure { echo '❌ Auth generation failed (disable GENERATE_AUTH to bypass).' }
             }
           }
 
           stage('🔧 Run Playwright Tests') {
             steps {
-              withCredentials([
-                usernamePassword(credentialsId: 'USER_EMAIL_0',  usernameVariable: 'USER_EMAIL_0',  passwordVariable: 'USER_PASSWORD_0'),
-                usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0')
-              ]) {
-                script {
-                  def selected = params.TEST_FILTER?.trim()
-                  def custom   = params.CUSTOM_TAGS?.trim()
-                  def grepExpr = (selected == 'Custom') ? custom : (selected != 'All tests' ? selected : '')
-                  def grepArg  = grepExpr ? "--grep \"${grepExpr}\"" : ""
+              script {
+                def selected = params.TEST_FILTER?.trim()
+                def custom   = params.CUSTOM_TAGS?.trim()
+                def grepExpr = (selected == 'Custom') ? custom : (selected != 'All tests' ? selected : '')
+                def grepArg  = grepExpr ? "--grep \"${grepExpr}\"" : ""
 
-                  echo "📌 ENV=${TEST_ENV}, GREP=${grepExpr ?: 'ALL'}, invert=@quarantine"
-                  bat """
-                    set TEST_ENV=${TEST_ENV}
-                    npx playwright test ${grepArg} --grep-invert "@quarantine" --reporter=line
-                  """
+                echo "📌 ENV=${TEST_ENV}, GREP=${grepExpr ?: 'ALL'}, invert=@quarantine"
+                timeout(time: 30, unit: 'MINUTES') {
+                  retry(1) {
+                    bat """
+                      set TEST_ENV=${TEST_ENV}
+                      npx playwright test ${grepArg} --grep-invert "@quarantine" --reporter=line
+                    """
+                  }
                 }
               }
             }
