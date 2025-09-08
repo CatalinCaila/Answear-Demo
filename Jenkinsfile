@@ -63,17 +63,15 @@ pipeline {
       steps {
         withCredentials([
           usernamePassword(credentialsId: 'USER_EMAIL_0',  usernameVariable: 'USER_EMAIL_0',  passwordVariable: 'USER_PASSWORD_0'),
-          usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0'),
-          usernamePassword(credentialsId: 'USER_EMAIL_1',  usernameVariable: 'USER_EMAIL_1',  passwordVariable: 'USER_PASSWORD_1'),
-          usernamePassword(credentialsId: 'ADMIN_EMAIL_1', usernameVariable: 'ADMIN_EMAIL_1', passwordVariable: 'ADMIN_PASSWORD_1')
-        ]) {
-          echo "📌 Generating auth state for ${params.TEST_ENV} / role matrix if needed..."
-          bat """
-            set TEST_ENV=${params.TEST_ENV}
-            set TEST_ROLE=${params.TEST_ROLE}
-            npm run auth:generate
-          """
-        }
+          usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0')
+]) {
+  echo "📌 Running for ${params.TEST_ENV} / role ${params.TEST_ROLE}..."
+  bat """
+    set TEST_ENV=${params.TEST_ENV}
+    set TEST_ROLE=${params.TEST_ROLE}
+    npm run auth:generate
+  """
+}
       }
       post {
         success { echo '✅ Auth state generated successfully.' }
@@ -85,9 +83,7 @@ pipeline {
       steps {
         withCredentials([
           usernamePassword(credentialsId: 'USER_EMAIL_0',  usernameVariable: 'USER_EMAIL_0',  passwordVariable: 'USER_PASSWORD_0'),
-          usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0'),
-          usernamePassword(credentialsId: 'USER_EMAIL_1',  usernameVariable: 'USER_EMAIL_1',  passwordVariable: 'USER_PASSWORD_1'),
-          usernamePassword(credentialsId: 'ADMIN_EMAIL_1', usernameVariable: 'ADMIN_EMAIL_1', passwordVariable: 'ADMIN_PASSWORD_1')
+          usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0')
         ]) {
           echo "📌 Running Playwright in ${params.TEST_ENV} as ${params.TEST_ROLE} with tag ${params.TEST_TAGS}..."
           bat """
