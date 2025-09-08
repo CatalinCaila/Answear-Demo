@@ -8,7 +8,7 @@ import { logger } from '../../utils/logger/logger';
 // __dirname for ESM
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-test.describe('@dev @qa @prod @ui @mock @search', () => {
+test.describe('@dev @qa @stage @ui @mock @search', () => {
   test('UI shows mocked search results', async ({ page }) => {
     // …load mock…
     const mockFilePath = path.resolve(__dirname, '../../fixtures/mocks/products.mock.json');

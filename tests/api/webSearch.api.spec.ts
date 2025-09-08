@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { makeSearchService } from '../../utils/factories/serviceFactory';
 
-test.describe('@dev @qa @prod @api @search @smoke @regression', () => {
+test.describe('@dev @qa @stage @api @search @smoke @regression', () => {
   test('returns products via flexible stack', async () => {
     // choose auth source with env var if you want:
     // STORAGE (default) | TXT | ENV

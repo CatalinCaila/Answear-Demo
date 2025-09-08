@@ -12,7 +12,7 @@ export const test = mergeTests(roleTest, searchTest, i18nTest);
 /**
  * UI test suite to verify search functionality across desktop and mobile devices.
  */
-test.describe('@dev @qa @prod @ui @crossdevice @search', () => {
+test.describe('@dev @qa @stage @ui @crossdevice @search', () => {
   test('Search functionality works correctly on desktop and mobile', async ({
     page,
     isMobile,

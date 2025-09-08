@@ -2,7 +2,7 @@
 import { test, expect } from '../../fixtures/auth/roleFixture';
 import { Role } from '../../utils/config/roleTypes';
 
-test.describe('@ui @multi-role', () => {
+test.describe('@dev @qa @stage @ui @multi-role @cart @state @regression', () => {
   test('Admin and User have different cart count state (same context)', async ({ page, loginAs }, testInfo) => {
     // --- User in SAME context ---
     await loginAs(Role.User, { accountIndex: 0, page });
@@ -10,10 +10,9 @@ test.describe('@ui @multi-role', () => {
 
     const userCartCount = page.getByTestId('cart_count');
     await expect(userCartCount).toBeVisible();
-    await expect(userCartCount).toHaveText('1'); // adjust if your UI shows '0' for user
+    await expect(userCartCount).toHaveText('1'); // adjust if UI shows '0'
 
     // --- Switch to Admin in SAME context ---
-    // Clear previous auth traces to avoid mixing sessions
     await page.context().clearCookies();
     await page.evaluate(() => {
       localStorage.clear();
@@ -24,10 +23,7 @@ test.describe('@ui @multi-role', () => {
     await page.goto('/c/barbati');
 
     const adminCartCount = page.getByTestId('cart_count');
-    // Choose the assertion that matches your UI:
-    // If the widget exists and shows "0":
+    // Use the assertion matching your app’s behavior:
     await expect(adminCartCount).toHaveCount(0);
-    // If the widget disappears entirely, use:
-    // await expect(adminCartCount).toHaveCount(0);
   });
 });

@@ -22,6 +22,20 @@ pipeline {
 
   stages {
 
+    stage('🧰 Sync Jenkins Parameters') {
+      steps {
+        script {
+          properties([
+            parameters([
+              choice(name: 'TEST_ENV',  choices: ['dev', 'qa', 'stage', 'prod'], description: 'Select environment'),
+              choice(name: 'TEST_ROLE', choices: ['user', 'admin'],              description: 'Select role'),
+              choice(name: 'TEST_TAGS', choices: ['@smoke', '@regression', '@api', '@search'], description: 'Playwright grep tag')
+            ])
+          ])
+        }
+      }
+    }
+
     stage('🔍 Checkout') {
       steps {
         echo "📌 Checking out source code..."
@@ -55,7 +69,6 @@ pipeline {
           usernamePassword(credentialsId: 'ADMIN_EMAIL_1', usernameVariable: 'ADMIN_EMAIL_1', passwordVariable: 'ADMIN_PASSWORD_1')
         ]) {
           echo "📌 Generating auth state for ${params.TEST_ENV} / role matrix if needed..."
-          // Your script should look at TEST_ENV + optionally both roles
           bat """
             set TEST_ENV=${params.TEST_ENV}
             set TEST_ROLE=${params.TEST_ROLE}
@@ -78,7 +91,6 @@ pipeline {
           usernamePassword(credentialsId: 'ADMIN_EMAIL_1', usernameVariable: 'ADMIN_EMAIL_1', passwordVariable: 'ADMIN_PASSWORD_1')
         ]) {
           echo "📌 Running Playwright in ${params.TEST_ENV} as ${params.TEST_ROLE} with tag ${params.TEST_TAGS}..."
-          // Pass env/role to your app/tests; filter tests by tag; exclude quarantined
           bat """
             set TEST_ENV=${params.TEST_ENV}
             set TEST_ROLE=${params.TEST_ROLE}
