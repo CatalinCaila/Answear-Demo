@@ -129,6 +129,7 @@ pipeline {
         }
 
         stages {
+
           stage('🔑 Generate Auth State (optional)') {
             when { expression { return params.GENERATE_AUTH } }
             steps {
@@ -138,9 +139,17 @@ pipeline {
               ]) {
                 timeout(time: 10, unit: 'MINUTES') {
                   echo "📌 Generating auth for ENV=${TEST_ENV}"
-                  // Adjust to your repo’s setup (role-agnostic if possible).
                   bat """
                     set TEST_ENV=${TEST_ENV}
+                    set DOTENV_FLOW_ENV=${TEST_ENV}
+
+                    rem Materialize .env.<env> so dotenv-flow can load it
+                    (echo ADMIN_EMAIL_0=%ADMIN_EMAIL_0%
+                     echo ADMIN_PASSWORD_0=%ADMIN_PASSWORD_0%
+                     echo USER_EMAIL_0=%USER_EMAIL_0%
+                     echo USER_PASSWORD_0=%USER_PASSWORD_0%
+                    )> .env.%TEST_ENV%
+
                     npm run auth:generate
                   """
                 }
@@ -153,19 +162,36 @@ pipeline {
 
           stage('🔧 Run Playwright Tests') {
             steps {
-              script {
-                def selected = params.TEST_FILTER?.trim()
-                def custom   = params.CUSTOM_TAGS?.trim()
-                def grepExpr = (selected == 'Custom') ? custom : (selected != 'All tests' ? selected : '')
-                def grepArg  = grepExpr ? "--grep \"${grepExpr}\"" : ""
+              // Inject the same creds here as well — tests need them at startup
+              withCredentials([
+                usernamePassword(credentialsId: 'USER_EMAIL_0',  usernameVariable: 'USER_EMAIL_0',  passwordVariable: 'USER_PASSWORD_0'),
+                usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0')
+              ]) {
+                script {
+                  def selected = params.TEST_FILTER?.trim()
+                  def custom   = params.CUSTOM_TAGS?.trim()
+                  def grepExpr = (selected == 'Custom') ? custom : (selected != 'All tests' ? selected : '')
+                  def grepArg  = grepExpr ? "--grep \"${grepExpr}\"" : ""
 
-                echo "📌 ENV=${TEST_ENV}, GREP=${grepExpr ?: 'ALL'}, invert=@quarantine"
-                timeout(time: 30, unit: 'MINUTES') {
-                  retry(1) {
-                    bat """
-                      set TEST_ENV=${TEST_ENV}
-                      npx playwright test ${grepArg} --grep-invert "@quarantine" --reporter=line
-                    """
+                  echo "📌 ENV=${TEST_ENV}, GREP=${grepExpr ?: 'ALL'}, invert=@quarantine"
+                  timeout(time: 30, unit: 'MINUTES') {
+                    retry(1) {
+                      bat """
+                        set TEST_ENV=${TEST_ENV}
+                        set DOTENV_FLOW_ENV=${TEST_ENV}
+
+                        rem Ensure dotenv-flow has a file to read (idempotent)
+                        if not exist .env.%TEST_ENV% (
+                          (echo ADMIN_EMAIL_0=%ADMIN_EMAIL_0%
+                           echo ADMIN_PASSWORD_0=%ADMIN_PASSWORD_0%
+                           echo USER_EMAIL_0=%USER_EMAIL_0%
+                           echo USER_PASSWORD_0=%USER_PASSWORD_0%
+                          )> .env.%TEST_ENV%
+                        )
+
+                        npx playwright test ${grepArg} --grep-invert "@quarantine" --reporter=line
+                      """
+                    }
                   }
                 }
               }
