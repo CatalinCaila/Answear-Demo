@@ -1,5 +1,5 @@
 // fixtures/auth/roleFixture.ts
-import { test as base, Page } from '@playwright/test';
+import { test as base, Page, expect } from '@playwright/test';
 import path from 'path';
 import fs from 'fs';
 import { credentials } from '../../utils/auth/credentials';
@@ -9,6 +9,7 @@ import { LoginPage } from '../../pages/web/LoginPage';
 import { CookieBanner } from '../../utils/helpers/cookieBanner';
 
 type Domain = 'ro' | 'it';
+
 type LoginOpts = {
   domain?: Domain;
   force?: boolean;
@@ -17,6 +18,7 @@ type LoginOpts = {
   page?: Page;
 };
 
+/** Infer domain from opts → project baseURL → project locale. */
 function inferDomain(
   optsDomain?: Domain,
   baseURL?: string,
@@ -31,17 +33,16 @@ function inferDomain(
   return 'ro';
 }
 
+/** Deterministic storage path: <repo>/auth/<role>Auth-<DOMAIN>-<index>.json */
 function storagePathFor(role: Role, domain: Domain, idx: number): string {
-  const cred = credentials[role][idx % credentials[role].length];
-  const mapped = cred.storageState[domain];
-  if (!mapped) {
-    throw new Error(
-      `[storagePathFor] Missing storageState mapping for role=${role}, domain=${domain}`
-    );
-  }
-  return path.resolve(process.cwd(), mapped);
+  const methodName = 'storagePathFor';
+  const rolePrefix = role === Role.Admin ? 'admin' : 'user';
+  const abs = path.resolve(process.cwd(), `auth/${rolePrefix}Auth-${domain.toUpperCase()}-${idx}.json`);
+  logger.info(`[${methodName}] Path resolved: ${abs}`);
+  return abs;
 }
 
+/** Parse  JSON Web Token exp (seconds since epoch) if present; otherwise null. */
 function parseJwtExp(token?: string | null): number | null {
   if (!token) return null;
   const parts = token.split('.');
@@ -54,19 +55,41 @@ function parseJwtExp(token?: string | null): number | null {
   }
 }
 
+/** Check storageState file has a not-near-expiry 'access_token' in localStorage. */
 function storageHasValidToken(filePath: string): boolean {
-  if (!fs.existsSync(filePath)) return false;
+  const methodName = 'storageHasValidToken';
+  if (!fs.existsSync(filePath)) {
+    logger.info(`[${methodName}] No file at ${filePath}`);
+    return false;
+  }
   try {
-    const state = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    const raw = fs.readFileSync(filePath, 'utf-8');
+    const state = JSON.parse(raw) as {
+      origins?: Array<{ origin: string; localStorage: Array<{ name: string; value: string }> }>;
+    };
+
     const token = state?.origins
-      ?.flatMap((o: any) => o.localStorage)
-      ?.find((e: any) => e.name === 'access_token')?.value as string | undefined;
-    if (!token) return false;
+      ?.flatMap((o) => o.localStorage)
+      ?.find((e) => e.name === 'access_token')?.value as string | undefined;
+
+    if (!token) {
+      logger.info(`[${methodName}] No access_token in ${filePath}`);
+      return false;
+    }
+
     const exp = parseJwtExp(token);
-    if (!exp) return true; // if no exp in JWT, assume valid when present
+    if (!exp) {
+      logger.info(`[${methodName}] Token has no exp claim — treating as valid.`);
+      return true;
+    }
+
     const now = Math.floor(Date.now() / 1000);
-    return exp - now > 120; // keep 2m safety margin
-  } catch {
+    const remaining = exp - now;
+    const ok = remaining > 120; // 2m safety margin
+    logger.info(`[${methodName}] Token remaining=${remaining}s => valid=${ok}`);
+    return ok;
+  } catch (err) {
+    logger.info(`[${methodName}] Failed to read/parse ${filePath}: ${(err as Error).message}`);
     return false;
   }
 }
@@ -90,6 +113,8 @@ type StorageState = {
 
 /**
  * Apply a saved storageState to the *existing* context + page.
+ * - Adds cookies to the context
+ * - Restores localStorage per origin via a temporary page, to avoid nuking the test's current page
  */
 async function applyStorageStateToExistingContext(targetPage: Page, filePath: string): Promise<void> {
   const methodName = 'applyStorageStateToExistingContext';
@@ -108,22 +133,16 @@ async function applyStorageStateToExistingContext(targetPage: Page, filePath: st
   }
 
   // 2) LocalStorage -> per origin
-   for (const origin of raw.origins ?? []) {
-    // Open a temporary page so we don’t disturb the current test page
+  for (const origin of raw.origins ?? []) {
     const tmpPage = await targetPage.context().newPage();
     try {
-      // Navigate to the origin (e.g., https://answear.ro)
       await tmpPage.goto(origin.origin, { waitUntil: 'domcontentloaded' });
-
-      // Inject each localStorage key/value pair
       for (const { name, value } of origin.localStorage ?? []) {
         // eslint-disable-next-line no-await-in-loop
         await tmpPage.evaluate(([k, v]) => localStorage.setItem(k, v), [name, value] as const);
       }
-
       logger.info(`[${methodName}] Restored ${origin.localStorage.length} localStorage items for ${origin.origin}`);
     } finally {
-      // Close the temporary page once done to avoid leaks
       await tmpPage.close();
     }
   }
@@ -133,6 +152,9 @@ async function applyStorageStateToExistingContext(targetPage: Page, filePath: st
 
 /**
  * Logs in via UI, waits for token, saves storageState (single source of truth).
+ * - Uses accountIndex as provided (no modulo)
+ * - Falls back to cred[0] if cred[accountIndex] not present
+ * - Saves user JWT to auth/userAccessToken-<domain>-<index>.txt
  */
 async function doLoginAndSaveState(
   targetPage: Page,
@@ -144,53 +166,71 @@ async function doLoginAndSaveState(
   const methodName = 'doLoginAndSaveState';
   logger.info(`[${methodName}] Start... role=${role}, domain=${domain}, accountIndex=${accountIndex}`);
 
-  const cred = credentials[role][accountIndex % credentials[role].length];
-  const storagePath = storagePathFor(role, domain, accountIndex);
+  // Resolve credentials with safe fallback
+  const list = credentials[role] ?? [];
+  if (!list.length) {
+    throw new Error(`[${methodName}] ❌ No credentials configured for role=${role}`);
+  }
+  const cred = list[accountIndex] ?? list[0]; // fallback lets you keep only *_EMAIL_0
 
+  const storagePath = storagePathFor(role, domain, accountIndex);
   const domainURL = baseURLFromProject ?? (domain === 'ro' ? 'https://answear.ro' : 'https://answear.it');
 
   const cookieBanner = new CookieBanner(targetPage);
   const loginPage = new LoginPage(targetPage);
 
-  // 1) Navigate home
-  await targetPage.goto(domainURL, { waitUntil: 'domcontentloaded' });
-  logger.info(`[${methodName}] Navigated to ${domainURL}`);
+  try {
+    // 1) Navigate home
+    await targetPage.goto(domainURL, { waitUntil: 'domcontentloaded' });
+    logger.info(`[${methodName}] Navigated to ${domainURL}`);
 
-  // 2) Accept cookies BEFORE login (if present)
-  await cookieBanner.clickIfPresent();
-  logger.info(`[${methodName}] Cookie banner handled (pre-login)`);
+    // 2) Accept cookies BEFORE login (if present)
+    await cookieBanner.clickIfPresent();
+    logger.info(`[${methodName}] Cookie banner handled (pre-login)`);
 
-  // 3) Login (UI)
-  await loginPage.loginUsers(cred.email, cred.password);
-  logger.info(`[${methodName}] Login submitted for ${role}`);
+    // 3) Login (UI)
+    await loginPage.loginUsers(cred.email, cred.password);
+    logger.info(`[${methodName}] Login submitted for ${role} using email=${cred.email}`);
 
-  // 4) Deterministic wait: localStorage token is JWT-like
-  await targetPage.waitForFunction(
-    () => {
-      const t = window.localStorage.getItem('access_token');
-      return !!t && t.split('.').length === 3;
-    },
-    { timeout: 15_000 }
-  );
+    // 4) Wait for JWT-like token to appear in localStorage
+    await targetPage.waitForFunction(
+      () => {
+        const t = window.localStorage.getItem('access_token');
+        return !!t && t.split('.').length === 3;
+      },
+      { timeout: 15_000 }
+    );
 
-  // 5) Save storage state
-  await targetPage.context().storageState({ path: storagePath });
-  logger.info(`[${methodName}] Storage state saved at: ${storagePath}`);
+    // 5) Save storage state
+    await targetPage.context().storageState({ path: storagePath });
+    logger.info(`[${methodName}] Storage state saved at: ${storagePath}`);
 
-  // Optional: also persist User token to a file
-  if (role === Role.User) {
-    const token = await targetPage.evaluate(() => window.localStorage.getItem('access_token'));
-    if (!token || token.split('.').length !== 3) {
-      logger.error(`[${methodName}] Invalid token after login for ${role} on ${domain}`);
-      throw new Error(`❌ Invalid token for ${role} on ${domain}`);
+    // Optional: also persist User token to a file (use exact accountIndex)
+    if (role === Role.User) {
+      const token = await targetPage.evaluate(() => window.localStorage.getItem('access_token'));
+      if (!token || token.split('.').length !== 3) {
+        logger.error(`[${methodName}] Invalid token after login for ${role} on ${domain}`);
+        throw new Error(`❌ Invalid token for ${role} on ${domain}`);
+      }
+      const tokenPath = path.resolve(`auth/userAccessToken-${domain}-${accountIndex}.txt`);
+      fs.writeFileSync(tokenPath, token, 'utf-8');
+      logger.info(`[${methodName}] ✅ Saved User token at ${tokenPath}`);
     }
-    const tokenPath = path.resolve(`auth/userAccessToken-${domain}-0.txt`.replace('-0', `-${accountIndex}`));
-    fs.writeFileSync(tokenPath, token, 'utf-8');
-    logger.info(`[${methodName}] ✅ Saved User token at ${tokenPath}`);
-  }
 
-  logger.info(`[${methodName}] End.`);
-  return storagePath;
+    logger.info(`[${methodName}] End.`);
+    return storagePath;
+  } catch (err) {
+    try {
+      await targetPage.screenshot({
+        path: `auth/_login-failure-${role}-${domain}-${accountIndex}.png`,
+        fullPage: true,
+      });
+    } catch {
+      // ignore
+    }
+    logger.error(`[${methodName}] ❌ Failed: ${(err as Error).message}`);
+    throw err;
+  }
 }
 
 export const test = base.extend<{
@@ -208,18 +248,21 @@ export const test = base.extend<{
     const baseURLFromProject = testInfo.project.use.baseURL as string | undefined;
 
     await use(async (role: Role, opts?: LoginOpts) => {
-      const targetPage = opts?.page ?? page; // allow overriding the page
+      const methodName = 'loginAs';
+      const targetPage = opts?.page ?? page;
       const domain: Domain = inferDomain(opts?.domain, baseURLFromProject, testInfo.project.use.locale);
-      const accountIndex = opts?.accountIndex ?? testInfo.workerIndex; // default: worker index
+
+      // Default account per role: Admin→0, User→1
+      const defaultIdx = role === Role.Admin ? 0 : 1;
+      const accountIndex = opts?.accountIndex ?? defaultIdx;
+
       const storagePath = storagePathFor(role, domain, accountIndex);
 
-      const methodName = 'loginAs';
       logger.info(
         `[${methodName}] Start... project=${testInfo.project.name}, baseURL=${baseURLFromProject ?? 'N/A'}, role=${role}, domain=${domain}, accountIndex=${accountIndex}`
       );
 
       const canReuse = !opts?.force && storageHasValidToken(storagePath);
-
       if (canReuse) {
         logger.info(`[${methodName}] Reusing storageState: ${storagePath}`);
         // IMPORTANT: do NOT call page.context().storageState({ path }) here — that WRITES.
@@ -235,4 +278,4 @@ export const test = base.extend<{
   },
 });
 
-export { expect } from '@playwright/test';
+export { expect };

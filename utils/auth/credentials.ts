@@ -11,6 +11,7 @@ function required(value: string | undefined, name: string): string {
   return value;
 }
 
+// Build credentials (keep only the entries you actually use)
 export const credentials: Record<Role, { email: string; password: string; storageState: Record<Domain, string> }[]> = {
   [Role.Admin]: [
     {
@@ -21,14 +22,15 @@ export const credentials: Record<Role, { email: string; password: string; storag
         it: './auth/adminAuth-IT-0.json',
       },
     },
-    {
-      email: required(process.env.ADMIN_EMAIL_1, 'ADMIN_EMAIL_1'),
-      password: required(process.env.ADMIN_PASSWORD_1, 'ADMIN_PASSWORD_1'),
-      storageState: {
-        ro: './auth/adminAuth-RO-1.json',
-        it: './auth/adminAuth-IT-1.json',
-      },
-    },
+    // If you really need a second admin, uncomment and ensure it's a different email than any user
+    // {
+    //   email: required(process.env.ADMIN_EMAIL_1, 'ADMIN_EMAIL_1'),
+    //   password: required(process.env.ADMIN_PASSWORD_1, 'ADMIN_PASSWORD_1'),
+    //   storageState: {
+    //     ro: './auth/adminAuth-RO-1.json',
+    //     it: './auth/adminAuth-IT-1.json',
+    //   },
+    // },
   ],
   [Role.User]: [
     {
@@ -39,15 +41,26 @@ export const credentials: Record<Role, { email: string; password: string; storag
         it: './auth/userAuth-IT-0.json',
       },
     },
-    {
-      email: required(process.env.USER_EMAIL_1, 'USER_EMAIL_1'),
-      password: required(process.env.USER_PASSWORD_1, 'USER_PASSWORD_1'),
-      storageState: {
-        ro: './auth/userAuth-RO-1.json',
-        it: './auth/userAuth-IT-1.json',
-      },
-    },
+    // Same here—only if needed and must be unique across roles
+    // {
+    //   email: required(process.env.USER_EMAIL_1, 'USER_EMAIL_1'),
+    //   password: required(process.env.USER_PASSWORD_1, 'USER_PASSWORD_1'),
+    //   storageState: {
+    //     ro: './auth/userAuth-RO-1.json',
+    //     it: './auth/userAuth-IT-1.json',
+    //   },
+    // },
   ],
 };
+
+// --- Validation: no email can be both Admin and User ---
+(function validateExclusiveEmails() {
+  const adminEmails = new Set(credentials[Role.Admin].map(c => c.email));
+  const userEmails = new Set(credentials[Role.User].map(c => c.email));
+  const duplicates = [...adminEmails].filter(e => userEmails.has(e));
+  if (duplicates.length) {
+    throw new Error(`❌ Role conflict: the following email(s) are assigned to BOTH Admin and User: ${duplicates.join(', ')}`);
+  }
+})();
 
 logger.info('✅ Credentials loaded successfully.');
