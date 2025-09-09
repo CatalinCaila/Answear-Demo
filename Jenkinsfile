@@ -9,33 +9,21 @@ pipeline {
   }
 
   parameters {
-    // CSV list of environments; default = run all
-    string(name: 'ENVS', defaultValue: 'dev,qa,stage,prod', description: 'Comma-separated envs to include (e.g., "dev,qa").')
+    // --- ENVIRONMENTS ---
+    booleanParam(name: 'RUN_DEV',   defaultValue: true,  description: 'Run tests on DEV')
+    booleanParam(name: 'RUN_QA',    defaultValue: true,  description: 'Run tests on QA')
+    booleanParam(name: 'RUN_STAGE', defaultValue: true,  description: 'Run tests on STAGE')
+    booleanParam(name: 'RUN_PROD',  defaultValue: false, description: 'Run tests on PROD')
 
-    // Tag filtering (Playwright --grep)
-    choice(
-      name: 'TEST_FILTER',
-      choices: [
-        'All tests',
-        '@smoke',
-        '@api',
-        '@search',
-        '@regression',
-        '@smoke|@api',                       // OR
-        '@search|@compare',
-        '(?=.*@ui)(?=.*@search)',            // AND
-        '(?=.*@ui)(?=.*(@search|@compare))', // AND + OR
-        'Custom'
-      ],
-      description: 'Preset Playwright --grep. Pick "Custom" to use CUSTOM_TAGS.'
-    )
-    string(
-      name: 'CUSTOM_TAGS',
-      defaultValue: '',
-      description: 'Used when TEST_FILTER=Custom. Examples: @smoke|@api  or  (?=.*@ui)(?=.*@search)'
-    )
+    // --- TAGS ---
+    booleanParam(name: 'TAG_SMOKE',      defaultValue: false, description: 'Run @smoke tests')
+    booleanParam(name: 'TAG_API',        defaultValue: false, description: 'Run @api tests')
+    booleanParam(name: 'TAG_SEARCH',     defaultValue: false, description: 'Run @search tests')
+    booleanParam(name: 'TAG_REGRESSION', defaultValue: false, description: 'Run @regression tests')
+    booleanParam(name: 'TAG_COMPARE',    defaultValue: false, description: 'Run @compare tests')
+    booleanParam(name: 'TAG_UI',         defaultValue: false, description: 'Run @ui tests')
 
-    // Optional auth setup (disabled by default)
+    // Optional auth setup
     booleanParam(name: 'GENERATE_AUTH', defaultValue: false, description: 'Run auth setup before tests (enable only if required).')
   }
 
@@ -47,30 +35,7 @@ pipeline {
 
   stages {
 
-    // keep job parameters in sync with this file
-    stage('🧰 Sync Jenkins Parameters') {
-      steps {
-        script {
-          properties([parameters([
-            string(name: 'ENVS', defaultValue: 'dev,qa,stage,prod', description: 'CSV envs to include'),
-            choice(name: 'TEST_FILTER',
-              choices: [
-                'All tests','@smoke','@api','@search','@regression',
-                '@smoke|@api','@search|@compare',
-                '(?=.*@ui)(?=.*@search)',
-                '(?=.*@ui)(?=.*(@search|@compare))',
-                'Custom'
-              ],
-              description: 'Preset grep'
-            ),
-            string(name: 'CUSTOM_TAGS', defaultValue: '', description: 'Used when TEST_FILTER=Custom'),
-            booleanParam(name: 'GENERATE_AUTH', defaultValue: false, description: 'Run auth setup before tests')
-          ])])
-        }
-      }
-    }
-
-    // clean previous reports so runs don’t mix
+    // 🧹 Clean previous reports
     stage('🧹 Clean Previous Results') {
       steps {
         echo "📌 Cleaning old reports and results..."
@@ -102,7 +67,6 @@ pipeline {
       steps {
         echo "📌 Running ESLint & TypeScript checks..."
         bat 'npm run lint'
-        // Windows-safe fallback to tsc if "typecheck" is missing or fails
         bat '''
           call npm run typecheck
           if errorlevel 1 (
@@ -113,18 +77,23 @@ pipeline {
       }
     }
 
-    // run the suite per-environment (no role axis)
+    // 🧪 Run matrix of environments
     stage('🧪 Run Matrix') {
       matrix {
         axes {
           axis { name 'TEST_ENV'; values 'dev', 'qa', 'stage', 'prod' }
         }
 
-        // Only run envs included in ENVS CSV
+        // rulează doar mediile bifate
         when {
           expression {
-            def envs = (params.ENVS ?: '').toLowerCase().split(/\s*,\s*/).findAll{ it }
-            return envs.contains(TEST_ENV.toLowerCase())
+            def flags = [
+              dev  : params.RUN_DEV,
+              qa   : params.RUN_QA,
+              stage: params.RUN_STAGE,
+              prod : params.RUN_PROD
+            ]
+            return (flags[TEST_ENV.toLowerCase()] ?: false)
           }
         }
 
@@ -143,13 +112,6 @@ pipeline {
                     set TEST_ENV=${TEST_ENV}
                     set DOTENV_FLOW_ENV=${TEST_ENV}
 
-                    rem Materialize .env.<env> so dotenv-flow can load it
-                    (echo ADMIN_EMAIL_0=%ADMIN_EMAIL_0%
-                     echo ADMIN_PASSWORD_0=%ADMIN_PASSWORD_0%
-                     echo USER_EMAIL_0=%USER_EMAIL_0%
-                     echo USER_PASSWORD_0=%USER_PASSWORD_0%
-                    )> .env.%TEST_ENV%
-
                     npm run auth:generate
                   """
                 }
@@ -162,32 +124,29 @@ pipeline {
 
           stage('🔧 Run Playwright Tests') {
             steps {
-              // Inject the same creds here as well — tests need them at startup
               withCredentials([
                 usernamePassword(credentialsId: 'USER_EMAIL_0',  usernameVariable: 'USER_EMAIL_0',  passwordVariable: 'USER_PASSWORD_0'),
                 usernamePassword(credentialsId: 'ADMIN_EMAIL_0', usernameVariable: 'ADMIN_EMAIL_0', passwordVariable: 'ADMIN_PASSWORD_0')
               ]) {
                 script {
-                  def selected = params.TEST_FILTER?.trim()
-                  def custom   = params.CUSTOM_TAGS?.trim()
-                  def grepExpr = (selected == 'Custom') ? custom : (selected != 'All tests' ? selected : '')
+                  // --- Construim GREP în funcție de tag-urile bifate ---
+                  def tags = []
+                  if (params.TAG_SMOKE)      tags << '@smoke'
+                  if (params.TAG_API)        tags << '@api'
+                  if (params.TAG_SEARCH)     tags << '@search'
+                  if (params.TAG_REGRESSION) tags << '@regression'
+                  if (params.TAG_COMPARE)    tags << '@compare'
+                  if (params.TAG_UI)         tags << '@ui'
+
+                  def grepExpr = tags ? tags.join('|') : ''
                   def grepArg  = grepExpr ? "--grep \"${grepExpr}\"" : ""
 
-                  echo "📌 ENV=${TEST_ENV}, GREP=${grepExpr ?: 'ALL'}, invert=@quarantine"
+                  echo "📌 ENV=${TEST_ENV}, TAGS=${grepExpr ?: 'ALL'}, invert=@quarantine"
                   timeout(time: 30, unit: 'MINUTES') {
                     retry(1) {
                       bat """
                         set TEST_ENV=${TEST_ENV}
                         set DOTENV_FLOW_ENV=${TEST_ENV}
-
-                        rem Ensure dotenv-flow has a file to read (idempotent)
-                        if not exist .env.%TEST_ENV% (
-                          (echo ADMIN_EMAIL_0=%ADMIN_EMAIL_0%
-                           echo ADMIN_PASSWORD_0=%ADMIN_PASSWORD_0%
-                           echo USER_EMAIL_0=%USER_EMAIL_0%
-                           echo USER_PASSWORD_0=%USER_PASSWORD_0%
-                          )> .env.%TEST_ENV%
-                        )
 
                         npx playwright test ${grepArg} --grep-invert "@quarantine" --reporter=line
                       """
